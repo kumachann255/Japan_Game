@@ -217,31 +217,31 @@ void UpdateParticle(void)
 			}
 		}
 
-		// パーティクル発生
-		{
-			XMFLOAT3 pos;
-			XMFLOAT3 move;
-			float fAngle, fLength;
-			int nLife;
-			float fSize;
+		//// パーティクル発生
+		//{
+		//	XMFLOAT3 pos;
+		//	XMFLOAT3 move;
+		//	float fAngle, fLength;
+		//	int nLife;
+		//	float fSize;
 
-			pos = g_posBase;
+		//	pos = g_posBase;
 
-			fAngle = (float)(rand() % 628 - 314) / 100.0f;
-			fLength = rand() % (int)(g_fWidthBase * 200 ) / 100.0f - g_fWidthBase;
-			move.x = sinf(fAngle) * fLength;
-			move.y = rand() % 300 / 100.0f + g_fHeightBase;
-			move.z = cosf(fAngle) * fLength;
+		//	fAngle = (float)(rand() % 628 - 314) / 100.0f;
+		//	fLength = rand() % (int)(g_fWidthBase * 200 ) / 100.0f - g_fWidthBase;
+		//	move.x = sinf(fAngle) * fLength;
+		//	move.y = rand() % 300 / 100.0f + g_fHeightBase;
+		//	move.z = cosf(fAngle) * fLength;
 
-			nLife = rand() % 100 + 150;  
+		//	nLife = rand() % 100 + 150;  
 
-			fSize = (float)(rand() % 30 + 20);
+		//	fSize = (float)(rand() % 30 + 20);
 
-			pos.y = fSize / 2;
+		//	pos.y = fSize / 2;
 
-			// ビルボードの設定
-			SetParticle(pos, move, XMFLOAT4(0.8f, 0.7f, 0.2f, 0.85f), fSize, fSize, nLife);
-		}
+		//	// ビルボードの設定
+		//	SetParticle(pos, move, XMFLOAT4(0.8f, 0.7f, 0.2f, 0.85f), fSize, fSize, nLife);
+		//}
 	}
 }
 
@@ -263,7 +263,7 @@ void DrawParticle(void)
 	SetDepthEnable(FALSE);
 
 	// フォグ無効
-	SetFogEnable(FALSE);
+	//SetFogEnable(FALSE);
 
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -333,7 +333,7 @@ void DrawParticle(void)
 	SetDepthEnable(TRUE);
 
 	// フォグ有効
-	SetFogEnable(TRUE);
+	//SetFogEnable(TRUE);
 
 }
 

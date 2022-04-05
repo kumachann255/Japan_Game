@@ -390,7 +390,7 @@ void DrawPlayer(void)
 
 
 		// ƒ‚ƒfƒ‹•`‰æ
-		DrawModel(&g_Parts[i].model);
+		//DrawModel(&g_Parts[i].model);
 
 	}
 

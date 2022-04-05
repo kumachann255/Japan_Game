@@ -133,8 +133,8 @@ void DrawShadow(void)
 	// Z比較なし
 	SetDepthEnable(FALSE);
 
-	// フォグ無効
-	SetFogEnable(FALSE);
+	//// フォグ無効
+	//SetFogEnable(FALSE);
 
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -186,8 +186,8 @@ void DrawShadow(void)
 	// Z比較あり
 	SetDepthEnable(TRUE);
 
-	// フォグ有効
-	SetFogEnable(TRUE);
+	//// フォグ有効
+	//SetFogEnable(TRUE);
 }
 
 //=============================================================================

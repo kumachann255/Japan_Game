@@ -15,6 +15,7 @@
 
 #include "player.h"
 #include "enemy.h"
+#include "attackRange.h"
 #include "meshfield.h"
 #include "meshwall.h"
 #include "shadow.h"
@@ -22,6 +23,7 @@
 #include "bullet.h"
 #include "score.h"
 #include "particle.h"
+#include "orbit.h"
 #include "collision.h"
 #include "debugproc.h"
 
@@ -65,6 +67,9 @@ HRESULT InitGame(void)
 	// エネミーの初期化
 	InitEnemy();
 
+	// 攻撃範囲
+	InitAttackR();
+
 	// 壁の初期化
 	InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_TOP), XMFLOAT3(0.0f, 0.0f, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
@@ -97,8 +102,11 @@ HRESULT InitGame(void)
 	// パーティクルの初期化
 	InitParticle();
 
+	// 軌跡の初期化
+	InitOrbit();
+
 	// BGM再生
-	PlaySound(SOUND_LABEL_BGM_sample001);
+	//PlaySound(SOUND_LABEL_BGM_sample001);
 
 	return S_OK;
 }
@@ -108,6 +116,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	// 軌跡の終了処理
+	UninitOrbit();
+
 	// パーティクルの終了処理
 	UninitParticle();
 
@@ -125,6 +136,9 @@ void UninitGame(void)
 
 	// 地面の終了処理
 	UninitMeshField();
+
+	// 攻撃範囲の終了処理
+	UninitAttackR();
 
 	// エネミーの終了処理
 	UninitEnemy();
@@ -169,6 +183,9 @@ void UpdateGame(void)
 	// エネミーの更新処理
 	UpdateEnemy();
 
+	// 攻撃範囲の更新処理
+	UpdateAttackR();
+
 	// 壁処理の更新
 	UpdateMeshWall();
 
@@ -180,6 +197,9 @@ void UpdateGame(void)
 
 	// パーティクルの更新処理
 	UpdateParticle();
+
+	// 軌跡の更新処理
+	UpdateOrbit();
 
 	// 影の更新処理
 	UpdateShadow();
@@ -220,6 +240,13 @@ void DrawGame0(void)
 
 	// パーティクルの描画処理
 	DrawParticle();
+
+	// 軌跡の描画処理
+	DrawOrbit();
+
+	// 攻撃範囲の描画処理
+	DrawAttackR();
+
 
 
 	// 2Dの物を描画する処理
