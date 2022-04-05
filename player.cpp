@@ -14,6 +14,7 @@
 #include "light.h"
 #include "bullet.h"
 #include "meshfield.h"
+#include "bom.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -156,27 +157,27 @@ void UpdatePlayer(void)
 {
 	CAMERA *cam = GetCamera();
 
-	// 移動させちゃう
-	if (GetKeyboardPress(DIK_LEFT))
-	{	// 左へ移動
-		g_Player.spd = VALUE_MOVE;
-		g_Player.dir = XM_PI / 2;
-	}
-	if (GetKeyboardPress(DIK_RIGHT))
-	{	// 右へ移動
-		g_Player.spd = VALUE_MOVE;
-		g_Player.dir = -XM_PI / 2;
-	}
-	if (GetKeyboardPress(DIK_UP))
-	{	// 上へ移動
-		g_Player.spd = VALUE_MOVE;
-		g_Player.dir = XM_PI;
-	}
-	if (GetKeyboardPress(DIK_DOWN))
-	{	// 下へ移動
-		g_Player.spd = VALUE_MOVE;
-		g_Player.dir = 0.0f;
-	}
+	//// 移動させちゃう
+	//if (GetKeyboardPress(DIK_LEFT))
+	//{	// 左へ移動
+	//	g_Player.spd = VALUE_MOVE;
+	//	g_Player.dir = XM_PI / 2;
+	//}
+	//if (GetKeyboardPress(DIK_RIGHT))
+	//{	// 右へ移動
+	//	g_Player.spd = VALUE_MOVE;
+	//	g_Player.dir = -XM_PI / 2;
+	//}
+	//if (GetKeyboardPress(DIK_UP))
+	//{	// 上へ移動
+	//	g_Player.spd = VALUE_MOVE;
+	//	g_Player.dir = XM_PI;
+	//}
+	//if (GetKeyboardPress(DIK_DOWN))
+	//{	// 下へ移動
+	//	g_Player.spd = VALUE_MOVE;
+	//	g_Player.dir = 0.0f;
+	//}
 
 
 #ifdef _DEBUG
@@ -218,7 +219,8 @@ void UpdatePlayer(void)
 	// 弾発射処理
 	if (GetKeyboardTrigger(DIK_SPACE))
 	{
-		SetBullet(g_Player.pos, g_Player.rot);
+		//SetBullet(g_Player.pos, g_Player.rot);
+		SetBom();
 	}
 
 	g_Player.spd *= 0.5f;
@@ -390,7 +392,7 @@ void DrawPlayer(void)
 
 
 		// モデル描画
-		DrawModel(&g_Parts[i].model);
+		//DrawModel(&g_Parts[i].model);
 
 	}
 
