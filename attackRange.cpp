@@ -11,6 +11,7 @@
 #include "model.h"
 #include "attackRange.h"
 #include "shadow.h"
+#include "bom.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -45,7 +46,7 @@ HRESULT InitAttackR(void)
 
 	g_AttackR.pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	g_AttackR.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	g_AttackR.scl = XMFLOAT3(4.0f, 4.0f, 4.0f);
+	g_AttackR.scl = XMFLOAT3(5.0f, 4.0f, 5.0f);
 
 	g_AttackR.spd = 0.0f;			// 移動スピードクリア
 
@@ -86,7 +87,19 @@ void UninitAttackR(void)
 //=============================================================================
 void UpdateAttackR(void)
 {
-	if (g_AttackR.use == TRUE)			// この攻撃範囲が使われている？
+	BOM *bom = GetBom();
+
+	// 攻撃範囲を表示するかどうか
+	if (bom->use == FALSE)
+	{
+		g_AttackR.use = TRUE;
+	}
+	if (bom->use == TRUE)
+	{
+		g_AttackR.use = FALSE;
+	}
+
+	//if (g_AttackR.use == TRUE)			// この攻撃範囲が使われている？
 	{									// Yes
 
 		// 移動させちゃう
@@ -107,18 +120,7 @@ void UpdateAttackR(void)
 			g_AttackR.pos.z -= VALUE_MOVE;
 		}
 
-
-
-
-
-
-
-
-
-
-
 	}
-
 }
 
 //=============================================================================
@@ -128,13 +130,9 @@ void DrawAttackR(void)
 {
 	XMMATRIX mtxScl, mtxRot, mtxTranslate, mtxWorld;
 
+
 	// カリング無効
 	SetCullingMode(CULL_MODE_NONE);
-
-	if (g_AttackR.use == FALSE) return;
-
-	// セルフシャドウを無効に
-	SetLightEnable(FALSE);
 
 	// αテストを有効に
 	SetAlphaTestEnable(TRUE);
@@ -142,32 +140,35 @@ void DrawAttackR(void)
 	// 加算合成に設定
 	SetBlendState(BLEND_MODE_ADD);
 
-	// ワールドマトリックスの初期化
-	mtxWorld = XMMatrixIdentity();
+	//フォグを無効に
+	SetFogEnable(FALSE);
 
-	// スケールを反映
-	mtxScl = XMMatrixScaling(g_AttackR.scl.x, g_AttackR.scl.y, g_AttackR.scl.z);
-	mtxWorld = XMMatrixMultiply(mtxWorld, mtxScl);
+	if (g_AttackR.use == TRUE)
+	{
+		// ワールドマトリックスの初期化
+		mtxWorld = XMMatrixIdentity();
 
-	// 回転を反映
-	mtxRot = XMMatrixRotationRollPitchYaw(g_AttackR.rot.x, g_AttackR.rot.y + XM_PI, g_AttackR.rot.z);
-	mtxWorld = XMMatrixMultiply(mtxWorld, mtxRot);
+		// スケールを反映
+		mtxScl = XMMatrixScaling(g_AttackR.scl.x, g_AttackR.scl.y, g_AttackR.scl.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxScl);
 
-	// 移動を反映
-	mtxTranslate = XMMatrixTranslation(g_AttackR.pos.x, g_AttackR.pos.y, g_AttackR.pos.z);
-	mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+		// 回転を反映
+		mtxRot = XMMatrixRotationRollPitchYaw(g_AttackR.rot.x, g_AttackR.rot.y + XM_PI, g_AttackR.rot.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxRot);
 
-	// ワールドマトリックスの設定
-	SetWorldMatrix(&mtxWorld);
+		// 移動を反映
+		mtxTranslate = XMMatrixTranslation(g_AttackR.pos.x, g_AttackR.pos.y, g_AttackR.pos.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
 
-	XMStoreFloat4x4(&g_AttackR.mtxWorld, mtxWorld);
+		// ワールドマトリックスの設定
+		SetWorldMatrix(&mtxWorld);
+
+		XMStoreFloat4x4(&g_AttackR.mtxWorld, mtxWorld);
 
 
-	// モデル描画
-	DrawModel(&g_AttackR.model);
-
-	// セルフシャドウを有効に
-	SetLightEnable(TRUE);
+		// モデル描画
+		DrawModel(&g_AttackR.model);
+	}
 
 	// 通常ブレンドに戻す
 	SetBlendState(BLEND_MODE_ALPHABLEND);
@@ -177,6 +178,9 @@ void DrawAttackR(void)
 
 	// αテストを無効に
 	SetAlphaTestEnable(FALSE);
+
+	// フォグを有効に
+	SetFogEnable(TRUE);
 
 }
 

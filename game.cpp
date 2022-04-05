@@ -16,6 +16,8 @@
 #include "player.h"
 #include "enemy.h"
 #include "attackRange.h"
+#include "bom.h"
+#include "blast.h"
 #include "meshfield.h"
 #include "meshwall.h"
 #include "shadow.h"
@@ -56,7 +58,7 @@ HRESULT InitGame(void)
 	g_ViewPortType_Game = TYPE_FULL_SCREEN;
 
 	// フィールドの初期化
-	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 100, 100, 13.0f, 13.0f);
+	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
 
 	// ライトを有効化	// 影の初期化処理
 	InitShadow();
@@ -67,31 +69,37 @@ HRESULT InitGame(void)
 	// エネミーの初期化
 	InitEnemy();
 
-	// 攻撃範囲
+	// 攻撃範囲の初期化
 	InitAttackR();
 
-	// 壁の初期化
-	InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_TOP), XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(MAP_LEFT, 0.0f, 0.0f), XMFLOAT3(0.0f, -XM_PI * 0.50f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(MAP_RIGHT, 0.0f, 0.0f), XMFLOAT3(0.0f, XM_PI * 0.50f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_DOWN), XMFLOAT3(0.0f,  XM_PI, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
+	// ダイナマイトの初期化
+	InitBom();
 
-	// 壁(裏側用の半透明)
-	InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_TOP), XMFLOAT3(0.0f,    XM_PI, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(MAP_LEFT, 0.0f, 0.0f), XMFLOAT3(0.0f,   XM_PI * 0.50f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(MAP_RIGHT, 0.0f, 0.0f), XMFLOAT3(0.0f, -XM_PI * 0.50f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
-	InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_DOWN), XMFLOAT3(0.0f, 0.0f, 0.0f),
-		XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
+	// 爆破オブジェクトの初期化
+	InitBlast();
+
+	//// 壁の初期化
+	//InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_TOP), XMFLOAT3(0.0f, 0.0f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(MAP_LEFT, 0.0f, 0.0f), XMFLOAT3(0.0f, -XM_PI * 0.50f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(MAP_RIGHT, 0.0f, 0.0f), XMFLOAT3(0.0f, XM_PI * 0.50f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_DOWN), XMFLOAT3(0.0f,  XM_PI, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 16, 2, 80.0f, 80.0f);
+
+	//// 壁(裏側用の半透明)
+	//InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_TOP), XMFLOAT3(0.0f,    XM_PI, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(MAP_LEFT, 0.0f, 0.0f), XMFLOAT3(0.0f,   XM_PI * 0.50f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(MAP_RIGHT, 0.0f, 0.0f), XMFLOAT3(0.0f, -XM_PI * 0.50f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
+	//InitMeshWall(XMFLOAT3(0.0f, 0.0f, MAP_DOWN), XMFLOAT3(0.0f, 0.0f, 0.0f),
+	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
 
 	// 木を生やす
-	InitTree();
+	//InitTree();
 
 	// 弾の初期化
 	InitBullet();
@@ -136,6 +144,12 @@ void UninitGame(void)
 
 	// 地面の終了処理
 	UninitMeshField();
+
+	// 爆破オブジェクトの終了処理
+	UninitBlast();
+
+	// ダイナマイトの終了処理
+	UninitBom();
 
 	// 攻撃範囲の終了処理
 	UninitAttackR();
@@ -186,6 +200,12 @@ void UpdateGame(void)
 	// 攻撃範囲の更新処理
 	UpdateAttackR();
 
+	// ダイナマイトの更新処理
+	UpdateBom();
+
+	// 爆破オブジェクトの更新処理
+	UpdateBlast();
+
 	// 壁処理の更新
 	UpdateMeshWall();
 
@@ -228,6 +248,12 @@ void DrawGame0(void)
 
 	// プレイヤーの描画処理
 	DrawPlayer();
+
+	// ダイナマイトの描画処理
+	DrawBom();
+
+	// 爆破オブジェクトの描画処理
+	DrawBlast();
 
 	// 弾の描画処理
 	DrawBullet();
@@ -333,23 +359,31 @@ void CheckHit(void)
 	ENEMY *enemy = GetEnemy();		// エネミーのポインターを初期化
 	PLAYER *player = GetPlayer();	// プレイヤーのポインターを初期化
 	BULLET *bullet = GetBullet();	// 弾のポインターを初期化
+	BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
-	// 敵とプレイヤーキャラ
+	// 敵と爆破オブジェクト
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{
 		//敵の有効フラグをチェックする
 		if (enemy[i].use == FALSE)
 			continue;
 
-		//BCの当たり判定
-		if (CollisionBC(player->pos, enemy[i].pos, player->size, enemy[i].size))
+		for (int p = 0; p < MAX_BLAST; p++)
 		{
-			// 敵キャラクターは倒される
-			enemy[i].use = FALSE;
-			ReleaseShadow(enemy[i].shadowIdx);
+			//爆破オブジェクトの有効フラグをチェックする
+			if (blast[p].use == FALSE)
+				continue;
 
-			// スコアを足す
-			AddScore(100);
+			//BCの当たり判定
+			if (CollisionBC(blast[p].pos, enemy[i].pos, blast[p].size, enemy[i].size))
+			{
+				// 敵キャラクターは倒される
+				enemy[i].use = FALSE;
+				ReleaseShadow(enemy[i].shadowIdx);
+
+				// スコアを足す
+				AddScore(100);
+			}
 		}
 	}
 
@@ -388,18 +422,18 @@ void CheckHit(void)
 
 
 	// エネミーが全部死亡したら状態遷移
-	int enemy_count = 0;
-	for (int i = 0; i < MAX_ENEMY; i++)
-	{
-		if (enemy[i].use == FALSE) continue;
-		enemy_count++;
-	}
+	//int enemy_count = 0;
+	//for (int i = 0; i < MAX_ENEMY; i++)
+	//{
+	//	if (enemy[i].use == FALSE) continue;
+	//	enemy_count++;
+	//}
 
-	// エネミーが０匹？
-	if (enemy_count == 0)
-	{
-		SetFade(FADE_OUT, MODE_RESULT);
-	}
+	//// エネミーが０匹？
+	//if (enemy_count == 0)
+	//{
+	//	SetFade(FADE_OUT, MODE_RESULT);
+	//}
 
 }
 

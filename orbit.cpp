@@ -13,6 +13,7 @@
 #include "orbit.h"
 #include "player.h"
 #include "attackRange.h"
+#include "bom.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -163,7 +164,7 @@ void UpdateOrbit(void)
 	control.z = (AttackR->pos.z - pPlayer->pos.z) / 2.0f + pPlayer->pos.z;
 	control.y = (AttackR->pos.y - pPlayer->pos.y) / 2.0f + pPlayer->pos.y;
 
-	hight = 40.0f;
+	hight = BOM_H;
 
 	control.y += hight;
 
