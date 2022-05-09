@@ -264,7 +264,7 @@ void UpdateMeshField(void)
 
 	for (int i = 0; i < (g_nNumBlockZField + 1) * (g_nNumBlockXField + 1); i++)
 	{
-		g_Vertex[i].Position.z += 5.0f;
+		g_Vertex[i].Position.z += FIELD_SPEED;
 
 		if (g_Vertex[i].Position.z > 2200)
 		{

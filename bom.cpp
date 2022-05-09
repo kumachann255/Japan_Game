@@ -211,9 +211,10 @@ void SetBom(void)
 		control1.z = (control2.z - control0.z) / 2.0f + control0.z;
 		control1.y = (control2.y - control0.y) / 2.0f + control0.y;
 
-		hight = BOM_H;
+		hight = BOM_H_MAX;
 
 		control1.y += hight;
+		control2.y += BOM_H;
 
 		// ‰ñ“]‘¬“x‚ÌZo
 		rot.x = (float)(rand() % 50) / 1000.0f;

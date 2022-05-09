@@ -156,13 +156,14 @@ void UpdateEnemy(void)
 			{
 				BOOL ans = TRUE;
 				// 他のパトカーと当たっていないかを確認
-				for (int p = 0; p < MAX_ENEMY; p++)
+				for (int p = 0 ; p < MAX_ENEMY; p++)
 				{
 					//敵の有効フラグをチェックする
 					if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
 
 					//BCの当たり判定
-					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size))
+					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size) && 
+						(g_Enemy[i].pos.z > g_Enemy[p].pos.z))
 					{	// 当たっていない場合に移動
 
 						ans = FALSE;

@@ -23,33 +23,6 @@
 // 構造体定義
 //*****************************************************************************
 
-// マテリアル構造体
-struct MODEL_MATERIAL
-{
-	char						Name[256];
-	MATERIAL					Material;
-	char						TextureName[256];
-};
-
-// 描画サブセット構造体
-struct SUBSET
-{
-	unsigned short	StartIndex;
-	unsigned short	IndexNum;
-	MODEL_MATERIAL	Material;
-};
-
-// モデル構造体
-struct MODEL
-{
-	VERTEX_3D		*VertexArray;
-	unsigned short	VertexNum;
-	unsigned short	*IndexArray;
-	unsigned short	IndexNum;
-	SUBSET			*SubsetArray;
-	unsigned short	SubsetNum;
-};
-
 
 
 //*****************************************************************************
@@ -60,7 +33,6 @@ struct MODEL
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-void LoadObj( char *FileName, MODEL *Model );
 void LoadMaterial( char *FileName, MODEL_MATERIAL **MaterialArray, unsigned short *MaterialNum );
 
 
@@ -135,6 +107,79 @@ void LoadModel( char *FileName, DX11_MODEL *Model )
 
 
 }
+
+
+//=============================================================================
+// 初期化処理(モーフィング様)
+//=============================================================================
+void LoadModelMorphing(char *FileName, DX11_MODEL *Model)
+{
+	MODEL model;
+
+	LoadObj(FileName, &model);
+
+
+	// 頂点バッファ生成
+	{	// モーフィングするモデルの読み込み
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DYNAMIC;
+		bd.ByteWidth = sizeof(VERTEX_3D) * model.VertexNum;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = model.VertexArray;
+
+		GetDevice()->CreateBuffer(&bd, &sd, &Model->VertexBuffer);
+	}
+
+
+	// インデックスバッファ生成
+	{
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(unsigned short) * model.IndexNum;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.pSysMem = model.IndexArray;
+
+		GetDevice()->CreateBuffer(&bd, &sd, &Model->IndexBuffer);
+	}
+
+	// サブセット設定
+	{
+		Model->SubsetArray = new DX11_SUBSET[model.SubsetNum];
+		Model->SubsetNum = model.SubsetNum;
+
+		for (unsigned short i = 0; i < model.SubsetNum; i++)
+		{
+			Model->SubsetArray[i].StartIndex = model.SubsetArray[i].StartIndex;
+			Model->SubsetArray[i].IndexNum = model.SubsetArray[i].IndexNum;
+
+			Model->SubsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
+
+			D3DX11CreateShaderResourceViewFromFile(GetDevice(),
+				model.SubsetArray[i].Material.TextureName,
+				NULL,
+				NULL,
+				&Model->SubsetArray[i].Material.Texture,
+				NULL);
+		}
+	}
+
+	delete[] model.VertexArray;
+	delete[] model.IndexArray;
+	delete[] model.SubsetArray;
+
+
+}
+
 
 
 //=============================================================================

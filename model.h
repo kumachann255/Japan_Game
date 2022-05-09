@@ -40,12 +40,43 @@ struct DX11_MODEL
 	unsigned short	SubsetNum;
 };
 
+// マテリアル構造体
+struct MODEL_MATERIAL
+{
+	char						Name[256];
+	MATERIAL					Material;
+	char						TextureName[256];
+};
+
+// 描画サブセット構造体
+struct SUBSET
+{
+	unsigned short	StartIndex;
+	unsigned short	IndexNum;
+	MODEL_MATERIAL	Material;
+};
+
+// モデル構造体
+struct MODEL
+{
+	VERTEX_3D		*VertexArray;
+	unsigned short	VertexNum;
+	unsigned short	*IndexArray;
+	unsigned short	IndexNum;
+	SUBSET			*SubsetArray;
+	unsigned short	SubsetNum;
+};
+
+
 
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
 void LoadModel( char *FileName, DX11_MODEL *Model );
+void LoadModelMorphing(char *FileName, DX11_MODEL *Model);
+
+void LoadObj(char *FileName, MODEL *Model);
 void UnloadModel( DX11_MODEL *Model );
 void DrawModel( DX11_MODEL *Model );
 
