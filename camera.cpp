@@ -10,6 +10,8 @@
 #include "debugproc.h"
 #include "model.h"
 #include "player.h"
+#include "bom.h"
+#include "blast.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -33,12 +35,16 @@
 #define	VALUE_MOVE_CAMERA	(2.0f)										// カメラの移動量
 #define	VALUE_ROTATE_CAMERA	(XM_PI * 0.01f)								// カメラの回転量
 
+#define CAMERA_OFFSET	(1.0f)				// 補間の許容範囲値
+#define CAMERA_VALUE	(10.0f)				// 補間の速度
+
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
 static CAMERA			g_Camera;		// カメラデータ
 
 static int				g_ViewPortType = TYPE_FULL_SCREEN;
+
 
 //=============================================================================
 // 初期化処理
@@ -61,6 +67,7 @@ void InitCamera(void)
 }
 
 
+
 //=============================================================================
 // カメラの終了処理
 //=============================================================================
@@ -76,14 +83,6 @@ void UninitCamera(void)
 void UpdateCamera(void)
 {
 	PLAYER *pPlayer = GetPlayer();
-
-
-
-
-
-
-
-
 
 
 
@@ -291,6 +290,8 @@ void SetViewPort(int type)
 }
 
 
+
+
 int GetViewPortType(void)
 {
 	return g_ViewPortType;
@@ -298,18 +299,72 @@ int GetViewPortType(void)
 
 
 
+
+
+
+
+
 // カメラの視点と注視点をセット
 void SetCameraAT(XMFLOAT3 pos)
 {
 	// カメラの注視点をプレイヤーの座標にしてみる
-	g_Camera.at = pos;
 
-	// カメラの視点をカメラのY軸回転に対応させている
-	g_Camera.pos.x = g_Camera.at.x - sinf(g_Camera.rot.y) * g_Camera.len;
-	g_Camera.pos.z = g_Camera.at.z - cosf(g_Camera.rot.y) * g_Camera.len;
-	
-	// シーンに応じてATの調整
-	g_Camera.at.y += CAMERA_OFFSET_Y;
+	BOM *bom = GetBom();
+	BLAST *blast = GetBlast();
 
+	XMFLOAT3 targetAT;
+
+	// 爆弾が使用されていたら爆弾に視線を送る
+	if (((bom->use) && (bom->time > 0.15f)) || (GetCameraSwitch()))
+	{
+		if(bom->use) targetAT = bom->pos;
+		else targetAT = blast->pos;
+
+		{
+			g_Camera.at.x = g_Camera.at.x + ((targetAT.x - g_Camera.at.x) / CAMERA_VALUE);
+			g_Camera.at.y = g_Camera.at.y + ((targetAT.y - g_Camera.at.y) / CAMERA_VALUE);
+			g_Camera.at.z = g_Camera.at.z + ((targetAT.z - g_Camera.at.z) / CAMERA_VALUE);
+		}
+
+
+		//g_Camera.at = bom->pos;
+
+		// 過去の注視点と違っている場合に少しずつ保管させる
+		// 注視点が瞬間移動しないように
+		//float distance = fabsf(old_pos.y - g_Camera.at.y);
+
+		//if (distance > CAMERA_OFFSET)
+		{
+			//g_Camera.at.x = old_pos.x + ((g_Camera.at.x - old_pos.x) / CAMERA_VALUE);
+			//g_Camera.at.y = old_pos.y + ((g_Camera.at.x - old_pos.y) / CAMERA_VALUE);
+			//g_Camera.at.z = old_pos.z + ((g_Camera.at.x - old_pos.z) / CAMERA_VALUE);
+		}
+
+
+	}
+	else
+	{
+		//g_Camera.at = pos;
+
+		// カメラの視点をカメラのY軸回転に対応させている
+		//g_Camera.pos.x = g_Camera.at.x - sinf(g_Camera.rot.y) * g_Camera.len;
+		//g_Camera.pos.z = g_Camera.at.z - cosf(g_Camera.rot.y) * g_Camera.len;
+
+		//// シーンに応じてATの調整
+		//g_Camera.at.y += CAMERA_OFFSET_Y;
+
+		XMFLOAT3 targetAT = pos;
+
+		// シーンに応じてATの調整
+		targetAT.y += CAMERA_OFFSET_Y;
+
+		{
+			g_Camera.at.x = g_Camera.at.x + ((targetAT.x - g_Camera.at.x) / CAMERA_VALUE * 2.0f);
+			g_Camera.at.y = g_Camera.at.y + ((targetAT.y - g_Camera.at.y) / CAMERA_VALUE * 2.0f);
+			g_Camera.at.z = g_Camera.at.z + ((targetAT.z - g_Camera.at.z) / CAMERA_VALUE * 2.0f);
+		}
+
+
+	}
 }
 

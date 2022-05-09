@@ -81,6 +81,8 @@ HRESULT InitPlayer(void)
 
 	g_Player.use = TRUE;
 
+	g_Player.hp = PLAYER_MAX_HP;
+
 	// ここでプレイヤー用の影を作成している
 	XMFLOAT3 pos = g_Player.pos;
 	pos.y -= (PLAYER_OFFSET_Y - 0.1f);

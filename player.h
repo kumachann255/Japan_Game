@@ -14,6 +14,8 @@
 
 #define	PLAYER_SIZE		(5.0f)				// 当たり判定の大きさ
 
+#define PLAYER_MAX_HP	(5)					// プレイヤーのHP
+
 
 //*****************************************************************************
 // 構造体定義
@@ -33,7 +35,9 @@ struct PLAYER
 	float				dir;		// 向き
 	float				size;		// 当たり判定の大きさ
 	int					shadowIdx;	// 影のIndex
+	int					hp;			// ヒットポイント
 	BOOL				use;
+
 
 	// 階層アニメーション用のメンバー変数
 	INTERPOLATION_DATA	*tbl_adr;	// アニメデータのテーブル先頭アドレス

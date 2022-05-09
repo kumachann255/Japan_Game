@@ -28,6 +28,7 @@
 #include "orbit.h"
 #include "collision.h"
 #include "debugproc.h"
+#include "timeUI.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -107,6 +108,9 @@ HRESULT InitGame(void)
 	// スコアの初期化
 	InitScore();
 
+	// 制限時間の初期化
+	InitTime();
+
 	// パーティクルの初期化
 	InitParticle();
 
@@ -129,6 +133,9 @@ void UninitGame(void)
 
 	// パーティクルの終了処理
 	UninitParticle();
+
+	// 時間の終了処理
+	UninitTime();
 
 	// スコアの終了処理
 	UninitScore();
@@ -229,6 +236,9 @@ void UpdateGame(void)
 
 	// スコアの更新処理
 	UpdateScore();
+
+	// 時間の更新処理
+	UpdateTime();
 }
 
 //=============================================================================
@@ -284,6 +294,9 @@ void DrawGame0(void)
 
 	// スコアの描画処理
 	DrawScore();
+
+	// 時間の描画処理
+	DrawTime();
 
 
 	// ライティングを有効に
@@ -420,6 +433,18 @@ void CheckHit(void)
 
 	}
 
+
+	// プレイヤーのHPが0でゲームオーバー
+	// リザルト画面へ遷移
+	// 最終的にはゲームオーバー画面からリザルト画面へ遷移
+	if (player->hp <= 0)
+	{
+		SetFade(FADE_OUT, MODE_RESULT);
+
+
+
+
+	}
 
 	// エネミーが全部死亡したら状態遷移
 	//int enemy_count = 0;

@@ -24,7 +24,7 @@
 #define	VALUE_MOVE			(5.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
-#define BOM_SPEED			(0.01f)						// ボムの速度
+#define BOM_SPEED			(0.015f)						// ボムの速度
 
 
 //*****************************************************************************
@@ -224,4 +224,17 @@ void SetBom(void)
 		// 回転の初期化
 		g_Bom.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	}
+}
+
+
+BOOL GetBomUse(void)
+{
+	return g_Bom.use;
+}
+
+
+// 爆弾の進んだ時間を取得
+float GetBomTime(void)
+{
+	return g_Bom.time;
 }

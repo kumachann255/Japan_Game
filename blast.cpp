@@ -56,6 +56,9 @@ static int				g_downCount;					// 落ち始めてどのくらい時間が経過したか
 
 static int				g_morphingNum;					// モーフィングの番号
 
+static BOOL				g_cameraOn;						// カメラのスイッチ
+
+
 //=============================================================================
 // 初期化処理
 //=============================================================================
@@ -104,6 +107,7 @@ HRESULT InitBlast(void)
 	g_morphingNum = 0;
 	g_time = 0.0f;
 	g_downCount = 0;
+	g_cameraOn = FALSE;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -222,6 +226,8 @@ void UpdateBlast(void)
 				{
 					g_Blast[i].pos.y -= BLAST_DOWN / BLASE_DOWN_SPEED;
 					g_downCount++;
+
+					g_cameraOn = FALSE;
 				}
 				
 				// 落ちた後は床と一緒に奥へ移動する
@@ -245,9 +251,6 @@ void UpdateBlast(void)
 
 				GetDeviceContext()->Unmap(g_Blast[0].model.VertexBuffer, 0);
 			}
-
-
-
 		}
 	}
 }
@@ -338,6 +341,8 @@ void SetBlast(XMFLOAT3 pos)
 			g_Blast[i].pos = pos;
 			g_Blast[i].life = BLAST_LIFE;
 
+			g_cameraOn = TRUE;
+
 			g_time = 0.0f;
 			g_morphingNum = 0;
 			g_downCount = 0;
@@ -345,4 +350,18 @@ void SetBlast(XMFLOAT3 pos)
 			return;
 		}
 	}
+}
+
+
+// カメラを切り替えるかどうかのスイッチを知る関数
+BOOL GetCameraSwitch(void)
+{
+	return g_cameraOn;
+}
+
+
+// カメラを切り替えるかどうかのスイッチ
+void SetCameraSwitch(BOOL data)
+{
+	g_cameraOn = data;
 }
