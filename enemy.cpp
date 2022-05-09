@@ -33,6 +33,13 @@
 #define POP_COUNT			(100)						// エネミーのポップ間隔
 #define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
 
+#define ENEMY_ATTACK_0		(300)						// エネミーが点滅するまでの時間
+#define ENEMY_ATTACK_1		(120 + ENEMY_ATTACK_0)		// 点滅が早くなるまでの時間
+#define ENEMY_ATTACK_2		(120 + ENEMY_ATTACK_1)		// 攻撃するまでの時間
+
+#define ENEMY_BLINKING0		(50)						// 点滅の間隔
+#define ENEMY_BLINKING1		(14)						// 点滅の間隔
+
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -86,6 +93,8 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].tbl_size = 0;		// 再生するアニメデータのレコード数をセット
 
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
+
+		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
 
 	}
 
@@ -150,6 +159,82 @@ void UpdateEnemy(void)
 	{
 		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
+			// 生存時間をカウント
+			g_Enemy[i].liveCount++;
+
+
+			// 攻撃処理
+			if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)
+			{	// 攻撃を行う
+				// 生存時間をリセット
+				g_Enemy[i].liveCount = 0;
+
+				// 色を戻す
+				for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+				{
+					SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+				}
+
+
+				// 攻撃
+
+
+
+
+			}
+			else if(g_Enemy[i].liveCount > ENEMY_ATTACK_1)
+			{	// 赤い点滅が早くなる
+				
+				if (g_Enemy[i].liveCount % ENEMY_BLINKING1 < ENEMY_BLINKING1 / 2)
+				{	// オブジェクトを赤くする
+
+					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, color);
+					}
+				}
+				else
+				{	// オブジェクトの色を戻す
+
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+					}
+				}
+
+
+			}
+			else if (g_Enemy[i].liveCount > ENEMY_ATTACK_0)
+			{	// 赤く点滅する
+
+				if (g_Enemy[i].liveCount % ENEMY_BLINKING0 < ENEMY_BLINKING0 / 2)
+				{	// オブジェクトを赤くする
+
+					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, color);
+					}
+				}
+				else
+				{	// オブジェクトの色を戻す
+
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+					}
+				}
+
+
+			}
+
+
+
+
+
+
+
 
 			// 目標地点まで到達していない場合に移動処理
 			if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
@@ -175,14 +260,6 @@ void UpdateEnemy(void)
 				{
 					g_Enemy[i].pos.z -= VALUE_MOVE;
 				}
-
-
-
-
-
-
-
-
 			}
 
 
@@ -315,7 +392,13 @@ void SetEnemy(void)
 			// 到達地点もランダム
 			g_Enemy[i].zGoal = (float)(rand() % ENEMY_GOAL_Z_OFFSET) + ENEMY_GOAL_Z;
 
+			g_Enemy[i].liveCount = 0;
 
+			// 色を戻す
+			for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+			{
+				SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+			}
 
 
 
