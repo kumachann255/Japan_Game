@@ -44,3 +44,5 @@ void DrawBlast(void);
 BLAST *GetBlast(void);
 
 void SetBlast(XMFLOAT3 pos);
+BOOL GetCameraSwitch(void);
+void SetCameraSwitch(BOOL data);
