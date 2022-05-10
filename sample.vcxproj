@@ -140,6 +140,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="damageEF.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="damageEF.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />

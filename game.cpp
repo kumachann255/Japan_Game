@@ -29,6 +29,7 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "timeUI.h"
+#include "damageEF.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -117,6 +118,9 @@ HRESULT InitGame(void)
 	// 軌跡の初期化
 	InitOrbit();
 
+	// ダメージエフェクトの初期化
+	InitDamageEF();
+
 	// BGM再生
 	//PlaySound(SOUND_LABEL_BGM_sample001);
 
@@ -128,6 +132,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	// ダメージエフェクトの終了処理
+	UninitDamageEF();
+
 	// 軌跡の終了処理
 	UninitOrbit();
 
@@ -239,6 +246,9 @@ void UpdateGame(void)
 
 	// 時間の更新処理
 	UpdateTime();
+
+	// ダメージエフェクトの更新処理
+	UpdateDamageEF();
 }
 
 //=============================================================================
@@ -297,6 +307,9 @@ void DrawGame0(void)
 
 	// 時間の描画処理
 	DrawTime();
+
+	// ダメージエフェクトの描画処理
+	DrawDamageEF();
 
 
 	// ライティングを有効に

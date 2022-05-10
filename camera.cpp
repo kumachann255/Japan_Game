@@ -38,12 +38,19 @@
 #define CAMERA_OFFSET	(1.0f)				// 補間の許容範囲値
 #define CAMERA_VALUE	(10.0f)				// 補間の速度
 
+#define CAMERA_SHAKE_MAX		(3)				// 画面が揺れる最大値
+#define CAMERA_SHAKE_INTERVAL	(2)				// 画面が揺れる間隔
+
 //*****************************************************************************
 // グローバル変数
 //*****************************************************************************
 static CAMERA			g_Camera;		// カメラデータ
 
 static int				g_ViewPortType = TYPE_FULL_SCREEN;
+
+static BOOL				g_Shake;		// 画面揺れをするかどうか
+static int				g_ShakeCount;	// 画面が揺れる残り時間
+static XMFLOAT3			g_ShakePos;		// どのくらい揺らすかの距離を保存
 
 
 //=============================================================================
@@ -84,6 +91,44 @@ void UpdateCamera(void)
 {
 	PLAYER *pPlayer = GetPlayer();
 
+	// 画面が揺れる処理
+	if (g_Shake)
+	{
+		// 画面揺れの残り時間を減らす
+		g_ShakeCount--;
+
+		// 残り時間が残っている場合
+		if (g_ShakeCount > 0)
+		{
+			g_Camera.pos.x += g_ShakePos.x;
+			g_Camera.pos.y += g_ShakePos.y;
+			g_Camera.pos.z += g_ShakePos.z;
+
+			// 画面揺れ幅をリセット
+			if (g_ShakeCount % CAMERA_SHAKE_INTERVAL == 0)
+			{
+				g_ShakePos.x = RamdomFloat(3, CAMERA_SHAKE_MAX, -CAMERA_SHAKE_MAX);
+				g_ShakePos.y = RamdomFloat(3, CAMERA_SHAKE_MAX, -CAMERA_SHAKE_MAX);
+				g_ShakePos.z = RamdomFloat(3, CAMERA_SHAKE_MAX, -CAMERA_SHAKE_MAX);
+			}
+		}
+		else
+		{
+			//XMFLOAT3 pos;
+
+			//pos = pPlayer->pos;
+			//pos.y = 0.0f;			// カメラ酔いを防ぐためにクリアしている
+			//SetCameraAT(pos);
+			//SetCamera();
+
+			g_Shake = FALSE;
+		}
+	}
+	else
+	{
+		//SetCameraAT(pPlayer->pos);
+		g_Camera.pos = { POS_X_CAM, POS_Y_CAM, POS_Z_CAM };
+	}
 
 
 
@@ -367,4 +412,16 @@ void SetCameraAT(XMFLOAT3 pos)
 
 	}
 }
+
+
+//=============================================================================
+// 画面を揺らす処理を開始
+//=============================================================================
+void SetCameraShake(int time)
+{
+	g_Shake = TRUE;
+	g_ShakeCount = time;
+	g_ShakePos = { 0.0f, 0.0f ,0.0f };
+}
+
 

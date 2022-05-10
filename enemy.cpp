@@ -12,6 +12,7 @@
 #include "enemy.h"
 #include "shadow.h"
 #include "collision.h"
+#include "damageEF.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -177,8 +178,8 @@ void UpdateEnemy(void)
 
 
 				// UŒ‚
-
-
+				SetDamageEF(TRUE);
+				SetCameraShake(20);
 
 
 			}

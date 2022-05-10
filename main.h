@@ -88,3 +88,4 @@ char* GetDebugStr(void);
 void SetMode(int mode);
 int GetMode(void);
 
+float RamdomFloat(int digits, float max, float min);
