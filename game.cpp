@@ -30,6 +30,9 @@
 #include "debugproc.h"
 #include "timeUI.h"
 #include "damageEF.h"
+#include "combo.h"
+
+
 
 //*****************************************************************************
 // マクロ定義
@@ -109,6 +112,9 @@ HRESULT InitGame(void)
 	// スコアの初期化
 	InitScore();
 
+	// コンボの初期化
+	InitCombo();
+
 	// 制限時間の初期化
 	InitTime();
 
@@ -143,6 +149,9 @@ void UninitGame(void)
 
 	// 時間の終了処理
 	UninitTime();
+
+	// コンボの終了処理
+	UninitCombo();
 
 	// スコアの終了処理
 	UninitScore();
@@ -244,6 +253,9 @@ void UpdateGame(void)
 	// スコアの更新処理
 	UpdateScore();
 
+	// コンボの更新処理
+	UpdateCombo();
+
 	// 時間の更新処理
 	UpdateTime();
 
@@ -304,6 +316,9 @@ void DrawGame0(void)
 
 	// スコアの描画処理
 	DrawScore();
+
+	// コンボの描画処理
+	DrawCombo();
 
 	// 時間の描画処理
 	DrawTime();
@@ -409,6 +424,10 @@ void CheckHit(void)
 
 				// スコアを足す
 				AddScore(100);
+
+				// コンボを足す
+				AddCombo(1);
+				ResetComboTime();
 			}
 		}
 	}
