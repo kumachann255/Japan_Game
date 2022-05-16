@@ -1,1 +1,0 @@
-＃Japan_Game
