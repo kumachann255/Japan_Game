@@ -12,16 +12,29 @@
 #include "attackRange.h"
 #include "shadow.h"
 #include "blast.h"
+#include "meshfield.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_BLAST			"data/MODEL/blast.obj"		// 読み込むモデル名
+#define	MODEL_BLAST				"data/MODEL/test_bom0.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_1			"data/MODEL/test_bom1.obj"		// 読み込むモデル名
+
 
 #define	VALUE_MOVE			(5.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
-#define BLAST_LIFE			(30)						// 爆破オブジェクトの表示時間
+#define BLAST_LIFE			(150)						// 爆破オブジェクトの表示時間
+#define BLAST_MOVE_TIME_0	(5)						// ねばねばが広がる時間
+#define BLAST_MOVE_TIME_1	(30)						// 広がった状態で止まる時間
+#define BLAST_MOVE_TIME_2	(10)						// ねばねばが縮まる時間
+
+#define BLAST_DOWN			(15.0f)						// モーフィング後に落ちる高さ
+#define BLASE_DOWN_SPEED	(5.0f)						// 落ちる時間
+
+#define MAX_BLAST_MOVE		(2)							// モーフィングの数
+
+
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -35,6 +48,16 @@ static BLAST			g_Blast[MAX_BLAST];				// 爆破オブジェクト
 
 static BOOL				g_Load = FALSE;
 
+static MODEL			g_Blast_Vertex[MAX_BLAST_MOVE];		// モーフィング用モデルの頂点情報が入ったデータ配列
+static VERTEX_3D		*g_BlastVertex = NULL;				// 途中経過を記録する場所
+
+static float			g_time;							// モーフィングの経過時間
+static int				g_downCount;					// 落ち始めてどのくらい時間が経過したか
+
+static int				g_morphingNum;					// モーフィングの番号
+
+static BOOL				g_cameraOn;						// カメラのスイッチ
+
 
 //=============================================================================
 // 初期化処理
@@ -43,7 +66,7 @@ HRESULT InitBlast(void)
 {
 	for (int i = 0; i < MAX_BLAST; i++)
 	{
-		LoadModel(MODEL_BLAST, &g_Blast[i].model);
+		LoadModelMorphing(MODEL_BLAST, &g_Blast[i].model);
 		g_Blast[i].load = TRUE;
 
 		g_Blast[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -65,6 +88,26 @@ HRESULT InitBlast(void)
 		g_Blast[i].use = FALSE;			// TRUE:生きてる
 	}
 
+	// モーフィングするオブジェクトの読み込み
+	LoadObj(MODEL_BLAST, &g_Blast_Vertex[0]);
+	LoadObj(MODEL_BLAST_1, &g_Blast_Vertex[1]);
+
+	// 中身を配列として使用できるように仕様変更
+	g_BlastVertex = new VERTEX_3D[g_Blast_Vertex[0].VertexNum];
+
+	// 差分(途中経過)の初期化
+	for (int i = 0; i < g_Blast_Vertex[0].VertexNum; i++)
+	{
+		g_BlastVertex[i].Position = g_Blast_Vertex[0].VertexArray[i].Position;
+		g_BlastVertex[i].Diffuse  = g_Blast_Vertex[0].VertexArray[i].Diffuse;
+		g_BlastVertex[i].Normal   = g_Blast_Vertex[0].VertexArray[i].Normal;
+		g_BlastVertex[i].TexCoord = g_Blast_Vertex[0].VertexArray[i].TexCoord;
+	}
+
+	g_morphingNum = 0;
+	g_time = 0.0f;
+	g_downCount = 0;
+	g_cameraOn = FALSE;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -105,6 +148,108 @@ void UpdateBlast(void)
 			if (g_Blast[i].life < 0)
 			{
 				g_Blast[i].use = FALSE;
+			}
+
+			// ねばねばのモーフィングの処理
+			{
+				int after, brfore;
+
+				// 広がり終えたら縮まる方向へモーフィング
+				if (g_Blast[i].life < BLAST_LIFE - BLAST_MOVE_TIME_0)
+				{
+					g_morphingNum = 1;
+				}
+				else
+				{
+					g_morphingNum = 0;
+				}
+
+
+				// モーフィングモデルの番号調整
+				switch (g_morphingNum)
+				{
+				case 0:
+					after = 1;
+					brfore = 0;
+
+					break;
+
+				case 1:
+					after = 0;
+					brfore = 1;
+
+					break;
+				}
+
+
+				// モーフィング処理
+				for (int p = 0; p < g_Blast_Vertex[0].VertexNum; p++)
+				{
+					g_BlastVertex[p].Position.x = g_Blast_Vertex[after].VertexArray[p].Position.x - g_Blast_Vertex[brfore].VertexArray[p].Position.x;
+					g_BlastVertex[p].Position.y = g_Blast_Vertex[after].VertexArray[p].Position.y - g_Blast_Vertex[brfore].VertexArray[p].Position.y;
+					g_BlastVertex[p].Position.z = g_Blast_Vertex[after].VertexArray[p].Position.z - g_Blast_Vertex[brfore].VertexArray[p].Position.z;
+
+					g_BlastVertex[p].Position.x *= g_time;
+					g_BlastVertex[p].Position.y *= g_time;
+					g_BlastVertex[p].Position.z *= g_time;
+
+					g_BlastVertex[p].Position.x += g_Blast_Vertex[brfore].VertexArray[p].Position.x;
+					g_BlastVertex[p].Position.y += g_Blast_Vertex[brfore].VertexArray[p].Position.y;
+					g_BlastVertex[p].Position.z += g_Blast_Vertex[brfore].VertexArray[p].Position.z;
+				}
+
+				// 時間を進める
+				switch (g_morphingNum)
+				{
+				case 0:
+					if (g_time < 1.0f) g_time += 1.0f / BLAST_MOVE_TIME_0;
+
+					break;
+
+				case 1:
+					if ((g_time < 1.0f) && (g_Blast[i].life < BLAST_LIFE - BLAST_MOVE_TIME_0 - BLAST_MOVE_TIME_1))
+					{
+						g_time += 1.0f / BLAST_MOVE_TIME_2;
+					}
+					break;
+				}
+
+				// 第一モーフィングが完了したら次のモーフィングへ
+				if ((g_time >= 1.0f) && (g_morphingNum == 0))
+				{
+					g_time = 0.0f;
+					g_morphingNum++;
+				}
+
+				// 第二モーフィングが終わった後は落ちる
+				if ((g_time >= 1.0f) && (g_morphingNum == 1) && (g_downCount < BLASE_DOWN_SPEED))
+				{
+					g_Blast[i].pos.y -= BLAST_DOWN / BLASE_DOWN_SPEED;
+					g_downCount++;
+
+					g_cameraOn = FALSE;
+				}
+				
+				// 落ちた後は床と一緒に奥へ移動する
+				if (g_downCount >= BLASE_DOWN_SPEED)
+				{
+					g_Blast[i].pos.z += FIELD_SPEED;
+				}
+					
+
+				D3D11_SUBRESOURCE_DATA sd;
+				ZeroMemory(&sd, sizeof(sd));
+				sd.pSysMem = g_BlastVertex;
+
+				// 頂点バッファに値をセットする
+				D3D11_MAPPED_SUBRESOURCE msr;
+				GetDeviceContext()->Map(g_Blast[0].model.VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+				VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
+
+				// 全頂点情報を毎回上書きしているのはDX11ではこの方が早いからです
+				memcpy(pVtx, g_BlastVertex, sizeof(VERTEX_3D)*g_Blast_Vertex[0].VertexNum);
+
+				GetDeviceContext()->Unmap(g_Blast[0].model.VertexBuffer, 0);
 			}
 		}
 	}
@@ -196,8 +341,27 @@ void SetBlast(XMFLOAT3 pos)
 			g_Blast[i].pos = pos;
 			g_Blast[i].life = BLAST_LIFE;
 
+			g_cameraOn = TRUE;
+
+			g_time = 0.0f;
+			g_morphingNum = 0;
+			g_downCount = 0;
 
 			return;
 		}
 	}
+}
+
+
+// カメラを切り替えるかどうかのスイッチを知る関数
+BOOL GetCameraSwitch(void)
+{
+	return g_cameraOn;
+}
+
+
+// カメラを切り替えるかどうかのスイッチ
+void SetCameraSwitch(BOOL data)
+{
+	g_cameraOn = data;
 }

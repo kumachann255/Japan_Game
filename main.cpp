@@ -28,6 +28,9 @@
 #include "result.h"
 #include "fade.h"
 
+#include "timeUI.h"
+
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -453,3 +456,29 @@ int GetMode(void)
 	return g_Mode;
 }
 
+
+//=============================================================================
+// float型で負数にも対応しているランダムの値を返す関数
+// digits:小数点以下の桁数(0.01f → 2), max:欲しい最大値, min:欲しい最小値
+//=============================================================================
+float RamdomFloat(int digits, float max, float min)
+{
+	// 小数点を消すための変数を作成
+	int l_digits = 1;
+	for (int i = 0; i < digits; i++)
+	{
+		l_digits *= 10;
+	}
+
+	// 剰余算するための値を作成
+	float surplus = (max - min) * l_digits;
+
+	int random = rand() % (int)surplus;
+
+	float ans;
+
+	// 整数のランダムの値をfloat型へキャストと負数の処理
+	ans = (float)random / l_digits + min;
+
+	return ans;
+}

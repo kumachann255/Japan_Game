@@ -1,21 +1,27 @@
 //=============================================================================
 //
-// メッシュ地面の処理 [meshfield.h]
+// ダメージエフェクト処理 [damageEF.h]
 // Author : 
 //
 //=============================================================================
 #pragma once
 
-#define FIELD_SPEED			(5.0f)		// 地面の動く速度
+
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+
+
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitMeshField(XMFLOAT3 pos, XMFLOAT3 rot,
-							int nNumBlockX, int nNumBlockZ, float nBlockSizeX, float nBlockSizeZ);
-void UninitMeshField(void);
-void UpdateMeshField(void);
-void DrawMeshField(void);
+HRESULT InitDamageEF(void);
+void UninitDamageEF(void);
+void UpdateDamageEF(void);
+void DrawDamageEF(void);
 
-BOOL RayHitField(XMFLOAT3 pos, XMFLOAT3 *HitPosition, XMFLOAT3 *Normal);
+void SetDamageEF(BOOL data);
+
+
 

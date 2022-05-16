@@ -96,7 +96,14 @@
     <ClInclude Include="blast.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="customFunc.h">
+=======
+    <ClInclude Include="timeUI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="damageEF.h">
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,7 +189,14 @@
     <ClCompile Include="blast.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="customFunc.cpp">
+=======
+    <ClCompile Include="timeUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="damageEF.cpp">
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

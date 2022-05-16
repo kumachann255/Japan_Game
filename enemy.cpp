@@ -13,6 +13,7 @@
 #include "blast.h"
 #include "shadow.h"
 #include "collision.h"
+#include "damageEF.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -34,6 +35,13 @@
 #define MAX_POP				(20)						// 最大、場に何体エネミーを出すか
 
 #define ENEMY_HIT_MOVE		(0.1f)						// 当たり判定後アニメーション用移動量
+
+#define ENEMY_ATTACK_0		(300)						// エネミーが点滅するまでの時間
+#define ENEMY_ATTACK_1		(120 + ENEMY_ATTACK_0)		// 点滅が早くなるまでの時間
+#define ENEMY_ATTACK_2		(120 + ENEMY_ATTACK_1)		// 攻撃するまでの時間
+
+#define ENEMY_BLINKING0		(50)						// 点滅の間隔
+#define ENEMY_BLINKING1		(14)						// 点滅の間隔
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -89,10 +97,14 @@ HRESULT InitEnemy(void)
 
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
 
+<<<<<<< HEAD
 		g_Enemy[i].hitPos = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 当たり判定後アニメーション用スピードクリア
 		g_Enemy[i].hitSpd = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピードクリア
 		g_Enemy[i].isHit = FALSE;		// TRUE:当たってる
 		g_Enemy[i].hitMove = ENEMY_HIT_MOVE;						// 当たり判定後アニメーション用移動量クリア
+=======
+		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
 
 	}
 
@@ -155,6 +167,7 @@ void UpdateEnemy(void)
 	// エネミーを動かく場合は、影も合わせて動かす事を忘れないようにね！
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{
+<<<<<<< HEAD
 		if (g_Enemy[i].isHit == FALSE)
 		{
 			if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
@@ -162,6 +175,93 @@ void UpdateEnemy(void)
 
 				// 目標地点まで到達していない場合に移動処理
 				if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
+=======
+		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
+		{									// Yes
+			// 生存時間をカウント
+			g_Enemy[i].liveCount++;
+
+
+			// 攻撃処理
+			if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)
+			{	// 攻撃を行う
+				// 生存時間をリセット
+				g_Enemy[i].liveCount = 0;
+
+				// 色を戻す
+				for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+				{
+					SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+				}
+
+
+				// 攻撃
+				SetDamageEF(TRUE);
+				SetCameraShake(20);
+
+
+			}
+			else if(g_Enemy[i].liveCount > ENEMY_ATTACK_1)
+			{	// 赤い点滅が早くなる
+				
+				if (g_Enemy[i].liveCount % ENEMY_BLINKING1 < ENEMY_BLINKING1 / 2)
+				{	// オブジェクトを赤くする
+
+					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, color);
+					}
+				}
+				else
+				{	// オブジェクトの色を戻す
+
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+					}
+				}
+
+
+			}
+			else if (g_Enemy[i].liveCount > ENEMY_ATTACK_0)
+			{	// 赤く点滅する
+
+				if (g_Enemy[i].liveCount % ENEMY_BLINKING0 < ENEMY_BLINKING0 / 2)
+				{	// オブジェクトを赤くする
+
+					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, color);
+					}
+				}
+				else
+				{	// オブジェクトの色を戻す
+
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+					}
+				}
+
+
+			}
+
+
+
+
+
+
+
+
+			// 目標地点まで到達していない場合に移動処理
+			if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
+			{
+				BOOL ans = TRUE;
+				// 他のパトカーと当たっていないかを確認
+				for (int p = 0 ; p < MAX_ENEMY; p++)
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
 				{
 					BOOL ans = TRUE;
 					// 他のパトカーと当たっていないかを確認
@@ -170,9 +270,16 @@ void UpdateEnemy(void)
 						//敵の有効フラグをチェックする
 						if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
 
+<<<<<<< HEAD
 						//BCの当たり判定
 						if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size))
 						{	// 当たっていない場合に移動
+=======
+					//BCの当たり判定
+					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size) && 
+						(g_Enemy[i].pos.z > g_Enemy[p].pos.z))
+					{	// 当たっていない場合に移動
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
 
 							ans = FALSE;
 							break;
@@ -270,6 +377,7 @@ void UpdateEnemy(void)
 					ans = FALSE;
 					break;
 				}
+<<<<<<< HEAD
 			}
 			//////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////
@@ -287,6 +395,8 @@ void UpdateEnemy(void)
 				g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
 				g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
 
+=======
+>>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
 			}
 
 		
@@ -373,7 +483,13 @@ void SetEnemy(void)
 			// 到達地点もランダム
 			g_Enemy[i].zGoal = (float)(rand() % ENEMY_GOAL_Z_OFFSET) + ENEMY_GOAL_Z;
 
+			g_Enemy[i].liveCount = 0;
 
+			// 色を戻す
+			for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+			{
+				SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+			}
 
 
 
