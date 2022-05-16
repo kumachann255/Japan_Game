@@ -17,20 +17,22 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_BLAST				"data/MODEL/test_bom0.obj"		// 読み込むモデル名
-#define	MODEL_BLAST_1			"data/MODEL/test_bom1.obj"		// 読み込むモデル名
+#define	MODEL_BLAST				"data/MODEL/bak00.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_1			"data/MODEL/bak02.obj"		// 読み込むモデル名
 
 
 #define	VALUE_MOVE			(5.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
 #define BLAST_LIFE			(150)						// 爆破オブジェクトの表示時間
-#define BLAST_MOVE_TIME_0	(5)						// ねばねばが広がる時間
+#define BLAST_MOVE_TIME_0	(5)							// ねばねばが広がる時間
 #define BLAST_MOVE_TIME_1	(30)						// 広がった状態で止まる時間
-#define BLAST_MOVE_TIME_2	(10)						// ねばねばが縮まる時間
+#define BLAST_MOVE_TIME_2	(5)						// ねばねばが縮まる時間
 
-#define BLAST_DOWN			(15.0f)						// モーフィング後に落ちる高さ
+#define BLAST_DOWN			(20.0f)						// モーフィング後に落ちる高さ
 #define BLASE_DOWN_SPEED	(5.0f)						// 落ちる時間
+
+#define BLASE_ROT			(3.14f)						// 回転の最大値
 
 #define MAX_BLAST_MOVE		(2)							// モーフィングの数
 
@@ -71,7 +73,7 @@ HRESULT InitBlast(void)
 
 		g_Blast[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		g_Blast[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		g_Blast[i].scl = XMFLOAT3(2.0f, 2.0f, 2.0f);
+		g_Blast[i].scl = XMFLOAT3(1.3f, 1.3f, 1.3f);
 		g_Blast[i].size = BLAST_SIZE;
 		g_Blast[i].life = 0;
 		g_Blast[i].spd = 0.0f;			// 移動スピードクリア
@@ -80,10 +82,10 @@ HRESULT InitBlast(void)
 		GetModelDiffuse(&g_Blast[i].model, &g_Blast[i].diffuse[0]);
 
 		// 色を少し変える
-		XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 0.5f };
+		//XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 		// 色をセット
-		SetModelDiffuse(&g_Blast[i].model, 0, color);
+		//SetModelDiffuse(&g_Blast[i].model, 0, color);
 
 		g_Blast[i].use = FALSE;			// TRUE:生きてる
 	}
@@ -270,7 +272,7 @@ void DrawBlast(void)
 	SetAlphaTestEnable(TRUE);
 
 	// 加算合成に設定
-	SetBlendState(BLEND_MODE_ADD);
+	//SetBlendState(BLEND_MODE_ADD);
 
 	//フォグを無効に
 	SetFogEnable(FALSE);
@@ -346,6 +348,8 @@ void SetBlast(XMFLOAT3 pos)
 			g_time = 0.0f;
 			g_morphingNum = 0;
 			g_downCount = 0;
+
+			g_Blast[i].rot.y = RamdomFloat(2, BLASE_ROT, -BLASE_ROT);
 
 			return;
 		}

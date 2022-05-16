@@ -19,12 +19,14 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_BOM			"data/MODEL/dynamite.obj"		// 読み込むモデル名
+#define	MODEL_BOM			"data/MODEL/stick00.obj"		// 読み込むモデル名
 
 #define	VALUE_MOVE			(5.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
 #define BOM_SPEED			(0.015f)						// ボムの速度
+
+#define BOM_COOL			(180)						// クールタイム
 
 
 //*****************************************************************************
@@ -41,6 +43,8 @@ static BOOL				g_Load = FALSE;
 
 static XMFLOAT3			control0, control1, control2;	// 制御点
 
+static int				coolTime;		// クールタイム
+
 static XMFLOAT3			rot;	// 回転
 
 //=============================================================================
@@ -53,7 +57,7 @@ HRESULT InitBom(void)
 
 	g_Bom.pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	g_Bom.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	g_Bom.scl = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	g_Bom.scl = XMFLOAT3(0.5f, 0.5f, 0.5f);
 
 	g_Bom.speed = BOM_SPEED;			// 移動スピードクリア
 	g_Bom.time = 0.0f;
@@ -69,6 +73,7 @@ HRESULT InitBom(void)
 
 	g_Bom.use = FALSE;			// TRUE:生きてる
 
+	coolTime = BOM_COOL;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -131,10 +136,12 @@ void UpdateBom(void)
 		g_Bom.rot.y += rot.y;
 		//g_Bom.rot.z += rot.z;
 
+	}
 
-
-
-
+	// クールタイム管理
+	if (coolTime > 0)
+	{
+		coolTime--;
 	}
 
 }
@@ -193,7 +200,7 @@ BOM *GetBom()
 //=============================================================================
 void SetBom(void)
 {
-	if (g_Bom.use == FALSE)
+	if ((g_Bom.use == FALSE) && (coolTime <= 0))
 	{
 		g_Bom.use = TRUE;
 		g_Bom.time = 0.0f;
@@ -223,6 +230,9 @@ void SetBom(void)
 
 		// 回転の初期化
 		g_Bom.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+		coolTime = BOM_COOL;
+
 	}
 }
 
