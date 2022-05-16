@@ -424,37 +424,37 @@ void CheckHit(void)
 	}
 
 
-	// プレイヤーの弾と敵
-	for (int i = 0; i < MAX_BULLET; i++)
-	{
-		//弾の有効フラグをチェックする
-		if (bullet[i].use == FALSE)
-			continue;
+	//// プレイヤーの弾と敵
+	//for (int i = 0; i < MAX_BULLET; i++)
+	//{
+	//	//弾の有効フラグをチェックする
+	//	if (bullet[i].use == FALSE)
+	//		continue;
 
-		// 敵と当たってるか調べる
-		for (int j = 0; j < MAX_ENEMY; j++)
-		{
-			//敵の有効フラグをチェックする
-			if (enemy[j].use == FALSE)
-				continue;
+	//	// 敵と当たってるか調べる
+	//	for (int j = 0; j < MAX_ENEMY; j++)
+	//	{
+	//		//敵の有効フラグをチェックする
+	//		if (enemy[j].use == FALSE)
+	//			continue;
 
-			//BCの当たり判定
-			if (CollisionBC(bullet[i].pos, enemy[j].pos, bullet[i].fWidth, enemy[j].size))
-			{
-				// 当たったから未使用に戻す
-				bullet[i].use = FALSE;
-				ReleaseShadow(bullet[i].shadowIdx);
+	//		//BCの当たり判定
+	//		if (CollisionBC(bullet[i].pos, enemy[j].pos, bullet[i].fWidth, enemy[j].size))
+	//		{
+	//			// 当たったから未使用に戻す
+	//			bullet[i].use = FALSE;
+	//			ReleaseShadow(bullet[i].shadowIdx);
 
-				// 敵キャラクターは倒される
-				enemy[j].use = FALSE;
-				ReleaseShadow(enemy[j].shadowIdx);
+	//			// 敵キャラクターは倒される
+	//			enemy[j].use = FALSE;
+	//			ReleaseShadow(enemy[j].shadowIdx);
 
-				// スコアを足す
-				AddScore(10);
-			}
-		}
+	//			// スコアを足す
+	//			AddScore(10);
+	//		}
+	//	}
 
-	}
+	//}
 
 
 	// プレイヤーのHPが0でゲームオーバー

@@ -106,6 +106,9 @@
 >>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="combo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -197,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="damageEF.cpp">
 >>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="combo.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

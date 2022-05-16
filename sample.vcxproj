@@ -141,8 +141,12 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClInclude Include="customFunc.h" />
 =======
+=======
+    <ClInclude Include="combo.h" />
+>>>>>>> 459972987af2b346ba9912cd2b8d990d147fc226
     <ClInclude Include="damageEF.h" />
 >>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
     <ClInclude Include="debugproc.h" />
@@ -176,8 +180,12 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClCompile Include="customFunc.cpp" />
 =======
+=======
+    <ClCompile Include="combo.cpp" />
+>>>>>>> 459972987af2b346ba9912cd2b8d990d147fc226
     <ClCompile Include="damageEF.cpp" />
 >>>>>>> 233e256620bd5f32afdf3aebfe482761d0aa21d6
     <ClCompile Include="debugproc.cpp" />
