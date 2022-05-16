@@ -10,6 +10,7 @@
 #include "input.h"
 #include "model.h"
 #include "enemy.h"
+#include "blast.h"
 #include "shadow.h"
 #include "collision.h"
 
@@ -22,16 +23,17 @@
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
 #define ENEMY_SHADOW_SIZE	(0.4f)						// 影の大きさ
-#define ENEMY_OFFSET_Y		(7.0f)						// エネミーの足元をあわせる
 
 #define ENEMY_POP_Z			(500.0f)					// エネミーの初期ポップ位置(z座標)
 #define ENEMY_POP_X			(250)						// エネミーの初期ポップの範囲(x座標)
 
-#define ENEMY_GOAL_Z		(70.0f)					// エネミーのゴール基準位置(z座標)
+#define ENEMY_GOAL_Z		(70.0f)						// エネミーのゴール基準位置(z座標)
 #define ENEMY_GOAL_Z_OFFSET	(60)						// エネミーのゴール位置の乱数
 
 #define POP_COUNT			(100)						// エネミーのポップ間隔
-#define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
+#define MAX_POP				(20)						// 最大、場に何体エネミーを出すか
+
+#define ENEMY_HIT_MOVE		(0.1f)						// 当たり判定後アニメーション用移動量
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -86,6 +88,11 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].tbl_size = 0;		// 再生するアニメデータのレコード数をセット
 
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
+
+		g_Enemy[i].hitPos = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 当たり判定後アニメーション用スピードクリア
+		g_Enemy[i].hitSpd = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピードクリア
+		g_Enemy[i].isHit = FALSE;		// TRUE:当たってる
+		g_Enemy[i].hitMove = ENEMY_HIT_MOVE;						// 当たり判定後アニメーション用移動量クリア
 
 	}
 
@@ -148,98 +155,150 @@ void UpdateEnemy(void)
 	// エネミーを動かく場合は、影も合わせて動かす事を忘れないようにね！
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{
-		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
-		{									// Yes
+		if (g_Enemy[i].isHit == FALSE)
+		{
+			if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
+			{									// Yes
 
-			// 目標地点まで到達していない場合に移動処理
-			if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
-			{
-				BOOL ans = TRUE;
-				// 他のパトカーと当たっていないかを確認
-				for (int p = 0; p < MAX_ENEMY; p++)
+				// 目標地点まで到達していない場合に移動処理
+				if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
 				{
-					//敵の有効フラグをチェックする
-					if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
+					BOOL ans = TRUE;
+					// 他のパトカーと当たっていないかを確認
+					for (int p = 0; p < MAX_ENEMY; p++)
+					{
+						//敵の有効フラグをチェックする
+						if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
 
-					//BCの当たり判定
-					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size))
-					{	// 当たっていない場合に移動
+						//BCの当たり判定
+						if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size))
+						{	// 当たっていない場合に移動
 
-						ans = FALSE;
-						break;
+							ans = FALSE;
+							break;
+						}
 					}
+
+					if (ans)
+					{
+						g_Enemy[i].pos.z -= VALUE_MOVE;
+					}
+
+
+
+
+
+
+
+
 				}
 
-				if (ans)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				//if (g_Enemy[i].tbl_adr != NULL)	// 線形補間を実行する？
+				//{								// 線形補間の処理
+				//	// 移動処理
+				//	int		index = (int)g_Enemy[i].move_time;
+				//	float	time = g_Enemy[i].move_time - index;
+				//	int		size = g_Enemy[i].tbl_size;
+
+				//	float dt = 1.0f / g_Enemy[i].tbl_adr[index].frame;	// 1フレームで進める時間
+				//	g_Enemy[i].move_time += dt;							// アニメーションの合計時間に足す
+
+				//	if (index > (size - 2))	// ゴールをオーバーしていたら、最初へ戻す
+				//	{
+				//		g_Enemy[i].move_time = 0.0f;
+				//		index = 0;
+				//	}
+
+				//	// 座標を求める	X = StartX + (EndX - StartX) * 今の時間
+				//	XMVECTOR p1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].pos);	// 次の場所
+				//	XMVECTOR p0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].pos);	// 現在の場所
+				//	XMVECTOR vec = p1 - p0;
+				//	XMStoreFloat3(&g_Enemy[i].pos, p0 + vec * time);
+
+				//	// 回転を求める	R = StartX + (EndX - StartX) * 今の時間
+				//	XMVECTOR r1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].rot);	// 次の角度
+				//	XMVECTOR r0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].rot);	// 現在の角度
+				//	XMVECTOR rot = r1 - r0;
+				//	XMStoreFloat3(&g_Enemy[i].rot, r0 + rot * time);
+
+				//	// scaleを求める S = StartX + (EndX - StartX) * 今の時間
+				//	XMVECTOR s1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].scl);	// 次のScale
+				//	XMVECTOR s0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].scl);	// 現在のScale
+				//	XMVECTOR scl = s1 - s0;
+				//	XMStoreFloat3(&g_Enemy[i].scl, s0 + scl * time);
+
+				//}
+
+				// 影もプレイヤーの位置に合わせる
+				XMFLOAT3 pos = g_Enemy[i].pos;
+				pos.y -= (ENEMY_OFFSET_Y - 0.1f);
+				SetPositionShadow(g_Enemy[i].shadowIdx, pos);
+			}
+
+		}
+
+
+		// エネミーの消去アニメーション
+		if (g_Enemy[i].isHit == TRUE)				// 攻撃が当たってるか？
+		{											// Yes
+			BOOL ans = TRUE;
+			int count = 0;
+
+			//////////////////////////////////////////////////////////////
+			// ほかのパトカーとぶつかってないか？
+			for (int j = 0; j < MAX_ENEMY; j++)
+			{
+				if ((g_Enemy[j].isHit == FALSE) || (i == j)) continue;	// 攻撃に当たってない奴には当たり判定のチェックをスキップ
+			
+				if (CollisionBC(g_Enemy[i].pos, g_Enemy[j].pos, g_Enemy[i].size, g_Enemy[j].size))
 				{
-					g_Enemy[i].pos.z -= VALUE_MOVE;
+					ans = FALSE;
+					break;
 				}
-
-
-
-
-
-
-
+			}
+			//////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////
+			//if ((g_Enemy[i].pos.x == g_Enemy[i].hitPos.x) &&
+			//	(g_Enemy[i].pos.y == g_Enemy[i].hitPos.y) &&
+			//	(g_Enemy[i].pos.z == g_Enemy[i].hitPos.z))
+			//{
+			//	ans = FALSE;
+			//}
+			//////////////////////////////////////////////////////////////
+			
+			if (ans)
+			{
+				g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
+				g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
+				g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
 
 			}
 
+		
 
+			//g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
+			//g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
+			//g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-			//if (g_Enemy[i].tbl_adr != NULL)	// 線形補間を実行する？
-			//{								// 線形補間の処理
-			//	// 移動処理
-			//	int		index = (int)g_Enemy[i].move_time;
-			//	float	time = g_Enemy[i].move_time - index;
-			//	int		size = g_Enemy[i].tbl_size;
-
-			//	float dt = 1.0f / g_Enemy[i].tbl_adr[index].frame;	// 1フレームで進める時間
-			//	g_Enemy[i].move_time += dt;							// アニメーションの合計時間に足す
-
-			//	if (index > (size - 2))	// ゴールをオーバーしていたら、最初へ戻す
-			//	{
-			//		g_Enemy[i].move_time = 0.0f;
-			//		index = 0;
-			//	}
-
-			//	// 座標を求める	X = StartX + (EndX - StartX) * 今の時間
-			//	XMVECTOR p1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].pos);	// 次の場所
-			//	XMVECTOR p0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].pos);	// 現在の場所
-			//	XMVECTOR vec = p1 - p0;
-			//	XMStoreFloat3(&g_Enemy[i].pos, p0 + vec * time);
-
-			//	// 回転を求める	R = StartX + (EndX - StartX) * 今の時間
-			//	XMVECTOR r1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].rot);	// 次の角度
-			//	XMVECTOR r0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].rot);	// 現在の角度
-			//	XMVECTOR rot = r1 - r0;
-			//	XMStoreFloat3(&g_Enemy[i].rot, r0 + rot * time);
-
-			//	// scaleを求める S = StartX + (EndX - StartX) * 今の時間
-			//	XMVECTOR s1 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 1].scl);	// 次のScale
-			//	XMVECTOR s0 = XMLoadFloat3(&g_Enemy[i].tbl_adr[index + 0].scl);	// 現在のScale
-			//	XMVECTOR scl = s1 - s0;
-			//	XMStoreFloat3(&g_Enemy[i].scl, s0 + scl * time);
-
-			//}
-
-			// 影もプレイヤーの位置に合わせる
-			XMFLOAT3 pos = g_Enemy[i].pos;
-			pos.y -= (ENEMY_OFFSET_Y - 0.1f);
-			SetPositionShadow(g_Enemy[i].shadowIdx, pos);
 		}
+
+	
+	
 	}
 
 }
@@ -324,4 +383,20 @@ void SetEnemy(void)
 }
 
 
+//=============================================================================
+// エネミーの消去
+//=============================================================================
+void DeleteEnemy(void)
+{
+	for (int i = 0; i < MAX_ENEMY; i++)
+	{
+		if (g_Enemy[i].isHit == TRUE)
+		{
+
+			g_Enemy[i].pos.x += g_Enemy[i].hitSpd.x;
+			g_Enemy[i].pos.y += g_Enemy[i].hitSpd.y;
+			g_Enemy[i].pos.z += g_Enemy[i].hitSpd.z;
+		}
+	}
+}
 

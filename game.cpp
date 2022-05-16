@@ -378,7 +378,17 @@ void CheckHit(void)
 			if (CollisionBC(blast[p].pos, enemy[i].pos, blast[p].size, enemy[i].size))
 			{
 				// 敵キャラクターは倒される
-				enemy[i].use = FALSE;
+				
+				enemy[i].isHit = TRUE;	//TRUE：当たってる
+				
+				enemy[i].hitPos.x = blast[p].pos.x;
+				enemy[i].hitPos.z = blast[p].pos.z;
+
+				// 移動量を計算
+				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
+				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
+				enemy[i].hitSpd.z = (enemy[i].pos.z - enemy[i].hitPos.z) * enemy[i].hitMove;
+
 				ReleaseShadow(enemy[i].shadowIdx);
 
 				// スコアを足す
