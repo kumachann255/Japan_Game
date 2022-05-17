@@ -11,7 +11,7 @@
 // マクロ定義
 //*****************************************************************************
 #define MAX_BLAST			(5)
-#define	BLAST_SIZE			(50.0f)				// 当たり判定の大きさ
+#define	BLAST_SIZE			(30.0f)				// 当たり判定の大きさ
 
 //*****************************************************************************
 // 構造体定義
@@ -47,3 +47,4 @@ BLAST *GetBlast(void);
 void SetBlast(XMFLOAT3 pos);
 BOOL GetCameraSwitch(void);
 void SetCameraSwitch(BOOL data);
+int GetMorphing(void);

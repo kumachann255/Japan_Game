@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// タイム処理 [timeUI.h]
+// プレイヤーのHP処理 [playerHP.h]
 // Author : 
 //
 //=============================================================================
@@ -10,8 +10,8 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-// #define TIME_MAX			(99999)		// タイムの最大値
-#define TIME_DIGIT			(2)			// 桁数
+#define HP_MAX			(99999)		// スコアの最大値
+#define HP_DIGIT			(5)			// 桁数
 
 
 
@@ -19,12 +19,12 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitTime(void);
-void UninitTime(void);
-void UpdateTime(void);
-void DrawTime(void);
+HRESULT InitPlayerHP(void);
+void UninitPlayerHP(void);
+void UpdatePlayerHP(void);
+void DrawPlayerHP(void);
 
-void AddTime(int add);
-int GetTime(void);
+//void AddPlayerHPe(int add);
+//int GetPlayerHP(void);
 
 

@@ -413,3 +413,9 @@ PLAYER *GetPlayer(void)
 	return &g_Player;
 }
 
+
+// ƒvƒŒƒCƒ„[‚ÌHP‚ğŒ¸‚ç‚·
+void SetPlayerDamage(int damage)
+{
+	g_Player.hp -= damage;
+}

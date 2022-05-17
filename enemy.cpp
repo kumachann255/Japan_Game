@@ -13,11 +13,12 @@
 #include "shadow.h"
 #include "collision.h"
 #include "damageEF.h"
+#include "player.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_ENEMY			"data/MODEL/atoka-.obj"		// 読み込むモデル名
+#define	MODEL_ENEMY			"data/MODEL/heri.obj"		// 読み込むモデル名
 
 #define	VALUE_MOVE			(3.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
@@ -180,7 +181,7 @@ void UpdateEnemy(void)
 				// 攻撃
 				SetDamageEF(TRUE);
 				SetCameraShake(20);
-
+				SetPlayerDamage(1);
 
 			}
 			else if(g_Enemy[i].liveCount > ENEMY_ATTACK_1)
