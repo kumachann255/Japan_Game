@@ -1,29 +1,30 @@
 //=============================================================================
 //
-// タイム処理 [timeUI.cpp]
+// プレイヤーのHP処理 [playerHP.cpp]
 // Author : 
 //
 //=============================================================================
 #include "main.h"
 #include "renderer.h"
-#include "time.h"
+#include "playerHP.h"
 #include "sprite.h"
-#include "timeUI.h"
-#include "fade.h"
+#include "model.h"
+#include "player.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(45)	// 時間サイズ
-#define TEXTURE_HEIGHT				(90)	// 
-#define TEXTURE_MAX					(2)		// テクスチャの数
+#define TEXTURE_WIDTH				(30)	// キャラサイズ
+#define TEXTURE_HEIGHT				(30)	// 
+#define TEXTURE_MAX					(1)		// テクスチャの数
 
-#define TIME_MAX					(50)	// 時間制限
+#define TEXTURE_HP_DISTANCE			(40)			// 隣のハートとの幅
+#define HP_MAX_X					(5)				// 横に並べる個数
+
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-void SetEndTime(void);
 
 
 //*****************************************************************************
@@ -33,8 +34,7 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/time0.png",
-	"data/TEXTURE/time1.png",
+	"data/TEXTURE/HP.png",
 };
 
 
@@ -43,17 +43,13 @@ static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
 static int						g_TexNo;					// テクスチャ番号
 
-static int						g_Time;						// 残り時間
-
 static BOOL						g_Load = FALSE;
 
-static time_t naw_time = 0;		// 現在の時間
-static time_t end_time = 0;		// 終了時間
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitTime(void)
+HRESULT InitPlayerHP(void)
 {
 	ID3D11Device *pDevice = GetDevice();
 
@@ -84,13 +80,8 @@ HRESULT InitTime(void)
 	g_Use   = TRUE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 880.0f, 80.0f, 0.0f };
+	g_Pos   = { 50.0f, 40.0f, 0.0f };
 	g_TexNo = 0;
-
-	g_Time = 0;	// 時間の初期化
-
-	// 終了時間の設定
-	SetEndTime();
 
 	g_Load = TRUE;
 	return S_OK;
@@ -99,7 +90,7 @@ HRESULT InitTime(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitTime(void)
+void UninitPlayerHP(void)
 {
 	if (g_Load == FALSE) return;
 
@@ -124,27 +115,8 @@ void UninitTime(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateTime(void)
+void UpdatePlayerHP(void)
 {
-	// 終了時間から現在の時間を引いて残り時間を算出する
-	g_Time = (int)(end_time - time(NULL));
-
-
-	// シーン遷移
-	if (g_Time < 0)
-	{
-		SetFade(FADE_OUT, MODE_RESULT);
-	}
-
-	if (g_Time > 10)
-	{
-		g_TexNo = 0;
-	}
-	else
-	{
-		g_TexNo = 1;
-	}
-
 
 
 #ifdef _DEBUG	// デバッグ情報を表示する
@@ -158,8 +130,10 @@ void UpdateTime(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawTime(void)
+void DrawPlayerHP(void)
 {
+	PLAYER *player = GetPlayer();
+
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
@@ -180,60 +154,42 @@ void DrawTime(void)
 	// テクスチャ設定
 	GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
 
-	// 桁数分処理する
-	int number = g_Time;
-	for (int i = 0; i < TIME_DIGIT; i++)
+	// HPを描画
+	for (int i = 0; i < player->hp; i++)
 	{
-		// 今回表示する桁の数字
-		float x = (float)(number % 10);
-
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - g_w*i;	// スコアの表示位置X
-		float py = g_Pos.y;			// スコアの表示位置Y
-		float pw = g_w;				// スコアの表示幅
-		float ph = g_h;				// スコアの表示高さ
-
-		float tw = 1.0f / 10;		// テクスチャの幅
-		float th = 1.0f / 1;		// テクスチャの高さ
-		float tx = x * tw;			// テクスチャの左上X座標
-		float ty = 0.0f;			// テクスチャの左上Y座標
+		int x = i % HP_MAX_X;
+		int y = i / HP_MAX_X;
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		SetSpriteColor(g_VertexBuffer, px, py, pw, ph, tx, ty, tw, th,
+		SetSpriteColor(g_VertexBuffer,
+			g_Pos.x + TEXTURE_HP_DISTANCE * x,
+			g_Pos.y + TEXTURE_HP_DISTANCE * y,
+			g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f,
 			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
-
-		// 次の桁へ
-		number /= 10;
 	}
 }
 
 
-//=============================================================================
-// スコアを加算する
-// 引数:add :追加する点数。マイナスも可能
-//=============================================================================
-void AddTime(int add)
-{
-	g_Time += add;
-	if (g_Time > TIME_MAX)
-	{
-		g_Time = TIME_MAX;
-	}
+////=============================================================================
+//// スコアを加算する
+//// 引数:add :追加する点数。マイナスも可能
+////=============================================================================
+//void AddPlayerHP(int add)
+//{
+//	g_Score += add;
+//	if (g_Score > SCORE_MAX)
+//	{
+//		g_Score = SCORE_MAX;
+//	}
+//
+//}
+//
+//
+//int GetPlayerHP(void)
+//{
+//	return g_Score;
+//}
 
-}
-
-
-int GetTime(void)
-{
-	return g_Time;
-}
-
-
-// 終了時間をセットする関数
-void SetEndTime(void)
-{
-	end_time = time(NULL) + TIME_MAX;
-}

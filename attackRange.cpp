@@ -46,7 +46,7 @@ HRESULT InitAttackR(void)
 
 	g_AttackR.pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	g_AttackR.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	g_AttackR.scl = XMFLOAT3(5.0f, 4.0f, 5.0f);
+	g_AttackR.scl = XMFLOAT3(3.5f, 4.0f, 3.5f);
 
 	g_AttackR.spd = 0.0f;			// 移動スピードクリア
 

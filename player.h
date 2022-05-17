@@ -14,7 +14,7 @@
 
 #define	PLAYER_SIZE		(5.0f)				// 当たり判定の大きさ
 
-#define PLAYER_MAX_HP	(5)					// プレイヤーのHP
+#define PLAYER_MAX_HP	(20)				// プレイヤーのHP
 
 
 //*****************************************************************************
@@ -64,3 +64,4 @@ void DrawPlayer(void);
 
 PLAYER *GetPlayer(void);
 
+void SetPlayerDamage(int damage);

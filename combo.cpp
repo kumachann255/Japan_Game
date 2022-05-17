@@ -130,6 +130,9 @@ void UpdateCombo(void)
 	if ((g_Combo_result != g_Combo) && (g_time % COMBO_SPEED == 0))
 	{
 		g_Combo++;
+		// ƒRƒ“ƒ{”‚ª‘‚¦‚é‰¹
+		// PlaySound(SOUND_LABEL_SE_shot000);
+
 	}
 
 	// ŠÔ‚ği‚ß‚é
