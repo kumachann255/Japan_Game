@@ -30,6 +30,7 @@
 #include "debugproc.h"
 #include "timeUI.h"
 #include "damageEF.h"
+#include "enemyHeli.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -70,6 +71,9 @@ HRESULT InitGame(void)
 
 	// エネミーの初期化
 	InitEnemy();
+
+	// エネミーヘリの初期化
+	InitHeli();
 
 	// 攻撃範囲の初期化
 	InitAttackR();
@@ -168,6 +172,9 @@ void UninitGame(void)
 	// 攻撃範囲の終了処理
 	UninitAttackR();
 
+	// エネミーヘリの終了処理
+	UninitHeli();
+
 	// エネミーの終了処理
 	UninitEnemy();
 
@@ -210,6 +217,9 @@ void UpdateGame(void)
 
 	// エネミーの更新処理
 	UpdateEnemy();
+
+	// エネミーヘリの更新処理
+	UpdateHeli();
 
 	// 攻撃範囲の更新処理
 	UpdateAttackR();
@@ -262,6 +272,9 @@ void DrawGame0(void)
 
 	// 影の描画処理
 	DrawShadow();
+
+	// エネミーヘリの描画処理
+	DrawHeli();
 
 	// エネミーの描画処理
 	DrawEnemy();
