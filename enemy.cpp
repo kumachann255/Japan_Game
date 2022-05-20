@@ -15,12 +15,8 @@
 #include "shadow.h"
 #include "collision.h"
 #include "damageEF.h"
-<<<<<<< HEAD
 #include "debugproc.h"
-
-=======
 #include "player.h"
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc
 
 //*****************************************************************************
 // マクロ定義
@@ -183,10 +179,9 @@ void UpdateEnemy(void)
 			g_Enemy[i].liveCount++;
 
 
-<<<<<<< HEAD
 			if (g_Enemy[i].isHit == FALSE)
-=======
-			// 攻撃処理
+
+				// 攻撃処理
 			if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)
 			{	// 攻撃を行う
 				// 生存時間をリセット
@@ -261,7 +256,6 @@ void UpdateEnemy(void)
 
 			// 目標地点まで到達していない場合に移動処理
 			if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc
 			{
 				// 攻撃処理
 				if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)

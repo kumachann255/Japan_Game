@@ -465,14 +465,10 @@ void CheckHit(void)
 
 				// スコアを足す
 				AddScore(100);
-<<<<<<< HEAD
-				
-=======
 
 				// コンボを足す
 				AddCombo(1);
 				ResetComboTime();
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc
 			}
 		}
 	}

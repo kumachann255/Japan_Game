@@ -48,8 +48,5 @@ BLAST *GetBlast(void);
 void SetBlast(XMFLOAT3 pos);
 BOOL GetCameraSwitch(void);
 void SetCameraSwitch(BOOL data);
-<<<<<<< HEAD
 int GetMorphingNum(void);
-=======
 int GetMorphing(void);
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc

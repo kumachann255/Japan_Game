@@ -378,7 +378,6 @@ void SetCameraSwitch(BOOL data)
 	g_cameraOn = data;
 }
 
-<<<<<<< HEAD
 //BOOL GetBlastMove(int no)
 //{
 //	return g_Blast[no].move;
@@ -388,11 +387,9 @@ int GetMorphingNum(void)
 {
 	return g_morphingNum;
 }
-=======
 
 // 現在のモーフィング番号を取得
 int GetMorphing(void)
 {
 	return g_morphingNum;
 }
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc
