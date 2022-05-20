@@ -16,7 +16,7 @@
 #include "light.h"
 #include "meshfield.h"
 #include "meshwall.h"
-#include "tree.h"
+#include "fieldobj.h"
 #include "collision.h"
 #include "bullet.h"
 #include "score.h"
@@ -482,3 +482,13 @@ float RamdomFloat(int digits, float max, float min)
 
 	return ans;
 }
+
+
+
+// –Ú•W•¨‚Æ‚ÌŠp“x‚ğ’²‚×‚é•û–@
+//{
+//	’ê•Ó = enemyX - PlayerX
+//	‚‚³ = enemyY - PlayerY
+//
+//	angle = atan2(‚‚³, ’ê•Ó)
+//}

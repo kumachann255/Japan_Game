@@ -1,7 +1,7 @@
 //=============================================================================
 //
-// 爆破と当たり判定処理 [blast.h]
-// Author : 
+// 木の処理 [tree.h]
+// Author : GP11A132 10 熊澤義弘
 //
 //=============================================================================
 #pragma once
@@ -10,13 +10,14 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_BLAST			(5)
-#define	BLAST_SIZE			(30.0f)				// 当たり判定の大きさ
+#define MAX_FOBJ		(20)					// オブジェクトの数
+#define MAX_FOBJ_GUAD	(55)					// オブジェクトの数
+
 
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-struct BLAST
+struct FOBJ
 {
 	XMFLOAT4X4			mtxWorld;			// ワールドマトリックス
 	XMFLOAT3			pos;				// モデルの位置
@@ -27,29 +28,15 @@ struct BLAST
 	BOOL				load;
 	DX11_MODEL			model;				// モデル情報
 	XMFLOAT4			diffuse[MODEL_MAX_MATERIAL];	// モデルの色
-
-	float				spd;				// 移動スピード
-	float				size;				// 当たり判定の大きさ
-	int					life;				// 爆破の残り時間
-
-	BOOL				move;				// 奥へ移動するかフラグ TRUE:移動する
 };
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitBlast(void);
-void UninitBlast(void);
-void UpdateBlast(void);
-void DrawBlast(void);
+HRESULT InitTree(void);
+void UninitTree(void);
+void UpdateTree(void);
+void DrawTree(void);
 
-BLAST *GetBlast(void);
+FOBJ *GetBilding(void);
 
-void SetBlast(XMFLOAT3 pos);
-BOOL GetCameraSwitch(void);
-void SetCameraSwitch(BOOL data);
-<<<<<<< HEAD
-int GetMorphingNum(void);
-=======
-int GetMorphing(void);
->>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc

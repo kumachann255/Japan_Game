@@ -21,7 +21,7 @@
 #include "meshfield.h"
 #include "meshwall.h"
 #include "shadow.h"
-#include "tree.h"
+#include "fieldobj.h"
 #include "bullet.h"
 #include "score.h"
 #include "particle.h"
@@ -30,6 +30,10 @@
 #include "debugproc.h"
 #include "timeUI.h"
 #include "damageEF.h"
+#include "combo.h"
+#include "playerHP.h"
+
+
 
 //*****************************************************************************
 // マクロ定義
@@ -101,7 +105,7 @@ HRESULT InitGame(void)
 	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
 
 	// 木を生やす
-	//InitTree();
+	InitTree();
 
 	// 弾の初期化
 	InitBullet();
@@ -109,8 +113,14 @@ HRESULT InitGame(void)
 	// スコアの初期化
 	InitScore();
 
+	// コンボの初期化
+	InitCombo();
+
 	// 制限時間の初期化
 	InitTime();
+
+	// プレイヤーのHPの初期化
+	InitPlayerHP();
 
 	// パーティクルの初期化
 	InitParticle();
@@ -141,8 +151,14 @@ void UninitGame(void)
 	// パーティクルの終了処理
 	UninitParticle();
 
+	// プレイヤーのHPの終了処理
+	UninitPlayerHP();
+
 	// 時間の終了処理
 	UninitTime();
+
+	// コンボの終了処理
+	UninitCombo();
 
 	// スコアの終了処理
 	UninitScore();
@@ -244,8 +260,14 @@ void UpdateGame(void)
 	// スコアの更新処理
 	UpdateScore();
 
+	// コンボの更新処理
+	UpdateCombo();
+
 	// 時間の更新処理
 	UpdateTime();
+
+	// プレイヤーのHPの更新処理
+	UpdatePlayerHP();
 
 	// ダメージエフェクトの更新処理
 	UpdateDamageEF();
@@ -305,8 +327,14 @@ void DrawGame0(void)
 	// スコアの描画処理
 	DrawScore();
 
+	// コンボの描画処理
+	DrawCombo();
+
 	// 時間の描画処理
 	DrawTime();
+
+	// プレイヤーのHPの描画処理
+	DrawPlayerHP();
 
 	// ダメージエフェクトの描画処理
 	DrawDamageEF();
@@ -406,7 +434,10 @@ void CheckHit(void)
 				continue;
 
 			//BCの当たり判定
-			if (CollisionBC(blast[p].pos, enemy[i].pos, blast[p].size, enemy[i].size))
+			float size = blast[p].size;
+			if (GetMorphing() == 1) size /= 4.0f;
+
+			if (CollisionBC(blast[p].pos, enemy[i].pos, size, enemy[i].size))
 			{
 				// 敵キャラクターは倒される
 				enemy[i].isHit = TRUE;
@@ -434,7 +465,14 @@ void CheckHit(void)
 
 				// スコアを足す
 				AddScore(100);
+<<<<<<< HEAD
 				
+=======
+
+				// コンボを足す
+				AddCombo(1);
+				ResetComboTime();
+>>>>>>> 3b80df470734f5703880fc331c20d482d12a10fc
 			}
 		}
 	}

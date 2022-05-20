@@ -233,6 +233,10 @@ void SetBom(void)
 
 		coolTime = BOM_COOL;
 
+		// ìäù±âπ
+		// PlaySound(SOUND_LABEL_SE_shot000);
+
+
 	}
 }
 

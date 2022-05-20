@@ -145,6 +145,7 @@
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
+    <ClInclude Include="fieldobj.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="orbit.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerHP.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="score.h" />
@@ -163,7 +165,6 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
-    <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="attackRange.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
+    <ClCompile Include="fieldobj.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
@@ -187,6 +189,7 @@
     <ClCompile Include="orbit.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerHP.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="score.cpp" />
@@ -195,7 +198,6 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />
-    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
