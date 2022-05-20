@@ -10,9 +10,13 @@
 #include "input.h"
 #include "model.h"
 #include "enemy.h"
+#include "blast.h"
+#include "meshfield.h"
 #include "shadow.h"
 #include "collision.h"
 #include "damageEF.h"
+#include "debugproc.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -23,7 +27,6 @@
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
 #define ENEMY_SHADOW_SIZE	(0.4f)						// 影の大きさ
-#define ENEMY_OFFSET_Y		(7.0f)						// エネミーの足元をあわせる
 
 #define ENEMY_POP_Z			(500.0f)					// エネミーの初期ポップ位置(z座標)
 #define ENEMY_POP_X			(250)						// エネミーの初期ポップの範囲(x座標)
@@ -33,6 +36,8 @@
 
 #define POP_COUNT			(100)						// エネミーのポップ間隔
 #define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
+
+#define ENEMY_HIT_MOVE		(0.1f)						// 当たり判定後アニメーション用移動量
 
 #define ENEMY_ATTACK_0		(300)						// エネミーが点滅するまでの時間
 #define ENEMY_ATTACK_1		(120 + ENEMY_ATTACK_0)		// 点滅が早くなるまでの時間
@@ -94,6 +99,16 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].tbl_size = 0;		// 再生するアニメデータのレコード数をセット
 
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
+
+		g_Enemy[i].hitPos = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 爆発の中心
+		g_Enemy[i].pos_old = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 一歩前の座標
+		g_Enemy[i].hitSpd = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
+		g_Enemy[i].isHit = FALSE;					// TRUE:当たってる
+		g_Enemy[i].move = FALSE;					// 奥へ移動するフラグ TRUE:移動する
+		g_Enemy[i].hitTime = 0;						// 奥へ移動するフラグ TRUE:移動する
+
+		g_Enemy[i].hitMove = ENEMY_HIT_MOVE;		// 当たり判定後アニメーション用、移動スピード
+
 
 		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
 
@@ -164,109 +179,203 @@ void UpdateEnemy(void)
 			g_Enemy[i].liveCount++;
 
 
-			// 攻撃処理
-			if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)
-			{	// 攻撃を行う
-				// 生存時間をリセット
-				g_Enemy[i].liveCount = 0;
-
-				// 色を戻す
-				for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
-				{
-					SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
-				}
-
-
-				// 攻撃
-				SetDamageEF(TRUE);
-				SetCameraShake(20);
-
-
-			}
-			else if(g_Enemy[i].liveCount > ENEMY_ATTACK_1)
-			{	// 赤い点滅が早くなる
-				
-				if (g_Enemy[i].liveCount % ENEMY_BLINKING1 < ENEMY_BLINKING1 / 2)
-				{	// オブジェクトを赤くする
-
-					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
-					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
-					{
-						SetModelDiffuse(&g_Enemy[i].model, p, color);
-					}
-				}
-				else
-				{	// オブジェクトの色を戻す
-
-					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
-					{
-						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
-					}
-				}
-
-
-			}
-			else if (g_Enemy[i].liveCount > ENEMY_ATTACK_0)
-			{	// 赤く点滅する
-
-				if (g_Enemy[i].liveCount % ENEMY_BLINKING0 < ENEMY_BLINKING0 / 2)
-				{	// オブジェクトを赤くする
-
-					XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
-					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
-					{
-						SetModelDiffuse(&g_Enemy[i].model, p, color);
-					}
-				}
-				else
-				{	// オブジェクトの色を戻す
-
-					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
-					{
-						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
-					}
-				}
-
-
-			}
-
-
-
-
-
-
-
-
-			// 目標地点まで到達していない場合に移動処理
-			if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
+			if (g_Enemy[i].isHit == FALSE)
 			{
-				BOOL ans = TRUE;
-				// 他のパトカーと当たっていないかを確認
-				for (int p = 0 ; p < MAX_ENEMY; p++)
+				// 攻撃処理
+				if (g_Enemy[i].liveCount > ENEMY_ATTACK_2)
+				{	// 攻撃を行う
+					// 生存時間をリセット
+					g_Enemy[i].liveCount = 0;
+
+					// 色を戻す
+					for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+					{
+						SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+					}
+
+
+					// 攻撃
+					SetDamageEF(TRUE);
+					SetCameraShake(20);
+
+
+				}
+				else if (g_Enemy[i].liveCount > ENEMY_ATTACK_1)
+				{	// 赤い点滅が早くなる
+
+					if (g_Enemy[i].liveCount % ENEMY_BLINKING1 < ENEMY_BLINKING1 / 2)
+					{	// オブジェクトを赤くする
+
+						XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+						for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+						{
+							SetModelDiffuse(&g_Enemy[i].model, p, color);
+						}
+					}
+					else
+					{	// オブジェクトの色を戻す
+
+						for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+						{
+							SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+						}
+					}
+
+
+				}
+				else if (g_Enemy[i].liveCount > ENEMY_ATTACK_0)
+				{	// 赤く点滅する
+
+					if (g_Enemy[i].liveCount % ENEMY_BLINKING0 < ENEMY_BLINKING0 / 2)
+					{	// オブジェクトを赤くする
+
+						XMFLOAT4 color = { 1.0f, 0.2f, 0.2f, 1.0f };
+						for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+						{
+							SetModelDiffuse(&g_Enemy[i].model, p, color);
+						}
+					}
+					else
+					{	// オブジェクトの色を戻す
+
+						for (int p = 0; p < g_Enemy[i].model.SubsetNum; p++)
+						{
+							SetModelDiffuse(&g_Enemy[i].model, p, g_Enemy[0].diffuse[p]);
+						}
+					}
+
+
+				}
+
+
+
+
+				// 目標地点まで到達していない場合に移動処理
+				if (g_Enemy[i].pos.z > g_Enemy[i].zGoal)
 				{
-					//敵の有効フラグをチェックする
-					if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
+					BOOL ans = TRUE;
+					// 他のパトカーと当たっていないかを確認
+					for (int p = 0; p < MAX_ENEMY; p++)
+					{
+						//敵の有効フラグをチェックする
+						if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
 
-					//BCの当たり判定
-					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size) && 
-						(g_Enemy[i].pos.z > g_Enemy[p].pos.z))
-					{	// 当たっていない場合に移動
+						//BCの当たり判定
+						if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size / 5.0f, g_Enemy[p].size / 5.0f) &&
+							(g_Enemy[i].pos.z > g_Enemy[p].pos.z))
+						{	// 当たっていない場合に移動
 
-						ans = FALSE;
-						break;
+							ans = FALSE;
+							break;
+						}
+					}
+
+					if (ans)
+					{
+						g_Enemy[i].pos.z -= VALUE_MOVE;
 					}
 				}
 
-				if (ans)
-				{
-					g_Enemy[i].pos.z -= VALUE_MOVE;
-				}
 			}
 
 
 
 
 
+
+			// エネミーの消去アニメーション
+			if (g_Enemy[i].isHit == TRUE)				// 攻撃が当たってるか？
+			{											// Yes
+				
+				//g_Enemy[i].pos_old.x = g_Enemy[i].pos.x;
+				//g_Enemy[i].pos_old.y = g_Enemy[i].pos.y;
+				//g_Enemy[i].pos_old.z = g_Enemy[i].pos.z;
+
+				//BOOL ans = TRUE;
+
+				//// ほかのパトカーとぶつかってないか？
+				//for (int j = 0; j < MAX_ENEMY; j++)
+				//{
+				//	if ((g_Enemy[j].isHit == FALSE) || (i == j)) continue;	// 攻撃に当たってない奴には当たり判定のチェックをスキップ
+
+				//	if (CollisionBC(g_Enemy[i].pos, g_Enemy[j].pos, g_Enemy[i].size - 20.0f, g_Enemy[j].size - 20.0f))
+				//	{
+				//		ans = FALSE;
+				//		break;
+				//	}
+				//
+				//}
+
+				//// 決まった位置まで来てかいか？
+				//if (CollisionBC(g_Enemy[i].pos, g_Enemy[i].hitPos, g_Enemy[i].size, g_Enemy[i].size))
+				//{
+				//	ans = FALSE;
+				//}
+
+
+				//XMFLOAT3 temp = XMFLOAT3(g_Enemy[i].pos.x - g_Enemy[i].hitPos.x, g_Enemy[i].pos.y - g_Enemy[i].hitPos.y, g_Enemy[i].pos.z - g_Enemy[i].hitPos.z);
+				//float lenSq = (temp.x * temp.x) + (temp.y * temp.y) + (temp.z * temp.z);
+
+				//if (lenSq > 5000)
+				//{
+				//	g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
+				//	g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
+				//	g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
+				//}
+
+				//５回移動する
+				if (g_Enemy[i].hitTime > 0)
+				{
+					g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / 5.0f;
+					g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / 5.0f;
+					g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / 5.0f;
+
+					//g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
+					//g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
+					//g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
+				
+					g_Enemy[i].hitTime--;
+				}
+				
+
+				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
+
+				//if (ans)
+				//if (blast[0].move == FALSE)
+				//if (g_Enemy[i].move == FALSE)
+				{
+					//g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / 5.0f;
+					//g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / 5.0f;
+					//g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / 5.0f;
+
+					//g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
+					//g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
+					//g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
+
+				}
+
+
+				//if ((g_Enemy[i].pos.x == g_Enemy[i].pos_old.x) &&
+				//	(g_Enemy[i].pos.y == g_Enemy[i].pos_old.y) &&
+				//	(g_Enemy[i].pos.z == g_Enemy[i].pos_old.z))
+				//{
+				//	g_Enemy[i].move = TRUE;
+				//}
+			
+				
+
+				//爆弾と一緒に奥へ移動する
+				if ((blast[0].move == TRUE) /*&& (g_Enemy[i].move == TRUE)*/ && (g_Enemy[i].hitTime == 0))
+				{
+					g_Enemy[i].pos.z += FIELD_SPEED;
+				}
+
+
+				if (blast[0].use == FALSE)
+				{
+					g_Enemy[i].use = FALSE;
+				}
+			}
 
 
 
@@ -319,7 +428,15 @@ void UpdateEnemy(void)
 			pos.y -= (ENEMY_OFFSET_Y - 0.1f);
 			SetPositionShadow(g_Enemy[i].shadowIdx, pos);
 		}
+
+
+
 	}
+
+
+#ifdef _DEBUG	// デバッグ情報を表示する
+	PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_Enemy[0].hitSpd.x, g_Enemy[0].hitSpd.y, g_Enemy[0].hitSpd.z);
+#endif
 
 }
 
@@ -386,6 +503,9 @@ void SetEnemy(void)
 		{
 			g_Enemy[i].use = TRUE;
 			g_Enemy[i].pos.z = ENEMY_POP_Z;
+			g_Enemy[i].pos.y = ENEMY_OFFSET_Y;
+			g_Enemy[i].isHit = FALSE;
+			g_Enemy[i].move = FALSE;
 
 			// x座標はランダム
 			g_Enemy[i].pos.x = (float)(rand() % ENEMY_POP_X) - ((float)ENEMY_POP_X / 2.0f);

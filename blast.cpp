@@ -88,6 +88,8 @@ HRESULT InitBlast(void)
 		//SetModelDiffuse(&g_Blast[i].model, 0, color);
 
 		g_Blast[i].use = FALSE;			// TRUE:生きてる
+		g_Blast[i].move = FALSE;		// TRUE:奥へ移動する
+	
 	}
 
 	// モーフィングするオブジェクトの読み込み
@@ -236,6 +238,7 @@ void UpdateBlast(void)
 				if (g_downCount >= BLASE_DOWN_SPEED)
 				{
 					g_Blast[i].pos.z += FIELD_SPEED;
+					g_Blast[i].move = TRUE;
 				}
 					
 
@@ -340,6 +343,8 @@ void SetBlast(XMFLOAT3 pos)
 		if (g_Blast[i].use == FALSE)
 		{
 			g_Blast[i].use = TRUE;
+			g_Blast[i].move = FALSE;
+
 			g_Blast[i].pos = pos;
 			g_Blast[i].life = BLAST_LIFE;
 
@@ -368,4 +373,14 @@ BOOL GetCameraSwitch(void)
 void SetCameraSwitch(BOOL data)
 {
 	g_cameraOn = data;
+}
+
+//BOOL GetBlastMove(int no)
+//{
+//	return g_Blast[no].move;
+//}
+
+int GetMorphingNum(void)
+{
+	return g_morphingNum;
 }
