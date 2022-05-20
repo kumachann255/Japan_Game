@@ -20,7 +20,7 @@
 #define COMBO_SPEED					(5)		// 表示しているコンボの数が増える速度
 #define COMBO_TIME					(120)	// 表示しているコンボの数が切れる時間
 
-#define COMBO_MOVE_MAX				(10.0f)	// コンボ表示をどれくらいの高さから落とすか
+#define COMBO_MOVE_MAX				(20.0f)	// コンボ表示をどれくらいの高さから落とすか
 #define COMBO_MOVE_SPEED			(3.0f)	// コンボ表示をどれくらいの速さで落とすか
 #define COMBO_MOVE_TIME				(3)		// コンボ表示を何フレームで落とすか
 

@@ -35,10 +35,6 @@ struct ENEMY
 	float				size;				// 当たり判定の大きさ
 	int					shadowIdx;			// 影のインデックス番号
 	
-	INTERPOLATION_DATA	*tbl_adr;			// アニメデータのテーブル先頭アドレス
-	int					tbl_size;			// 登録したテーブルのレコード総数
-	float				move_time;			// 実行時間
-
 	float				zGoal;				// z座標のプレイヤーに近づく最大距離
 
 	XMFLOAT3			hitPos;				// 爆発の座標
@@ -49,6 +45,8 @@ struct ENEMY
 	float				hitMove;			// 当たり判定後アニメーション用、移動スピード
 	int					hitTime;			// 移動時間
 	int					liveCount;			// ポップしてからの時間を管理
+
+	BOOL				fuchi;				// リムライトのオンオフ
 
 };
 
