@@ -27,7 +27,7 @@
 //#define	POS_Z_CAM		(-400.0f)		// カメラの初期位置(Z座標)
 
 
-#define	VIEW_ANGLE		(XMConvertToRadians(45.0f))						// ビュー平面の視野角
+#define	VIEW_ANGLE		(XMConvertToRadians(50.0f))						// ビュー平面の視野角
 #define	VIEW_ASPECT		((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT)	// ビュー平面のアスペクト比	
 #define	VIEW_NEAR_Z		(10.0f)											// ビュー平面のNearZ値
 #define	VIEW_FAR_Z		(10000.0f)										// ビュー平面のFarZ値

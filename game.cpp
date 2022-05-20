@@ -21,7 +21,7 @@
 #include "meshfield.h"
 #include "meshwall.h"
 #include "shadow.h"
-#include "tree.h"
+#include "fieldobj.h"
 #include "bullet.h"
 #include "score.h"
 #include "particle.h"
@@ -105,7 +105,7 @@ HRESULT InitGame(void)
 	//	XMFLOAT4(1.0f, 1.0f, 1.0f, 0.25f), 16, 2, 80.0f, 80.0f);
 
 	// –Ø‚ğ¶‚â‚·
-	//InitTree();
+	InitTree();
 
 	// ’e‚Ì‰Šú‰»
 	InitBullet();

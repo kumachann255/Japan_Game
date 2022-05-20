@@ -12,17 +12,23 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(60)	// テクスチャサイズ
-#define TEXTURE_HEIGHT				(120)	// 
+#define TEXTURE_WIDTH				(100)	// テクスチャサイズ
+#define TEXTURE_HEIGHT				(300)	// 
 #define TEXTURE_MAX					(1)		// テクスチャの数
 
+#define COMBO_POS_Y					(400.0f)	// コンボ表示の高さ
 #define COMBO_SPEED					(5)		// 表示しているコンボの数が増える速度
-#define COMBO_TIME					(120)	// 表示しているコンボの数が増える速度
+#define COMBO_TIME					(120)	// 表示しているコンボの数が切れる時間
+
+#define COMBO_MOVE_MAX				(10.0f)	// コンボ表示をどれくらいの高さから落とすか
+#define COMBO_MOVE_SPEED			(3.0f)	// コンボ表示をどれくらいの速さで落とすか
+#define COMBO_MOVE_TIME				(3)		// コンボ表示を何フレームで落とすか
 
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
+void SetComboMove(void);
 
 
 //*****************************************************************************
@@ -32,7 +38,7 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/number16x32.png",
+	"data/TEXTURE/comboNum.png",
 };
 
 
@@ -46,6 +52,8 @@ static int						g_Combo;					// 表示するコンボ数
 static int						g_Combo_result;				// 増えた合計コンボ数
 static int						g_time;						// 経過時間
 static int						g_ComboTime;				// コンボの持続
+static BOOL						g_ComboMove;				// コンボに動きがあるか
+static int						g_ComboMoveTime;			// コンボ表示が動く時間
 
 static BOOL						g_Load = FALSE;
 
@@ -84,7 +92,7 @@ HRESULT InitCombo(void)
 	g_Use   = TRUE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 800.0f, 400.0f, 0.0f };
+	g_Pos   = { 800.0f, COMBO_POS_Y, 0.0f };
 	g_TexNo = 0;
 
 	g_Combo = 0;	// コンボ数の初期化
@@ -92,6 +100,7 @@ HRESULT InitCombo(void)
 
 	g_time = 0;
 	g_ComboTime = 0;
+	g_ComboMoveTime = 0;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -133,6 +142,7 @@ void UpdateCombo(void)
 		// コンボ数が増える音
 		// PlaySound(SOUND_LABEL_SE_shot000);
 
+		SetComboMove();
 	}
 
 	// 時間を進める
@@ -144,6 +154,15 @@ void UpdateCombo(void)
 	{
 		g_Combo = 0;
 		g_Combo_result = 0;
+	}
+
+
+	// コンボ数が増えた時にちょっと上から落ちてくる（動きを付ける
+	//if ((g_ComboMove) && (g_ComboMoveTime != 0))
+	if (g_ComboMoveTime != 0)
+	{
+		g_Pos.y = (COMBO_POS_Y - g_Pos.y) / COMBO_MOVE_SPEED + g_Pos.y;
+		g_ComboMoveTime--;
 	}
 
 
@@ -238,4 +257,13 @@ int GetCombo(void)
 void ResetComboTime(void)
 {
 	g_ComboTime = 0;
+}
+
+
+void SetComboMove(void)
+{
+	// コンボが増えたので表示を少し動かす
+	//g_ComboMove = TRUE;
+	g_ComboMoveTime = COMBO_MOVE_TIME;
+	g_Pos.y = COMBO_POS_Y + COMBO_MOVE_MAX;
 }

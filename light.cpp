@@ -56,7 +56,7 @@ void InitLight(void)
 
 	// フォグの初期化（霧の効果）
 	g_Fog.FogStart = 300.0f;									// 視点からこの距離離れるとフォグがかかり始める
-	g_Fog.FogEnd   = 650.0f;									// ここまで離れるとフォグの色で見えなくなる
+	g_Fog.FogEnd   = 1500.0f;									// ここまで離れるとフォグの色で見えなくなる
 	g_Fog.FogColor = XMFLOAT4( 0.5f, 0.5f, 0.5f, 1.0f );		// フォグの色
 	SetFog(&g_Fog);
 	SetFogEnable(TRUE);		// 他の場所もチェックする shadow
