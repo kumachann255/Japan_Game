@@ -415,12 +415,17 @@ void CheckHit(void)
 	BULLET *bullet = GetBullet();	// 弾のポインターを初期化
 	BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
+	float offsetX;
+	float offsetY;
+	float offsetZ;
+
 	// 敵と爆破オブジェクト
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{
 		//敵の有効フラグをチェックする
-		if (enemy[i].use == FALSE)
+		if (enemy[i].use == FALSE || enemy[i].isHit == TRUE)
 			continue;
+
 
 		for (int p = 0; p < MAX_BLAST; p++)
 		{
@@ -435,7 +440,27 @@ void CheckHit(void)
 			if (CollisionBC(blast[p].pos, enemy[i].pos, size, enemy[i].size))
 			{
 				// 敵キャラクターは倒される
-				enemy[i].use = FALSE;
+				enemy[i].isHit = TRUE;
+
+				offsetX = RamdomFloat(0, 30.0f, -30.0f);
+				offsetY = RamdomFloat(0, 30.0f, ENEMY_OFFSET_Y);
+				offsetZ = RamdomFloat(0, -10.0f, -40.0f);
+
+				enemy[i].hitPos.x = blast[p].pos.x + offsetX;
+				enemy[i].hitPos.y = blast[p].pos.y + offsetY;
+				enemy[i].hitPos.z = blast[p].pos.z + offsetZ;
+
+				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
+				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
+				enemy[i].hitSpd.z = (enemy[i].pos.x - enemy[i].hitPos.z) * enemy[i].hitMove;
+
+				int morphing = GetMorphingNum();
+
+				//if (morphing == 1)
+				{
+					enemy[i].hitTime = 15;
+				}
+
 				ReleaseShadow(enemy[i].shadowIdx);
 
 				// スコアを足す
