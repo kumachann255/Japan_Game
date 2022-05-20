@@ -14,8 +14,8 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(30)	// キャラサイズ
-#define TEXTURE_HEIGHT				(30)	// 
+#define TEXTURE_WIDTH				(50)	// キャラサイズ
+#define TEXTURE_HEIGHT				(50)	// 
 #define TEXTURE_MAX					(1)		// テクスチャの数
 
 #define TEXTURE_HP_DISTANCE			(40)			// 隣のハートとの幅
