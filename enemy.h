@@ -14,6 +14,7 @@
 
 #define	ENEMY_SIZE		(30.0f)				// 当たり判定の大きさ
 
+#define ENEMY_OFFSET_Y		(7.0f)			// エネミーの足元をあわせる
 
 //*****************************************************************************
 // 構造体定義
@@ -40,6 +41,13 @@ struct ENEMY
 
 	float				zGoal;				// z座標のプレイヤーに近づく最大距離
 
+	XMFLOAT3			hitPos;				// 爆発の座標
+	XMFLOAT3			pos_old;			// 一歩前の座標
+	XMFLOAT3			hitSpd;				// 当たり判定後アニメーション用、毎回の移動量
+	BOOL				isHit;				// 当たってるフラグ TRUE:当たっている
+	BOOL				move;				// 奥へ移動するフラグ TRUE:移動する
+	float				hitMove;			// 当たり判定後アニメーション用、移動スピード
+	int					hitTime;			// 移動時間
 	int					liveCount;			// ポップしてからの時間を管理
 
 };
