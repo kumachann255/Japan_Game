@@ -32,6 +32,8 @@ struct BLAST
 	float				size;				// “–‚½‚è”»’è‚Ì‘å‚«‚³
 	int					life;				// ”š”j‚Ìc‚èŠÔ
 
+	BOOL				shrink;				// k‚Ü‚Á‚Ä‚¢‚é‚©
+
 	BOOL				move;				// ‰œ‚ÖˆÚ“®‚·‚é‚©ƒtƒ‰ƒO TRUE:ˆÚ“®‚·‚é
 };
 
@@ -48,5 +50,5 @@ BLAST *GetBlast(void);
 void SetBlast(XMFLOAT3 pos);
 BOOL GetCameraSwitch(void);
 void SetCameraSwitch(BOOL data);
-int GetMorphingNum(void);
 int GetMorphing(void);
+int GetStopTime(void);

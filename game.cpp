@@ -439,8 +439,11 @@ void CheckHit(void)
 
 			if (CollisionBC(blast[p].pos, enemy[i].pos, size, enemy[i].size))
 			{
+				if (enemy[i].isHit == TRUE) break;
+
 				// 敵キャラクターは倒される
 				enemy[i].isHit = TRUE;
+				enemy[i].hitTime = 15;
 
 				offsetX = RamdomFloat(0, 30.0f, -30.0f);
 				offsetY = RamdomFloat(0, 30.0f, ENEMY_OFFSET_Y);
@@ -453,13 +456,6 @@ void CheckHit(void)
 				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
 				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
 				enemy[i].hitSpd.z = (enemy[i].pos.x - enemy[i].hitPos.z) * enemy[i].hitMove;
-
-				int morphing = GetMorphingNum();
-
-				//if (morphing == 1)
-				{
-					enemy[i].hitTime = 15;
-				}
 
 				ReleaseShadow(enemy[i].shadowIdx);
 
