@@ -319,7 +319,7 @@ void UpdateEnemy(void)
 				//”š’e‚Æˆê‚É‰œ‚ÖˆÚ“®‚·‚é
 				if (blast[0].move == TRUE) /*&& (g_Enemy[i].move == TRUE)*/ //&& (g_Enemy[i].hitTime == 0))
 				{
-					g_Enemy[i].pos.z += FIELD_SPEED;
+					g_Enemy[i].pos.z += FIELD_SPEED+ 2.0f;
 				}
 
 
