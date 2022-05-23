@@ -34,6 +34,9 @@
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="sky.cpp" />
+    <ClCompile Include="logo.cpp" />
+    <ClCompile Include="logoD.cpp" />
+    <ClCompile Include="countdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -69,5 +72,8 @@
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="sky.h" />
+    <ClInclude Include="logo.h" />
+    <ClInclude Include="logoD.h" />
+    <ClInclude Include="countdown.h" />
   </ItemGroup>
 </Project>

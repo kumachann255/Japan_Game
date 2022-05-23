@@ -84,7 +84,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < MAX_FOBJ; i++)
 	{
 		g_Bilding[i].load = TRUE;
-		g_Bilding[i].pos = XMFLOAT3(-370.0f, 0.0f, 340.0f);
+		g_Bilding[i].pos = XMFLOAT3(-370.0f, 0.0f, 0.0f);
 		g_Bilding[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 		g_Bilding[i].scl = XMFLOAT3(10.0f, 10.0f, 10.0f);
 		g_Bilding[i].use = FALSE;			// TRUE:生きてる
@@ -95,7 +95,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < MAX_FOBJ; i++)
 	{
 		g_House[i].load = TRUE;
-		g_House[i].pos = XMFLOAT3(-370.0f, 0.0f, 340.0f);
+		g_House[i].pos = XMFLOAT3(-370.0f, 0.0f, 0.0f);
 		g_House[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 		g_House[i].scl = XMFLOAT3(10.0f, 10.0f, 10.0f);
 		g_House[i].use = FALSE;			// TRUE:生きてる
@@ -106,7 +106,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < MAX_FOBJ_GUAD; i++)
 	{
 		g_Guardrail[i].load = TRUE;
-		g_Guardrail[i].pos = XMFLOAT3(-370.0f, 0.0f, 340.0f);
+		g_Guardrail[i].pos = XMFLOAT3(-370.0f, 0.0f, 0.0f);
 		g_Guardrail[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 		g_Guardrail[i].scl = XMFLOAT3(1.0f, 1.0f, 1.0f);
 		g_Guardrail[i].use = FALSE;			// TRUE:生きてる
@@ -117,7 +117,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < MAX_FOBJ; i++)
 	{
 		g_Pole[i].load = TRUE;
-		g_Pole[i].pos = XMFLOAT3(-370.0f, FOBJ_Y_Pole, 340.0f);
+		g_Pole[i].pos = XMFLOAT3(-370.0f, FOBJ_Y_Pole, 0.0f);
 		g_Pole[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 		g_Pole[i].scl = XMFLOAT3(2.5f, 2.5f, 2.5f);
 		g_Pole[i].use = FALSE;			// TRUE:生きてる
@@ -128,12 +128,23 @@ HRESULT InitTree(void)
 	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
 	{
 		g_Sign0[i].load = TRUE;
-		g_Sign0[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, 340.0f);
+		g_Sign0[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, 0.0f);
 		g_Sign0[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 		g_Sign0[i].scl = XMFLOAT3(1.5f, 1.5f, 1.5f);
 		g_Sign0[i].use = FALSE;			// TRUE:生きてる
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Sign0[i].model, &g_Sign0[i].diffuse[0]);
+	}
+
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		g_Sign1[i].load = TRUE;
+		g_Sign1[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, 0.0f);
+		g_Sign1[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
+		g_Sign1[i].scl = XMFLOAT3(1.5f, 1.5f, 1.5f);
+		g_Sign1[i].use = FALSE;			// TRUE:生きてる
+		// モデルのディフューズを保存しておく。色変え対応の為。
+		GetModelDiffuse(&g_Sign1[i].model, &g_Sign1[i].diffuse[0]);
 	}
 
 
@@ -170,6 +181,15 @@ HRESULT InitTree(void)
 		g_Pole[i].use = TRUE;
 		g_Pole[i].pos = XMFLOAT3(-FOBJ_X_POLE, FOBJ_Y_Pole, FOBJ_DISTANCE * i);
 		g_Pole[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
+
+	}
+
+	// 看板
+	for (int i = 0; i < 2; i++)
+	{
+		g_Sign1[i].use = TRUE;
+		g_Sign1[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBJ_DISTANCE_SIGN * (i + 1) - FOBJ_DISTANCE_SIGN / 2.0f);
+		g_Sign1[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	}
 
@@ -276,7 +296,8 @@ void UpdateTree(void)
 				if(g_Bilding[i].pos.x > 0) LR = right;
 
 				// ランダムでビルか家を設置
-				int data = rand() % 2;
+				int data = 0;
+				data = rand() % 2;
 
 				switch (data)
 				{
@@ -309,7 +330,8 @@ void UpdateTree(void)
 				if (g_House[i].pos.x > 0) LR = right;
 
 				// ランダムでビルか家を設置
-				int data = rand() % 2;
+				int data = 0;
+				data = rand() % 2;
 
 				switch (data)
 				{
@@ -331,7 +353,7 @@ void UpdateTree(void)
 		if (g_Guardrail[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
 			// 地面と一緒に動く
-			g_Guardrail[i].pos.z += FIELD_SPEED;
+//			g_Guardrail[i].pos.z += FIELD_SPEED;
 
 			if (g_Guardrail[i].pos.z >= FOBF_Z_MAX)
 			{
@@ -370,7 +392,7 @@ void UpdateTree(void)
 	}
 
 	// 看板(日本)の処理
-	for (int i = 0; i < MAX_FOBJ; i++)
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
 	{
 		if (g_Sign0[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
@@ -386,7 +408,8 @@ void UpdateTree(void)
 				if (g_Sign0[i].pos.x > 0) LR = right;
 
 				// ランダムで看板を設置
-				int data = rand() % 2;
+				int data = 0;
+				data = rand() % 2;
 
 				// 看板設置
 				switch (data)
@@ -404,7 +427,7 @@ void UpdateTree(void)
 	}
 
 	// 看板(アメリカ)の処理
-	for (int i = 0; i < MAX_FOBJ; i++)
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
 	{
 		if (g_Sign1[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
@@ -420,7 +443,8 @@ void UpdateTree(void)
 				if (g_Sign1[i].pos.x > 0) LR = right;
 
 				// ランダムで看板を設置
-				int data = rand() % 2;
+				int data = 0;
+				data = rand() % 2;
 
 				// 看板設置
 				switch (data)
@@ -563,7 +587,7 @@ void DrawTree(void)
 		XMStoreFloat4x4(&g_Pole[i].mtxWorld, mtxWorld);
 
 		// モデル描画
-		DrawModel(&g_Pole[0].model);
+		//DrawModel(&g_Pole[0].model);
 
 	}
 
@@ -781,7 +805,7 @@ void SetSign0(BOOL LR)
 			else
 			{	// 左に設置
 				g_Sign0[i].pos.x = -FOBJ_X_SIGN;
-				g_Sign0[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
+				g_Sign0[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 			}
 
 			//g_House[i].pos.y -= (float)(rand() % FOBJ_Y);
@@ -812,7 +836,7 @@ void SetSign1(BOOL LR)
 			else
 			{	// 左に設置
 				g_Sign1[i].pos.x = -FOBJ_X_SIGN;
-				g_Sign1[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
+				g_Sign1[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 			}
 
 			//g_House[i].pos.y -= (float)(rand() % FOBJ_Y);

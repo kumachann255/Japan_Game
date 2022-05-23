@@ -65,8 +65,8 @@ HRESULT InitGame(void)
 	g_ViewPortType_Game = TYPE_FULL_SCREEN;
 
 	// フィールドの初期化
-	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
-	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 8, 8, 700.0f, 400.0f);
+	InitMeshField(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
+	//InitMeshField(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 1, 5000.0f, 5000.0f);
 
 	// ライトを有効化	// 影の初期化処理
 	InitShadow();
@@ -112,7 +112,7 @@ HRESULT InitGame(void)
 	// 木を生やす
 	InitTree();
 
-	// スカイボムの初期化
+	// スカイドームの初期化
 	InitSky();
 
 	// 弾の初期化
@@ -174,7 +174,7 @@ void UninitGame(void)
 	// 弾の終了処理
 	UninitBullet();
 
-	// スカイボムの終了処理
+	// スカイドームの終了処理
 	UninitSky();
 
 	// 木の終了処理
@@ -259,7 +259,7 @@ void UpdateGame(void)
 	// 木の更新処理
 	UpdateTree();
 
-	// スカイボムの更新処理
+	// スカイドームの更新処理
 	UpdateSky();
 
 	// 弾の更新処理
@@ -327,9 +327,9 @@ void DrawGame0(void)
 	DrawMeshWall();
 
 	// 木の描画処理
-	//DrawTree();
+	DrawTree();
 
-	// スカイボムの描画処理
+	// スカイドームの描画処理
 	DrawSky();
 
 	// パーティクルの描画処理
@@ -580,10 +580,6 @@ void CheckHit(void)
 	if (player->hp <= 0)
 	{
 		SetFade(FADE_OUT, MODE_RESULT);
-
-
-
-
 	}
 
 	// エネミーが全部死亡したら状態遷移

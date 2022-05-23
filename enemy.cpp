@@ -22,6 +22,9 @@
 // マクロ定義
 //*****************************************************************************
 #define	MODEL_ENEMY			"data/MODEL/patoka-.obj"		// 読み込むモデル名
+#define	MODEL_ENEMY_01		"data/MODEL/sirobai.obj"		// 読み込むモデル名
+
+#define ENEMY_TYPE_MAX		(2)							// エネミータイプの最大数
 
 #define	VALUE_MOVE			(3.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
@@ -34,8 +37,18 @@
 #define ENEMY_GOAL_Z		(70.0f)						// エネミーのゴール基準位置(z座標)
 #define ENEMY_GOAL_Z_OFFSET	(60)						// エネミーのゴール位置の乱数
 
-#define POP_COUNT			(100)						// エネミーのポップ間隔
-#define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
+#define STAGE0_POP_COUNT			(100)				// エネミーのポップ間隔
+#define STAGE0_MAX_POP				(20)				// 最大、場に何体エネミーを出すか
+
+#define STAGE1_POP_COUNT			(70)				// エネミーのポップ間隔
+#define STAGE1_MAX_POP				(25)				// 最大、場に何体エネミーを出すか
+
+#define STAGE2_POP_COUNT			(50)				// エネミーのポップ間隔
+#define STAGE2_MAX_POP				(30)				// 最大、場に何体エネミーを出すか
+
+#define STAGE3_POP_COUNT			(30)				// エネミーのポップ間隔
+#define STAGE3_MAX_POP				(45)				// 最大、場に何体エネミーを出すか
+
 
 #define ENEMY_HIT_MOVE		(5.0f)						// 当たり判定後アニメーション用移動量
 
@@ -68,11 +81,12 @@ static int				count = 0;		// ポップカウント
 //=============================================================================
 HRESULT InitEnemy(void)
 {
+	LoadModel(MODEL_ENEMY, &g_Enemy[0].model);
+	LoadModel(MODEL_ENEMY_01, &g_Enemy[1].model);
 
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{	
 		g_Enemy[i].load = TRUE;
-		LoadModel(MODEL_ENEMY, &g_Enemy[i].model);
 
 		g_Enemy[i].pos = XMFLOAT3(-50.0f + i * 30.0f, ENEMY_OFFSET_Y, 20.0f);
 		g_Enemy[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -94,9 +108,8 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].hitRot = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
 		g_Enemy[i].isHit = FALSE;									// TRUE:当たってる
 		g_Enemy[i].hitTime = 0;										// タイミング管理用
-
-
 		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
+		g_Enemy[i].type = 0;			// エネミータイプ
 
 		g_Enemy[i].fuchi = FALSE;
 
@@ -136,17 +149,72 @@ void UpdateEnemy(void)
 		count++;
 		int useCount = 0;
 
-		// 今何体出現しているかを確認
-		for (int i = 0; i < MAX_ENEMY; i++)
+		switch (GetStage())
 		{
-			if (g_Enemy[i].use == TRUE) useCount++;
-		}
+		case stage0:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
 
-		// 時間経過とエネミーの出現数次第でポップするか判断
-		if ((count % POP_COUNT == 0) && (useCount < MAX_POP))
-		{
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE0_POP_COUNT == 0) && (useCount < STAGE0_MAX_POP))
+			{
 
-			SetEnemy();
+				SetEnemy();
+			}
+
+			break;
+
+		case stage1:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE1_POP_COUNT == 0) && (useCount < STAGE1_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
+		case stage2:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE2_POP_COUNT == 0) && (useCount < STAGE2_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
+		case stage3:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE3_POP_COUNT == 0) && (useCount < STAGE3_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
 		}
 	}
 
@@ -386,7 +454,16 @@ void DrawEnemy(void)
 
 
 		// モデル描画
-		DrawModel(&g_Enemy[i].model);
+		switch (g_Enemy[i].type)
+		{
+		case 0:
+			DrawModel(&g_Enemy[0].model);
+			break;
+
+		case 1:
+			DrawModel(&g_Enemy[1].model);
+			break;
+		}
 
 		// リムライトの設定
 		SetFuchi(FALSE);
@@ -428,6 +505,8 @@ void SetEnemy(void)
 
 			g_Enemy[i].liveCount = 0;
 
+			// エネミーのタイプをランダムに
+			g_Enemy[i].type = rand() % ENEMY_TYPE_MAX;
 			// リムライトオフ
 			g_Enemy[i].fuchi = FALSE;
 
