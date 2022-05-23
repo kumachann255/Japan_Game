@@ -30,8 +30,6 @@
 #define BLAST_MOVE_TIME_2	(10)						// ねばねばが縮まる時間
 #define BLAST_MOVE_TIME_3	(20)						// ねばねばが空中で止まる時間
 
-#define BLAST_DOWN			(20.0f)						// モーフィング後に落ちる高さ
-#define BLASE_DOWN_SPEED	(10.0f)						// 落ちる時間
 
 #define BLASE_ROT			(3.14f)						// 回転の最大値
 
