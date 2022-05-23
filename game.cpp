@@ -22,6 +22,7 @@
 #include "meshwall.h"
 #include "shadow.h"
 #include "fieldobj.h"
+#include "sky.h"
 #include "bullet.h"
 #include "score.h"
 #include "particle.h"
@@ -110,6 +111,9 @@ HRESULT InitGame(void)
 	// 木を生やす
 	InitTree();
 
+	// スカイボムの初期化
+	InitSky();
+
 	// 弾の初期化
 	InitBullet();
 
@@ -168,6 +172,9 @@ void UninitGame(void)
 
 	// 弾の終了処理
 	UninitBullet();
+
+	// スカイボムの終了処理
+	UninitSky();
 
 	// 木の終了処理
 	UninitTree();
@@ -251,6 +258,9 @@ void UpdateGame(void)
 	// 木の更新処理
 	UpdateTree();
 
+	// スカイボムの更新処理
+	UpdateSky();
+
 	// 弾の更新処理
 	UpdateBullet();
 
@@ -317,6 +327,9 @@ void DrawGame0(void)
 
 	// 木の描画処理
 	//DrawTree();
+
+	// スカイボムの描画処理
+	DrawSky();
 
 	// パーティクルの描画処理
 	DrawParticle();
