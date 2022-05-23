@@ -33,7 +33,7 @@
 #define FOBF_Z_MAX				(2500.0f)					// オブジェクトを消すz座標
 #define FOBF_Z_START			(0.0f)						// オブジェクトを出すz座標
 #define FOBJ_Y					(50)						// 高さの調整(ランダム限界)
-#define FOBJ_Y_Pole				(40)						// 電柱の高さの調整
+#define FOBJ_Y_Pole				(70)						// 電柱の高さの調整
 #define FOBJ_Y_SIGN				(10)						// 看板の高さの調整
 
 #define FOBJ_DISTANCE			(500.0f)					// オブジェクトの間隔
