@@ -435,7 +435,7 @@ void UpdateEnemyHeli(void)
 				//”š’e‚Æˆê‚É‰œ‚ÖˆÚ“®‚·‚é
 				if (blast[0].move == TRUE) /*&& (g_EnemyHeli[i].move == TRUE)*/ //&& (g_EnemyHeli[i].hitTime == 0))
 				{
-					g_EnemyHeli[i].pos.z += FIELD_SPEED;
+					g_EnemyHeli[i].pos.z += FIELD_SPEED + 2.0f;
 				}
 
 
