@@ -213,10 +213,10 @@ void PixelShaderPolygon( in  float4 inPosition		: SV_POSITION,
 	{
 		float angle = dot(normalize(inWorldPos.xyz - Camera.xyz), normalize(inNormal));
 		//if ((angle < 0.5f)&&(angle > -0.5f))
-		if (angle > -0.3f)
+		//if (angle > -0.5f)
 		{
-			outDiffuse.rb  = 1.0f;
-			outDiffuse.g = 0.0f;			
+			outDiffuse.r  = 1.0f;
+			outDiffuse.gb = 0.0f;			
 		}
 	}
 }

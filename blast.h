@@ -11,7 +11,7 @@
 // マクロ定義
 //*****************************************************************************
 #define MAX_BLAST			(5)
-#define	BLAST_SIZE			(50.0f)				// 当たり判定の大きさ
+#define	BLAST_SIZE			(30.0f)				// 当たり判定の大きさ
 
 //*****************************************************************************
 // 構造体定義
@@ -31,6 +31,10 @@ struct BLAST
 	float				spd;				// 移動スピード
 	float				size;				// 当たり判定の大きさ
 	int					life;				// 爆破の残り時間
+
+	BOOL				shrink;				// 縮まっているか
+
+	BOOL				move;				// 奥へ移動するかフラグ TRUE:移動する
 };
 
 //*****************************************************************************
@@ -46,3 +50,5 @@ BLAST *GetBlast(void);
 void SetBlast(XMFLOAT3 pos);
 BOOL GetCameraSwitch(void);
 void SetCameraSwitch(BOOL data);
+int GetMorphing(void);
+int GetStopTime(void);

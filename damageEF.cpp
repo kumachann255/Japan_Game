@@ -15,7 +15,7 @@
 //*****************************************************************************
 #define TEXTURE_WIDTH				(SCREEN_WIDTH)	// 背景サイズ
 #define TEXTURE_HEIGHT				(SCREEN_HEIGHT)	// 
-#define TEXTURE_MAX					(2)				// テクスチャの数
+#define TEXTURE_MAX					(4)				// テクスチャの数
 
 #define DAMAGEEF_MAX_TIME			(20)			// 何フレームダメージエフェクトを表示するか
 
@@ -31,8 +31,10 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/damageEF_0.png",
-	"data/TEXTURE/damageEF_1.png",
+	"data/TEXTURE/glass0.png",
+	"data/TEXTURE/glass1.png",
+	"data/TEXTURE/glass2.png",
+	"data/TEXTURE/glass3.png",
 };
 
 

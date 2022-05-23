@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // 爆破と当たり判定処理 [blast.cpp]
-// Author : 
+// Author : a
 //
 //=============================================================================
 #include "main.h"
@@ -17,20 +17,23 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_BLAST				"data/MODEL/test_bom0.obj"		// 読み込むモデル名
-#define	MODEL_BLAST_1			"data/MODEL/test_bom1.obj"		// 読み込むモデル名
+#define	MODEL_BLAST				"data/MODEL/bak00.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_1			"data/MODEL/bak02.obj"		// 読み込むモデル名
 
 
 #define	VALUE_MOVE			(5.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
 
 #define BLAST_LIFE			(150)						// 爆破オブジェクトの表示時間
-#define BLAST_MOVE_TIME_0	(5)						// ねばねばが広がる時間
-#define BLAST_MOVE_TIME_1	(30)						// 広がった状態で止まる時間
+#define BLAST_MOVE_TIME_0	(3)							// ねばねばが広がる時間
+#define BLAST_MOVE_TIME_1	(10)						// 広がった状態で止まる時間
 #define BLAST_MOVE_TIME_2	(10)						// ねばねばが縮まる時間
+#define BLAST_MOVE_TIME_3	(20)						// ねばねばが空中で止まる時間
 
-#define BLAST_DOWN			(15.0f)						// モーフィング後に落ちる高さ
-#define BLASE_DOWN_SPEED	(5.0f)						// 落ちる時間
+#define BLAST_DOWN			(20.0f)						// モーフィング後に落ちる高さ
+#define BLASE_DOWN_SPEED	(10.0f)						// 落ちる時間
+
+#define BLASE_ROT			(3.14f)						// 回転の最大値
 
 #define MAX_BLAST_MOVE		(2)							// モーフィングの数
 
@@ -58,6 +61,8 @@ static int				g_morphingNum;					// モーフィングの番号
 
 static BOOL				g_cameraOn;						// カメラのスイッチ
 
+static int				g_stopTime;						// 爆弾が空中で止まる時間
+
 
 //=============================================================================
 // 初期化処理
@@ -71,7 +76,7 @@ HRESULT InitBlast(void)
 
 		g_Blast[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		g_Blast[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		g_Blast[i].scl = XMFLOAT3(2.0f, 2.0f, 2.0f);
+		g_Blast[i].scl = XMFLOAT3(1.1f, 1.1f, 1.1f);
 		g_Blast[i].size = BLAST_SIZE;
 		g_Blast[i].life = 0;
 		g_Blast[i].spd = 0.0f;			// 移動スピードクリア
@@ -79,13 +84,10 @@ HRESULT InitBlast(void)
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Blast[i].model, &g_Blast[i].diffuse[0]);
 
-		// 色を少し変える
-		XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 0.5f };
-
-		// 色をセット
-		SetModelDiffuse(&g_Blast[i].model, 0, color);
-
 		g_Blast[i].use = FALSE;			// TRUE:生きてる
+		g_Blast[i].move = FALSE;		// TRUE:奥へ移動する
+		g_Blast[i].shrink = FALSE;		// 縮まり始めているか
+	
 	}
 
 	// モーフィングするオブジェクトの読み込み
@@ -108,6 +110,7 @@ HRESULT InitBlast(void)
 	g_time = 0.0f;
 	g_downCount = 0;
 	g_cameraOn = FALSE;
+	g_stopTime = 0;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -210,6 +213,7 @@ void UpdateBlast(void)
 					if ((g_time < 1.0f) && (g_Blast[i].life < BLAST_LIFE - BLAST_MOVE_TIME_0 - BLAST_MOVE_TIME_1))
 					{
 						g_time += 1.0f / BLAST_MOVE_TIME_2;
+						g_Blast[i].shrink = TRUE;
 					}
 					break;
 				}
@@ -221,8 +225,13 @@ void UpdateBlast(void)
 					g_morphingNum++;
 				}
 
-				// 第二モーフィングが終わった後は落ちる
+				// 第二モーフィングが終わった後はちょっと止まる
 				if ((g_time >= 1.0f) && (g_morphingNum == 1) && (g_downCount < BLASE_DOWN_SPEED))
+				{
+					g_stopTime++;
+				}
+
+				if ((g_stopTime >= BLAST_MOVE_TIME_3) && (g_downCount < BLASE_DOWN_SPEED))
 				{
 					g_Blast[i].pos.y -= BLAST_DOWN / BLASE_DOWN_SPEED;
 					g_downCount++;
@@ -234,6 +243,7 @@ void UpdateBlast(void)
 				if (g_downCount >= BLASE_DOWN_SPEED)
 				{
 					g_Blast[i].pos.z += FIELD_SPEED;
+					g_Blast[i].move = TRUE;
 				}
 					
 
@@ -270,7 +280,7 @@ void DrawBlast(void)
 	SetAlphaTestEnable(TRUE);
 
 	// 加算合成に設定
-	SetBlendState(BLEND_MODE_ADD);
+	//SetBlendState(BLEND_MODE_ADD);
 
 	//フォグを無効に
 	SetFogEnable(FALSE);
@@ -338,6 +348,9 @@ void SetBlast(XMFLOAT3 pos)
 		if (g_Blast[i].use == FALSE)
 		{
 			g_Blast[i].use = TRUE;
+			g_Blast[i].move = FALSE;
+			g_Blast[i].shrink = FALSE;
+
 			g_Blast[i].pos = pos;
 			g_Blast[i].life = BLAST_LIFE;
 
@@ -346,6 +359,12 @@ void SetBlast(XMFLOAT3 pos)
 			g_time = 0.0f;
 			g_morphingNum = 0;
 			g_downCount = 0;
+			g_stopTime = 0;
+
+			g_Blast[i].rot.y = RamdomFloat(2, BLASE_ROT, -BLASE_ROT);
+
+			// 爆発音
+			// PlaySound(SOUND_LABEL_SE_shot000);
 
 			return;
 		}
@@ -364,4 +383,17 @@ BOOL GetCameraSwitch(void)
 void SetCameraSwitch(BOOL data)
 {
 	g_cameraOn = data;
+}
+
+
+// 現在のモーフィング番号を取得
+int GetMorphing(void)
+{
+	return g_morphingNum;
+}
+
+
+int GetStopTime(void)
+{
+	return g_stopTime;
 }

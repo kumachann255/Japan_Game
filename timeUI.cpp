@@ -16,9 +16,9 @@
 //*****************************************************************************
 #define TEXTURE_WIDTH				(45)	// 時間サイズ
 #define TEXTURE_HEIGHT				(90)	// 
-#define TEXTURE_MAX					(1)		// テクスチャの数
+#define TEXTURE_MAX					(2)		// テクスチャの数
 
-#define TIME_MAX					(100)	// 時間制限
+#define TIME_MAX					(50)	// 時間制限
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -33,7 +33,8 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/time.png",
+	"data/TEXTURE/time0.png",
+	"data/TEXTURE/time1.png",
 };
 
 
@@ -135,6 +136,14 @@ void UpdateTime(void)
 		SetFade(FADE_OUT, MODE_RESULT);
 	}
 
+	if (g_Time > 10)
+	{
+		g_TexNo = 0;
+	}
+	else
+	{
+		g_TexNo = 1;
+	}
 
 
 

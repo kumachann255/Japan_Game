@@ -10,63 +10,59 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_HELI		(5)					// エネミーヘリの数
+#define MAX_ENEMY_HELI		(1)			// エネミーヘリの数
 
-#define	HELI_SIZE		(5.0f)				// 当たり判定の大きさ
+#define HELI_PARTS_MAX		(2)			// エネミーヘリのパーツの数
 
-// ヘリのベジェ曲線繰り返し用enum
-enum
-{
-	TO_GO,				// ベジェ曲線行き
-	RETURN				// ベジェ曲線帰り
-};
+#define	ENEMY_HELI_SIZE		(30.0f)		// 当たり判定の大きさ
 
-// ヘリのベジェ曲線パターン生成用enum
-enum
-{
-	PATTERN_01,			// ベジェ曲線パターン1
-	PATTERN_02				// ベジェ曲線パターン2
-};
+#define ENEMY_HELI_OFFSET_Y	(40.0f)		// エネミーヘリの足元をあわせる
 
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-struct HELI
+struct ENEMY_HELI
 {
-	XMFLOAT3			pos;			// ポリゴンの位置
-	XMFLOAT3			rot;			// ポリゴンの向き(回転)
-	XMFLOAT3			scl;			// ポリゴンの大きさ(スケール)
-
-	XMFLOAT4X4			mtxWorld;		// ワールドマトリックス
-
-	BOOL				load;
-	DX11_MODEL			model;			// モデル情報
-
-	float				spd;			// 移動スピード
-	float				dir;			// 向き
-	float				size;			// 当たり判定の大きさ
-
-	int					shadowIdx;		// 影のIndex
-	int					switchFlag;		// ヘリの往復変更用フラグ
-	int					patternFlag;	// ヘリの動きパターン変更用フラグ
+	XMFLOAT4X4			mtxWorld;			// ワールドマトリックス
+	XMFLOAT3			pos;				// モデルの位置
+	XMFLOAT3			rot;				// モデルの向き(回転)
+	XMFLOAT3			scl;				// モデルの大きさ(スケール)
 
 	BOOL				use;
+	BOOL				load;
+	DX11_MODEL			model;				// モデル情報
+	XMFLOAT4			diffuse[MODEL_MAX_MATERIAL];	// モデルの色
 
-	float				speed;		// 移動スピード
-	float				time;		// 時間
+	float				spd;				// 移動スピード
+	float				size;				// 当たり判定の大きさ
+	int					shadowIdx;			// 影のインデックス番号
 
-	// 親は、NULL、子供は親のアドレスを入れる
-	HELI				*parent;	// 自分が親ならNULL、自分が子供なら親のheliアドレス
+	float				zGoal;				// z座標のプレイヤーに近づく最大距離
 
+	XMFLOAT3			hitPos;				// 爆発の座標
+	XMFLOAT3			pos_old;			// 一歩前の座標
+	XMFLOAT3			hitSpd;				// 当たり判定後アニメーション用、毎回の移動量
+	BOOL				isHit;				// 当たってるフラグ TRUE:当たっている
+	BOOL				move;				// 奥へ移動するフラグ TRUE:移動する
+	float				hitMove;			// 当たり判定後アニメーション用、移動スピード
+	int					hitTime;			// 移動時間
+	int					liveCount;			// ポップしてからの時間を管理
+
+	BOOL				fuchi;				// リムライトのオンオフ
+
+	float				speed;				// 移動スピード
+	float				time;				// 時間
+	BOOL				switchFlag;			// ベジェ用
+	ENEMY_HELI			*parent;			// エネミーヘリのパーツ
 };
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitHeli(void);
-void UninitHeli(void);
-void UpdateHeli(void);
-void DrawHeli(void);
+HRESULT InitEnemyHeli(void);
+void UninitEnemyHeli(void);
+void UpdateEnemyHeli(void);
+void DrawEnemyHeli(void);
 
-HELI *GetHeli(void);
+ENEMY_HELI *GetEnemyHeli(void);
 

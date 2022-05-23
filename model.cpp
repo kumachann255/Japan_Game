@@ -622,6 +622,21 @@ void SetModelDiffuse(DX11_MODEL *Model, int mno, XMFLOAT4 diffuse)
 }
 
 
+void SetModelColor(DX11_MODEL *Model, COLOR *model)
+{
+	// サブセット設定
+	{
+		Model->SubsetArray = new DX11_SUBSET[model->SubsetNum];
+
+		for (unsigned short i = 0; i < model->SubsetNum; i++)
+		{
+			Model->SubsetArray[i].StartIndex = model->SubsetArray[i].StartIndex;
+			Model->SubsetArray[i].IndexNum = model->SubsetArray[i].IndexNum;
+
+			Model->SubsetArray[i].Material.Material = model->SubsetArray[i].Material.Material;
+		}
+	}
+}
 
 
 
