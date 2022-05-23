@@ -26,7 +26,7 @@
 
 #define	VALUE_MOVE				(3.0f)						// ˆÚ“®—Ê
 #define	VALUE_ROTATE			(XM_PI * 0.02f)				// ‰ñ“]—Ê
-#define ENEMY_HELI_SPEED		(0.0025)						// “_–Å‚ÌŠÔŠu
+#define ENEMY_HELI_SPEED		(0.0025f)						// “_–Å‚ÌŠÔŠu
 
 #define ENEMY_HELI_SHADOW_SIZE	(0.4f)						// ‰e‚Ì‘å‚«‚³
 

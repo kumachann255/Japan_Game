@@ -136,6 +136,17 @@ HRESULT InitTree(void)
 		GetModelDiffuse(&g_Sign0[i].model, &g_Sign0[i].diffuse[0]);
 	}
 
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		g_Sign1[i].load = TRUE;
+		g_Sign1[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, 340.0f);
+		g_Sign1[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
+		g_Sign1[i].scl = XMFLOAT3(1.5f, 1.5f, 1.5f);
+		g_Sign1[i].use = FALSE;			// TRUE:生きてる
+		// モデルのディフューズを保存しておく。色変え対応の為。
+		GetModelDiffuse(&g_Sign1[i].model, &g_Sign1[i].diffuse[0]);
+	}
+
 
 	// 左側のフィールドオブジェクトの初期配置
 	// ビル
@@ -563,7 +574,7 @@ void DrawTree(void)
 		XMStoreFloat4x4(&g_Pole[i].mtxWorld, mtxWorld);
 
 		// モデル描画
-		DrawModel(&g_Pole[0].model);
+		//DrawModel(&g_Pole[0].model);
 
 	}
 

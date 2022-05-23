@@ -316,7 +316,7 @@ void DrawGame0(void)
 	DrawMeshWall();
 
 	// 木の描画処理
-	//DrawTree();
+	DrawTree();
 
 	// パーティクルの描画処理
 	DrawParticle();
