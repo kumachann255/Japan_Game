@@ -33,6 +33,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="sky.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -67,5 +68,6 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="sky.h" />
   </ItemGroup>
 </Project>

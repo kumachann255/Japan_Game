@@ -287,8 +287,8 @@ void DrawBlast(void)
 	// 加算合成に設定
 	//SetBlendState(BLEND_MODE_ADD);
 
-	//フォグを無効に
-	SetFogEnable(FALSE);
+	////フォグを無効に
+	//SetFogEnable(FALSE);
 
 	for (int i = 0; i < MAX_BLAST; i++)
 	{
@@ -329,8 +329,8 @@ void DrawBlast(void)
 	// αテストを無効に
 	SetAlphaTestEnable(FALSE);
 
-	// フォグを有効に
-	SetFogEnable(TRUE);
+	//// フォグを有効に
+	//SetFogEnable(TRUE);
 
 }
 
