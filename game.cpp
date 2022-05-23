@@ -423,6 +423,8 @@ void DrawGame(void)
 void CheckHit(void)
 {
 	ENEMY *enemy = GetEnemy();		// エネミーのポインターを初期化
+	ENEMY_HELI *enemyHeli = GetEnemyHeli();		// エネミーのポインターを初期化
+
 	PLAYER *player = GetPlayer();	// プレイヤーのポインターを初期化
 	BULLET *bullet = GetBullet();	// 弾のポインターを初期化
 	BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
@@ -476,6 +478,53 @@ void CheckHit(void)
 			}
 		}
 	}
+
+	// 敵と爆破オブジェクト
+	for (int i = 0; i < MAX_ENEMY_HELI; i++)
+	{
+		//敵の有効フラグをチェックする
+		if (enemyHeli[i].use == FALSE || enemyHeli[i].isHit == TRUE)
+			continue;
+
+
+		for (int p = 0; p < MAX_BLAST; p++)
+		{
+			//爆破オブジェクトの有効フラグをチェックする
+			if (blast[p].use == FALSE)
+				continue;
+
+			//BCの当たり判定
+			float size = blast[p].size;
+			if (GetMorphing() == 1) size /= 4.0f;
+
+			if (CollisionBC(blast[p].pos, enemyHeli[i].pos, size, enemyHeli[i].size))
+			{
+				if (enemyHeli[i].isHit == TRUE) break;
+
+				// 敵キャラクターは倒される
+				enemyHeli[i].isHit = TRUE;
+				enemyHeli[i].hitTime = 15;
+
+				offsetX = RamdomFloat(0, 30.0f, -30.0f);
+				offsetY = RamdomFloat(0, 30.0f, ENEMY_HELI_OFFSET_Y);
+				offsetZ = RamdomFloat(0, -10.0f, -40.0f);
+
+				enemyHeli[i].hitPos.x = blast[p].pos.x + offsetX;
+				enemyHeli[i].hitPos.y = blast[p].pos.y + offsetY;
+				enemyHeli[i].hitPos.z = blast[p].pos.z + offsetZ;
+
+				ReleaseShadow(enemyHeli[i].shadowIdx);
+
+				// スコアを足す
+				AddScore(100);
+
+				// コンボを足す
+				AddCombo(1);
+				ResetComboTime();
+			}
+		}
+	}
+
 
 
 	//// プレイヤーの弾と敵

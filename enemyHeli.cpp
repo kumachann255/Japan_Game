@@ -25,8 +25,8 @@
 #define	MODEL_HELI_PARTS		"data/MODEL/puropera.obj"	// 読み込むモデル名
 
 #define	VALUE_MOVE				(3.0f)						// 移動量
-#define	VALUE_ROTATE			(XM_PI * 0.02f)				// 回転量
-#define ENEMY_HELI_SPEED		(0.0025)						// 点滅の間隔
+#define	VALUE_ROTATE			(0.5f)				// 回転量
+#define ENEMY_HELI_SPEED		(0.0025f)						// 点滅の間隔
 
 #define ENEMY_HELI_SHADOW_SIZE	(0.4f)						// 影の大きさ
 
@@ -39,7 +39,7 @@
 #define POP_COUNT				(300)						// ヘリエネミーのポップ間隔
 #define MAX_POP					(2)							// 最大、場に何体ヘリエネミーを出すか
 
-#define ENEMY_HELI_HIT_MOVE		(0.1f)						// 当たり判定後アニメーション用移動量
+#define ENEMY_HELI_HIT_MOVE		(5.0f)						// 当たり判定後アニメーション用移動量
 
 #define ENEMY_HELI_ATTACK_0		(300)						// ヘリエネミーが点滅するまでの時間
 #define ENEMY_HELI_ATTACK_1		(120 + ENEMY_HELI_ATTACK_0)	// 点滅が早くなるまでの時間
@@ -101,14 +101,10 @@ HRESULT InitEnemyHeli(void)
 
 
 		g_EnemyHeli[i].hitPos = XMFLOAT3(0.0f, ENEMY_HELI_OFFSET_Y, 0.0f);	// 爆発の中心
-		g_EnemyHeli[i].pos_old = XMFLOAT3(0.0f, ENEMY_HELI_OFFSET_Y, 0.0f);	// 一歩前の座標
-		g_EnemyHeli[i].hitSpd = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
+		g_EnemyHeli[i].hitRot = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
 		g_EnemyHeli[i].isHit = FALSE;					// TRUE:当たってる
 		g_EnemyHeli[i].move = FALSE;					// 奥へ移動するフラグ TRUE:移動する
 		g_EnemyHeli[i].hitTime = 0;						// 奥へ移動するフラグ TRUE:移動する
-
-		g_EnemyHeli[i].hitMove = ENEMY_HELI_HIT_MOVE;		// 当たり判定後アニメーション用、移動スピード
-
 
 		g_EnemyHeli[i].liveCount = 0;		// 生存時間をリセット
 
@@ -234,8 +230,8 @@ void UpdateEnemyHeli(void)
 			{
 				// プロペラ回転処理
 				{
-					g_Parts[0].rot.y += 0.5f;
-					g_Parts[1].rot.x += 0.5f;
+					g_Parts[0].rot.y += VALUE_ROTATE;
+					g_Parts[1].rot.x += VALUE_ROTATE;
 				}
 
 				// ベジェ曲線での移動
@@ -399,41 +395,42 @@ void UpdateEnemyHeli(void)
 				//}
 				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
-				//５回移動する
+				// 縮まる処理
 				if ((blast[0].shrink) && (g_EnemyHeli[i].hitTime > 0))
 				{
-					g_EnemyHeli[i].pos.x += (g_EnemyHeli[i].hitPos.x - g_EnemyHeli[i].pos.x) / 5.0f;
-					g_EnemyHeli[i].pos.y += (g_EnemyHeli[i].hitPos.y - g_EnemyHeli[i].pos.y) / 5.0f;
-					g_EnemyHeli[i].pos.z += (g_EnemyHeli[i].hitPos.z - g_EnemyHeli[i].pos.z) / 5.0f;
+					g_EnemyHeli[i].pos.x += (g_EnemyHeli[i].hitPos.x - g_EnemyHeli[i].pos.x) / ENEMY_HELI_HIT_MOVE;
+					g_EnemyHeli[i].pos.y += (g_EnemyHeli[i].hitPos.y - g_EnemyHeli[i].pos.y) / ENEMY_HELI_HIT_MOVE;
+					g_EnemyHeli[i].pos.z += (g_EnemyHeli[i].hitPos.z - g_EnemyHeli[i].pos.z) / ENEMY_HELI_HIT_MOVE;
+
+					// ランダムに回転させる
+					g_EnemyHeli[i].hitRot.x = RamdomFloat(2, 6.28f, -6.28f);
+					g_EnemyHeli[i].hitRot.y = RamdomFloat(2, 6.28f, -6.28f);
+					g_EnemyHeli[i].hitRot.z = RamdomFloat(2, 6.28f, -6.28f);
+
+					if (g_EnemyHeli[i].hitTime == 15)
+					{
+						g_EnemyHeli[i].rot.x += g_EnemyHeli[i].hitRot.x;
+						g_EnemyHeli[i].rot.y += g_EnemyHeli[i].hitRot.y;
+						g_EnemyHeli[i].rot.z += g_EnemyHeli[i].hitRot.z;
+					}
 
 					g_EnemyHeli[i].hitTime--;
 				}
 
 
 
-				//if (ans)
-				//if (blast[0].move == FALSE)
-				//if (g_EnemyHeli[i].move == FALSE)
+				// 爆弾と一緒に落下する
+				BOOL camera = GetCameraSwitch();
+
+				if (camera == FALSE && blast[0].move == FALSE)
 				{
-					//g_EnemyHeli[i].pos.x += (g_EnemyHeli[i].hitPos.x - g_EnemyHeli[i].pos.x) / 5.0f;
-					//g_EnemyHeli[i].pos.y += (g_EnemyHeli[i].hitPos.y - g_EnemyHeli[i].pos.y) / 5.0f;
-					//g_EnemyHeli[i].pos.z += (g_EnemyHeli[i].hitPos.z - g_EnemyHeli[i].pos.z) / 5.0f;
+					g_EnemyHeli[i].pos.y -= BLAST_DOWN / BLASE_DOWN_SPEED;
 
-					//g_EnemyHeli[i].pos.x -= g_EnemyHeli[i].hitSpd.x;
-					//g_EnemyHeli[i].pos.y -= g_EnemyHeli[i].hitSpd.y;
-					//g_EnemyHeli[i].pos.z -= g_EnemyHeli[i].hitSpd.z;
-
+					if (g_EnemyHeli[i].pos.y < ENEMY_HELI_OFFSET_Y)
+					{
+						g_EnemyHeli[i].pos.y = ENEMY_HELI_OFFSET_Y;
+					}
 				}
-
-
-				//if ((g_EnemyHeli[i].pos.x == g_EnemyHeli[i].pos_old.x) &&
-				//	(g_EnemyHeli[i].pos.y == g_EnemyHeli[i].pos_old.y) &&
-				//	(g_EnemyHeli[i].pos.z == g_EnemyHeli[i].pos_old.z))
-				//{
-				//	g_EnemyHeli[i].move = TRUE;
-				//}
-
-
 
 				//爆弾と一緒に奥へ移動する
 				if (blast[0].move == TRUE) /*&& (g_EnemyHeli[i].move == TRUE)*/ //&& (g_EnemyHeli[i].hitTime == 0))
@@ -461,7 +458,7 @@ void UpdateEnemyHeli(void)
 
 
 #ifdef _DEBUG	// デバッグ情報を表示する
-	PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_EnemyHeli[0].hitSpd.x, g_EnemyHeli[0].hitSpd.y, g_EnemyHeli[0].hitSpd.z);
+	//PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_EnemyHeli[0].hitSpd.x, g_EnemyHeli[0].hitSpd.y, g_EnemyHeli[0].hitSpd.z);
 #endif
 
 }
@@ -576,6 +573,7 @@ void SetEnemyHeli(void)
 			g_EnemyHeli[i].pos.y = ENEMY_HELI_OFFSET_Y;
 			g_EnemyHeli[i].isHit = FALSE;
 			g_EnemyHeli[i].move = FALSE;
+			g_EnemyHeli[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 			// 到達地点もランダム
 			g_EnemyHeli[i].zGoal = (float)(rand() % ENEMY_HELI_GOAL_Z_OFFSET) + ENEMY_HELI_GOAL_Z;
