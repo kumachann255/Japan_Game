@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // エネミーモデル処理 [enemy.cpp]
-// Author : aa
+// Author : aaa
 //
 //=============================================================================
 #include "main.h"
@@ -319,7 +319,7 @@ void UpdateEnemy(void)
 				//爆弾と一緒に奥へ移動する
 				if (blast[0].move == TRUE) /*&& (g_Enemy[i].move == TRUE)*/ //&& (g_Enemy[i].hitTime == 0))
 				{
-					g_Enemy[i].pos.z += FIELD_SPEED;
+					g_Enemy[i].pos.z += FIELD_SPEED+ 2.0f;
 				}
 
 
