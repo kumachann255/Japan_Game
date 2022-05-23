@@ -70,10 +70,14 @@ struct INTERPOLATION_DATA
 
 enum
 {
-	MODE_TITLE = 0,			// タイトル画面
+	MODE_TITLE_LOGO = 0,	// ロゴ画面
+	MODE_TITLE_DirectX,		// DirectXで作ってますアピ画面
+	MODE_TITLE,				// タイトル画面
 	MODE_TUTORIAL,			// ゲーム説明画面
 	MODE_GAME,				// ゲーム画面
+	MODE_GAME_COUNT,		// 次のステージまでのカウント画面
 	MODE_RESULT,			// リザルト画面
+	MODE_ENDROLL,			// エンドロール画面
 	MODE_MAX
 };
 

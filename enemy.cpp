@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // エネミーモデル処理 [enemy.cpp]
-// Author : a
+// Author : aaa
 //
 //=============================================================================
 #include "main.h"
@@ -22,6 +22,9 @@
 // マクロ定義
 //*****************************************************************************
 #define	MODEL_ENEMY			"data/MODEL/patoka-.obj"		// 読み込むモデル名
+#define	MODEL_ENEMY_01		"data/MODEL/sirobai.obj"		// 読み込むモデル名
+
+#define ENEMY_TYPE_MAX		(2)							// エネミータイプの最大数
 
 #define	VALUE_MOVE			(3.0f)						// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// 回転量
@@ -68,11 +71,12 @@ static int				count = 0;		// ポップカウント
 //=============================================================================
 HRESULT InitEnemy(void)
 {
+	LoadModel(MODEL_ENEMY, &g_Enemy[0].model);
+	LoadModel(MODEL_ENEMY_01, &g_Enemy[1].model);
 
 	for (int i = 0; i < MAX_ENEMY; i++)
 	{	
 		g_Enemy[i].load = TRUE;
-		LoadModel(MODEL_ENEMY, &g_Enemy[i].model);
 
 		g_Enemy[i].pos = XMFLOAT3(-50.0f + i * 30.0f, ENEMY_OFFSET_Y, 20.0f);
 		g_Enemy[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -94,9 +98,8 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].hitRot = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
 		g_Enemy[i].isHit = FALSE;									// TRUE:当たってる
 		g_Enemy[i].hitTime = 0;										// タイミング管理用
-
-
 		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
+		g_Enemy[i].type = 0;			// エネミータイプ
 
 		g_Enemy[i].fuchi = FALSE;
 
@@ -319,7 +322,7 @@ void UpdateEnemy(void)
 				//爆弾と一緒に奥へ移動する
 				if (blast[0].move == TRUE) /*&& (g_Enemy[i].move == TRUE)*/ //&& (g_Enemy[i].hitTime == 0))
 				{
-					g_Enemy[i].pos.z += FIELD_SPEED;
+					g_Enemy[i].pos.z += FIELD_SPEED+ 2.0f;
 				}
 
 
@@ -386,7 +389,16 @@ void DrawEnemy(void)
 
 
 		// モデル描画
-		DrawModel(&g_Enemy[i].model);
+		switch (g_Enemy[i].type)
+		{
+		case 0:
+			DrawModel(&g_Enemy[0].model);
+			break;
+
+		case 1:
+			DrawModel(&g_Enemy[1].model);
+			break;
+		}
 
 		// リムライトの設定
 		SetFuchi(FALSE);
@@ -428,6 +440,8 @@ void SetEnemy(void)
 
 			g_Enemy[i].liveCount = 0;
 
+			// エネミーのタイプをランダムに
+			g_Enemy[i].type = rand() % ENEMY_TYPE_MAX;
 			// リムライトオフ
 			g_Enemy[i].fuchi = FALSE;
 

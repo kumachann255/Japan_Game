@@ -292,6 +292,14 @@ void Update(void)
 	// モードによって処理を分ける
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の更新
+
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の更新
+
+		break;
+
 	case MODE_TITLE:		// タイトル画面の更新
 		UpdateTitle();
 		break;
@@ -300,8 +308,16 @@ void Update(void)
 		UpdateGame();
 		break;
 
+	case MODE_GAME_COUNT:	// 次のステージまでのカウント画面の更新
+
+		break;
+
 	case MODE_RESULT:		// リザルト画面の更新
 		UpdateResult();
+		break;
+
+	case MODE_ENDROLL:		// エンドロール画面の更新
+
 		break;
 	}
 
@@ -324,6 +340,26 @@ void Draw(void)
 	// モードによって処理を分ける
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
 	case MODE_TITLE:		// タイトル画面の描画
 		SetViewPort(TYPE_FULL_SCREEN);
 
@@ -347,6 +383,16 @@ void Draw(void)
 		DrawGame();
 		break;
 
+	case MODE_GAME_COUNT:	// 次のステージまでのカウント画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
 	case MODE_RESULT:		// リザルト画面の描画
 		SetViewPort(TYPE_FULL_SCREEN);
 
@@ -361,6 +407,16 @@ void Draw(void)
 
 		// ライティングを有効に
 		SetLightEnable(TRUE);
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
+	case MODE_ENDROLL:		// エンドロール画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
 
 		// Z比較あり
 		SetDepthEnable(TRUE);

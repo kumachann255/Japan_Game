@@ -77,10 +77,11 @@ HRESULT InitBlast(void)
 
 		g_Blast[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		g_Blast[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		g_Blast[i].scl = XMFLOAT3(1.1f, 1.1f, 1.1f);
+		g_Blast[i].scl = XMFLOAT3(1.3f, 1.3f, 1.3f);
 		g_Blast[i].size = BLAST_SIZE;
 		g_Blast[i].life = 0;
 		g_Blast[i].spd = 0.0f;			// 移動スピードクリア
+		g_Blast[i].after = 1;
 
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Blast[i].model, &g_Blast[i].diffuse[0]);
@@ -176,14 +177,14 @@ void UpdateBlast(void)
 				switch (g_morphingNum)
 				{
 				case 0:
-					after = 1;
+					after = g_Blast[i].after;
 					brfore = 0;
 
 					break;
 
 				case 1:
 					after = 0;
-					brfore = 1;
+					brfore = g_Blast[i].after;
 
 					break;
 				}
@@ -357,6 +358,8 @@ void SetBlast(XMFLOAT3 pos)
 
 			g_Blast[i].pos = pos;
 			g_Blast[i].life = BLAST_LIFE;
+
+			g_Blast[i].after = (rand() % (MAX_BLAST_MOVE - 1)) + 1;
 
 			g_cameraOn = TRUE;
 

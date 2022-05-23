@@ -43,6 +43,7 @@ struct ENEMY
 	int					hitTime;			// 移動時間
 	int					liveCount;			// ポップしてからの時間を管理
 
+	int					type;				// エネミーのタイプ（0:パトカー、1:白バイ
 	BOOL				fuchi;				// リムライトのオンオフ
 
 };
