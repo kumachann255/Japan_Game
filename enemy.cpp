@@ -228,10 +228,10 @@ void UpdateEnemy(void)
 				for (int p = 0; p < MAX_ENEMY; p++)
 				{
 					//敵の有効フラグをチェックする
-					if ((g_Enemy[p].use == FALSE) || (i == p)) continue;
+					if ((g_Enemy[p].use == FALSE) || (i == p) || (g_Enemy[p].isHit == TRUE)) continue;
 
 					//BCの当たり判定
-					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size / 5.0f, g_Enemy[p].size / 5.0f) &&
+					if (CollisionBC(g_Enemy[i].pos, g_Enemy[p].pos, g_Enemy[p].size, g_Enemy[p].size) &&
 						(g_Enemy[i].pos.z > g_Enemy[p].pos.z))
 					{	// 当たっていない場合に移動
 
@@ -256,20 +256,6 @@ void UpdateEnemy(void)
 				//g_Enemy[i].pos_old.y = g_Enemy[i].pos.y;
 				//g_Enemy[i].pos_old.z = g_Enemy[i].pos.z;
 
-				//BOOL ans = TRUE;
-
-				//// ほかのパトカーとぶつかってないか？
-				//for (int j = 0; j < MAX_ENEMY; j++)
-				//{
-				//	if ((g_Enemy[j].isHit == FALSE) || (i == j)) continue;	// 攻撃に当たってない奴には当たり判定のチェックをスキップ
-
-				//	if (CollisionBC(g_Enemy[i].pos, g_Enemy[j].pos, g_Enemy[i].size - 20.0f, g_Enemy[j].size - 20.0f))
-				//	{
-				//		ans = FALSE;
-				//		break;
-				//	}
-				//
-				//}
 
 				//// 決まった位置まで来てかいか？
 				//if (CollisionBC(g_Enemy[i].pos, g_Enemy[i].hitPos, g_Enemy[i].size, g_Enemy[i].size))
