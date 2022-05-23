@@ -66,6 +66,7 @@ HRESULT InitGame(void)
 
 	// フィールドの初期化
 	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
+	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 8, 8, 700.0f, 400.0f);
 
 	// ライトを有効化	// 影の初期化処理
 	InitShadow();
