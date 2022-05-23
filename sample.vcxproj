@@ -144,6 +144,7 @@
     <ClInclude Include="damageEF.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="enemyHeli.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="fieldobj.h" />
     <ClInclude Include="game.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="damageEF.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemyHeli.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fieldobj.cpp" />
     <ClCompile Include="game.cpp" />

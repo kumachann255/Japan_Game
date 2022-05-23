@@ -30,9 +30,9 @@
 #include "debugproc.h"
 #include "timeUI.h"
 #include "damageEF.h"
+#include "enemyHeli.h"
 #include "combo.h"
 #include "playerHP.h"
-
 
 
 //*****************************************************************************
@@ -74,6 +74,9 @@ HRESULT InitGame(void)
 
 	// エネミーの初期化
 	InitEnemy();
+
+	// エネミーヘリの初期化
+	InitEnemyHeli();
 
 	// 攻撃範囲の初期化
 	InitAttackR();
@@ -184,6 +187,9 @@ void UninitGame(void)
 	// 攻撃範囲の終了処理
 	UninitAttackR();
 
+	// エネミーヘリの終了処理
+	UninitEnemyHeli();
+
 	// エネミーの終了処理
 	UninitEnemy();
 
@@ -226,6 +232,9 @@ void UpdateGame(void)
 
 	// エネミーの更新処理
 	UpdateEnemy();
+
+	// エネミーヘリの更新処理
+	UpdateEnemyHeli();
 
 	// 攻撃範囲の更新処理
 	UpdateAttackR();
@@ -285,6 +294,9 @@ void DrawGame0(void)
 	// 影の描画処理
 	DrawShadow();
 
+	// エネミーヘリの描画処理
+	DrawEnemyHeli();
+
 	// エネミーの描画処理
 	DrawEnemy();
 
@@ -304,7 +316,7 @@ void DrawGame0(void)
 	DrawMeshWall();
 
 	// 木の描画処理
-	DrawTree();
+	//DrawTree();
 
 	// パーティクルの描画処理
 	DrawParticle();
@@ -452,10 +464,6 @@ void CheckHit(void)
 				enemy[i].hitPos.x = blast[p].pos.x + offsetX;
 				enemy[i].hitPos.y = blast[p].pos.y + offsetY;
 				enemy[i].hitPos.z = blast[p].pos.z + offsetZ;
-
-				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
-				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
-				enemy[i].hitSpd.z = (enemy[i].pos.x - enemy[i].hitPos.z) * enemy[i].hitMove;
 
 				ReleaseShadow(enemy[i].shadowIdx);
 

@@ -1,7 +1,7 @@
 //=============================================================================
 //
-// エネミーモデル処理 [enemy.h]
-// Author : 
+// エネミーヘリモデル処理 [enemyHeli.h]
+// Author : 変更
 //
 //=============================================================================
 #pragma once
@@ -10,16 +10,18 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_ENEMY		(50)					// エネミーの数
+#define MAX_ENEMY_HELI		(1)			// エネミーヘリの数
 
-#define	ENEMY_SIZE		(30.0f)				// 当たり判定の大きさ
+#define HELI_PARTS_MAX		(2)			// エネミーヘリのパーツの数
 
-#define ENEMY_OFFSET_Y		(0.0f)			// エネミーの足元をあわせる
+#define	ENEMY_HELI_SIZE		(30.0f)		// 当たり判定の大きさ
+
+#define ENEMY_HELI_OFFSET_Y	(40.0f)		// エネミーヘリの足元をあわせる
 
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-struct ENEMY
+struct ENEMY_HELI
 {
 	XMFLOAT4X4			mtxWorld;			// ワールドマトリックス
 	XMFLOAT3			pos;				// モデルの位置
@@ -34,26 +36,33 @@ struct ENEMY
 	float				spd;				// 移動スピード
 	float				size;				// 当たり判定の大きさ
 	int					shadowIdx;			// 影のインデックス番号
-	
+
 	float				zGoal;				// z座標のプレイヤーに近づく最大距離
 
 	XMFLOAT3			hitPos;				// 爆発の座標
-	XMFLOAT3			hitRot;				// 当たり判定後アニメーション用、毎回の移動量
+	XMFLOAT3			pos_old;			// 一歩前の座標
+	XMFLOAT3			hitSpd;				// 当たり判定後アニメーション用、毎回の移動量
 	BOOL				isHit;				// 当たってるフラグ TRUE:当たっている
+	BOOL				move;				// 奥へ移動するフラグ TRUE:移動する
+	float				hitMove;			// 当たり判定後アニメーション用、移動スピード
 	int					hitTime;			// 移動時間
 	int					liveCount;			// ポップしてからの時間を管理
 
 	BOOL				fuchi;				// リムライトのオンオフ
 
+	float				speed;				// 移動スピード
+	float				time;				// 時間
+	BOOL				switchFlag;			// ベジェ用
+	ENEMY_HELI			*parent;			// エネミーヘリのパーツ
 };
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitEnemy(void);
-void UninitEnemy(void);
-void UpdateEnemy(void);
-void DrawEnemy(void);
+HRESULT InitEnemyHeli(void);
+void UninitEnemyHeli(void);
+void UpdateEnemyHeli(void);
+void DrawEnemyHeli(void);
 
-ENEMY *GetEnemy(void);
+ENEMY_HELI *GetEnemyHeli(void);
 
