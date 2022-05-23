@@ -30,7 +30,9 @@
 
 #include "timeUI.h"
 
-#include "titlelogo.h"
+#include "logo.h"
+#include "logoD.h"
+#include "countdown.h"
 
 
 //*****************************************************************************
@@ -64,6 +66,7 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 int	g_Mode = MODE_TITLE_LOGO;					// 起動時の画面を設定
 
+int g_Stage = stage0;							// 現在のステージ
 
 //=============================================================================
 // メイン関数
@@ -299,7 +302,7 @@ void Update(void)
 		break;
 
 	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の更新
-
+		UpdateLogoD();
 		break;
 
 	case MODE_TITLE:		// タイトル画面の更新
@@ -311,7 +314,7 @@ void Update(void)
 		break;
 
 	case MODE_GAME_COUNT:	// 次のステージまでのカウント画面の更新
-
+		UpdateCountDown();
 		break;
 
 	case MODE_RESULT:		// リザルト画面の更新
@@ -347,7 +350,13 @@ void Draw(void)
 		// Z比較なし
 		SetDepthEnable(FALSE);
 
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
 		DrawLogo();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -358,6 +367,13 @@ void Draw(void)
 		// Z比較なし
 		SetDepthEnable(FALSE);
 
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawLogoD();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -391,6 +407,13 @@ void Draw(void)
 		// Z比較なし
 		SetDepthEnable(FALSE);
 
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawCountDown();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -470,11 +493,17 @@ void SetMode(int mode)
 	// ロゴ画面の終了処理
 	UninitLogo();
 
+	// DirectXで作ってますアピ画面の終了処理
+	UninitLogoD();
+
 	// タイトル画面の終了処理
 	UninitTitle();
 
 	// ゲーム画面の終了処理
 	UninitGame();
+
+	// 次のステージまでのカウント画面の終了処理
+	UninitCountDown();
 
 	// リザルト画面の終了処理
 	UninitResult();
@@ -489,7 +518,7 @@ void SetMode(int mode)
 		break;
 
 	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の初期化
-
+		InitLogoD();
 		break;
 
 	case MODE_TITLE:
@@ -500,6 +529,10 @@ void SetMode(int mode)
 	case MODE_GAME:
 		// ゲーム画面の初期化
 		InitGame();
+		break;
+
+	case MODE_GAME_COUNT:
+		InitCountDown();
 		break;
 
 	case MODE_RESULT:
@@ -562,3 +595,15 @@ float RamdomFloat(int digits, float max, float min)
 //
 //	angle = atan2(高さ, 底辺)
 //}
+
+
+int GetStage(void)
+{
+	return g_Stage;
+}
+
+
+void SetStage(int stage)
+{
+	g_Stage = stage;
+}

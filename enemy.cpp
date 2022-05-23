@@ -37,8 +37,18 @@
 #define ENEMY_GOAL_Z		(70.0f)						// エネミーのゴール基準位置(z座標)
 #define ENEMY_GOAL_Z_OFFSET	(60)						// エネミーのゴール位置の乱数
 
-#define POP_COUNT			(100)						// エネミーのポップ間隔
-#define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
+#define STAGE0_POP_COUNT			(100)				// エネミーのポップ間隔
+#define STAGE0_MAX_POP				(20)				// 最大、場に何体エネミーを出すか
+
+#define STAGE1_POP_COUNT			(70)				// エネミーのポップ間隔
+#define STAGE1_MAX_POP				(25)				// 最大、場に何体エネミーを出すか
+
+#define STAGE2_POP_COUNT			(50)				// エネミーのポップ間隔
+#define STAGE2_MAX_POP				(30)				// 最大、場に何体エネミーを出すか
+
+#define STAGE3_POP_COUNT			(30)				// エネミーのポップ間隔
+#define STAGE3_MAX_POP				(45)				// 最大、場に何体エネミーを出すか
+
 
 #define ENEMY_HIT_MOVE		(5.0f)						// 当たり判定後アニメーション用移動量
 
@@ -139,17 +149,72 @@ void UpdateEnemy(void)
 		count++;
 		int useCount = 0;
 
-		// 今何体出現しているかを確認
-		for (int i = 0; i < MAX_ENEMY; i++)
+		switch (GetStage())
 		{
-			if (g_Enemy[i].use == TRUE) useCount++;
-		}
+		case stage0:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
 
-		// 時間経過とエネミーの出現数次第でポップするか判断
-		if ((count % POP_COUNT == 0) && (useCount < MAX_POP))
-		{
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE0_POP_COUNT == 0) && (useCount < STAGE0_MAX_POP))
+			{
 
-			SetEnemy();
+				SetEnemy();
+			}
+
+			break;
+
+		case stage1:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE1_POP_COUNT == 0) && (useCount < STAGE1_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
+		case stage2:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE2_POP_COUNT == 0) && (useCount < STAGE2_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
+		case stage3:
+			// 今何体出現しているかを確認
+			for (int i = 0; i < MAX_ENEMY; i++)
+			{
+				if (g_Enemy[i].use == TRUE) useCount++;
+			}
+
+			// 時間経過とエネミーの出現数次第でポップするか判断
+			if ((count % STAGE3_POP_COUNT == 0) && (useCount < STAGE3_MAX_POP))
+			{
+
+				SetEnemy();
+			}
+
+			break;
+
 		}
 	}
 

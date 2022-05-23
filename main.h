@@ -81,6 +81,15 @@ enum
 	MODE_MAX
 };
 
+enum {
+	stage0,
+	stage1,
+	stage2,
+	stage3,
+	stage4,
+};
+
+
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -93,3 +102,5 @@ void SetMode(int mode);
 int GetMode(void);
 
 float RamdomFloat(int digits, float max, float min);
+int GetStage(void);
+void SetStage(int stage);

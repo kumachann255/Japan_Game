@@ -141,6 +141,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="combo.h" />
+    <ClInclude Include="countdown.h" />
     <ClInclude Include="damageEF.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="enemy.h" />
@@ -150,6 +151,8 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="logo.h" />
+    <ClInclude Include="logoD.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="meshfield.h" />
     <ClInclude Include="meshwall.h" />
@@ -167,7 +170,6 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
-    <ClInclude Include="titlelogo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="attackRange.cpp" />
@@ -177,6 +179,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="combo.cpp" />
+    <ClCompile Include="countdown.cpp" />
     <ClCompile Include="damageEF.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -186,6 +189,8 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="logo.cpp" />
+    <ClCompile Include="logoD.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="meshfield.cpp" />
     <ClCompile Include="meshwall.cpp" />
@@ -203,7 +208,6 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />
-    <ClCompile Include="titlelogo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// ロゴ画面処理 [titlelogo.cpp]
+// ロゴ(DirectX)画面処理 [logoD.cpp]
 // Author : 
 //
 //=============================================================================
@@ -10,17 +10,15 @@
 #include "fade.h"
 #include "sound.h"
 #include "sprite.h"
-#include "titlelogo.h"
+#include "logoD.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
 #define TEXTURE_WIDTH				(SCREEN_WIDTH)	// 背景サイズ
 #define TEXTURE_HEIGHT				(SCREEN_HEIGHT)	// 
-#define TEXTURE_MAX					(3)				// テクスチャの数
-
-#define TEXTURE_WIDTH_LOGO			(480)			// ロゴサイズ
-#define TEXTURE_HEIGHT_LOGO			(80)			// 
+#define TEXTURE_MAX					(1)				// テクスチャの数
+#define NEXT_MODE					(120)			// 自動で次のモードに変わる時間
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -34,7 +32,7 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/Logo.png",
+	"data/TEXTURE/DirectX.png",
 };
 
 
@@ -43,13 +41,15 @@ static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
 static int						g_TexNo;					// テクスチャ番号
 
+static int						count;						// 経過時間
+
 static BOOL						g_Load = FALSE;
 
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitLogo(void)
+HRESULT InitLogoD(void)
 {
 	ID3D11Device *pDevice = GetDevice();
 
@@ -82,9 +82,10 @@ HRESULT InitLogo(void)
 	g_h     = TEXTURE_HEIGHT;
 	g_Pos   = XMFLOAT3(g_w/2, g_h/2, 0.0f);
 	g_TexNo = 0;
+	count = 0;
 
 	// BGM再生
-	//PlaySound(SOUND_LABEL_BGM_sample000);
+	PlaySound(SOUND_LABEL_BGM_sample000);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -93,7 +94,7 @@ HRESULT InitLogo(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitLogo(void)
+void UninitLogoD(void)
 {
 	if (g_Load == FALSE) return;
 
@@ -118,12 +119,12 @@ void UninitLogo(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateLogo(void)
+void UpdateLogoD(void)
 {
 
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{// Enter押したら、ステージを切り替える
-		SetFade(FADE_OUT, MODE_GAME);
+		SetFade(FADE_OUT, MODE_TITLE);
 		//SetFade(FADE_OUT, MODE_RESULT);
 	}
 	// ゲームパッドで入力処理
@@ -136,8 +137,8 @@ void UpdateLogo(void)
 		SetFade(FADE_OUT, MODE_TITLE);
 	}
 
-
-
+	count++;
+	if(count >= NEXT_MODE) SetFade(FADE_OUT, MODE_TITLE);
 
 
 #ifdef _DEBUG	// デバッグ情報を表示する
@@ -151,7 +152,7 @@ void UpdateLogo(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawLogo(void)
+void DrawLogoD(void)
 {
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -170,7 +171,7 @@ void DrawLogo(void)
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
 
-	// タイトルの背景を描画
+	// ロゴを描画
 	{
 		// テクスチャ設定
 		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[0]);

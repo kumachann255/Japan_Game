@@ -10,6 +10,7 @@
 #include "sprite.h"
 #include "timeUI.h"
 #include "fade.h"
+#include "score.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -18,7 +19,7 @@
 #define TEXTURE_HEIGHT				(90)	// 
 #define TEXTURE_MAX					(2)		// テクスチャの数
 
-#define TIME_MAX					(50)	// 時間制限
+#define TIME_MAX					(45)	// 時間制限
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -46,6 +47,8 @@ static int						g_TexNo;					// テクスチャ番号
 static int						g_Time;						// 残り時間
 
 static BOOL						g_Load = FALSE;
+
+static int						g_stage;					// 現在のステージ数
 
 static time_t naw_time = 0;		// 現在の時間
 static time_t end_time = 0;		// 終了時間
@@ -89,6 +92,8 @@ HRESULT InitTime(void)
 
 	g_Time = 0;	// 時間の初期化
 
+	g_stage = GetStage();
+
 	// 終了時間の設定
 	SetEndTime();
 
@@ -129,11 +134,47 @@ void UpdateTime(void)
 	// 終了時間から現在の時間を引いて残り時間を算出する
 	g_Time = (int)(end_time - time(NULL));
 
-
 	// シーン遷移
 	if (g_Time < 0)
 	{
-		SetFade(FADE_OUT, MODE_RESULT);
+		switch (g_stage)
+		{
+		case stage0:
+			if (GetScore() >= SCORE_STAGE0_BORDER)
+			{
+				SetStage(stage1);
+				SetFade(FADE_OUT, MODE_GAME_COUNT);
+			}
+			//else SetFade(FADE_OUT, MODE_RESULT);
+
+			break;
+
+		case stage1:
+			if (GetScore() >= SCORE_STAGE1_BORDER)
+			{
+				SetStage(stage2);
+				SetFade(FADE_OUT, MODE_GAME_COUNT);
+			}
+			else SetFade(FADE_OUT, MODE_RESULT);
+
+			break;
+
+		case stage2:
+			if (GetScore() >= SCORE_STAGE2_BORDER)
+			{
+				SetStage(stage3);
+				SetFade(FADE_OUT, MODE_GAME_COUNT);
+			}
+			else SetFade(FADE_OUT, MODE_RESULT);
+
+			break;
+
+		case stage3:
+			SetFade(FADE_OUT, MODE_RESULT);
+
+			break;
+
+		}
 	}
 
 	if (g_Time > 10)

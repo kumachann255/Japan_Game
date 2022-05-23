@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// ロゴ画面処理 [titlelogo.h]
+// カウントダウン画面処理 [countdown.h]
 // Author : 
 //
 //=============================================================================
@@ -17,9 +17,9 @@
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitLogo(void);
-void UninitLogo(void);
-void UpdateLogo(void);
-void DrawLogo(void);
+HRESULT InitCountDown(void);
+void UninitCountDown(void);
+void UpdateCountDown(void);
+void DrawCountDown(void);
 
 
