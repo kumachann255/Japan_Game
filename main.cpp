@@ -30,6 +30,8 @@
 
 #include "timeUI.h"
 
+#include "titlelogo.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -60,7 +62,7 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 #endif
 
-int	g_Mode = MODE_GAME;					// 起動時の画面を設定
+int	g_Mode = MODE_TITLE_LOGO;					// 起動時の画面を設定
 
 
 //=============================================================================
@@ -293,7 +295,7 @@ void Update(void)
 	switch (g_Mode)
 	{
 	case MODE_TITLE_LOGO:	// ロゴ画面の更新
-
+		UpdateLogo();
 		break;
 
 	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の更新
@@ -345,6 +347,7 @@ void Draw(void)
 		// Z比較なし
 		SetDepthEnable(FALSE);
 
+		DrawLogo();
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -464,6 +467,9 @@ void SetMode(int mode)
 {
 	// モードを変える前に全部メモリを解放しちゃう
 
+	// ロゴ画面の終了処理
+	UninitLogo();
+
 	// タイトル画面の終了処理
 	UninitTitle();
 
@@ -478,6 +484,14 @@ void SetMode(int mode)
 
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の初期化
+		InitLogo();
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の初期化
+
+		break;
+
 	case MODE_TITLE:
 		// タイトル画面の初期化
 		InitTitle();

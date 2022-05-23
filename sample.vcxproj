@@ -167,6 +167,7 @@
     <ClInclude Include="sprite.h" />
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="titlelogo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="attackRange.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="titlelogo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
