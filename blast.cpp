@@ -17,8 +17,11 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_BLAST				"data/MODEL/bak00.obj"		// 読み込むモデル名
-#define	MODEL_BLAST_1			"data/MODEL/bak02.obj"		// 読み込むモデル名
+#define	MODEL_BLAST				"data/MODEL/newneba00.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_1			"data/MODEL/newneba01.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_2			"data/MODEL/newneba02.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_3			"data/MODEL/newneba03.obj"		// 読み込むモデル名
+#define	MODEL_BLAST_4			"data/MODEL/newneba04.obj"		// 読み込むモデル名
 
 
 #define	VALUE_MOVE			(5.0f)						// 移動量
@@ -35,7 +38,7 @@
 
 #define BLASE_ROT			(3.14f)						// 回転の最大値
 
-#define MAX_BLAST_MOVE		(2)							// モーフィングの数
+#define MAX_BLAST_MOVE		(5)							// モーフィングの数
 
 
 
@@ -93,6 +96,9 @@ HRESULT InitBlast(void)
 	// モーフィングするオブジェクトの読み込み
 	LoadObj(MODEL_BLAST, &g_Blast_Vertex[0]);
 	LoadObj(MODEL_BLAST_1, &g_Blast_Vertex[1]);
+	LoadObj(MODEL_BLAST_2, &g_Blast_Vertex[2]);
+	LoadObj(MODEL_BLAST_3, &g_Blast_Vertex[3]);
+	LoadObj(MODEL_BLAST_4, &g_Blast_Vertex[4]);
 
 	// 中身を配列として使用できるように仕様変更
 	g_BlastVertex = new VERTEX_3D[g_Blast_Vertex[0].VertexNum];
