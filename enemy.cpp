@@ -37,7 +37,7 @@
 #define POP_COUNT			(100)						// エネミーのポップ間隔
 #define MAX_POP				(20)							// 最大、場に何体エネミーを出すか
 
-#define ENEMY_HIT_MOVE		(0.1f)						// 当たり判定後アニメーション用移動量
+#define ENEMY_HIT_MOVE		(5.0f)						// 当たり判定後アニメーション用移動量
 
 #define ENEMY_ATTACK_0		(300)						// エネミーが点滅するまでの時間
 #define ENEMY_ATTACK_1		(120 + ENEMY_ATTACK_0)		// 点滅が早くなるまでの時間
@@ -91,13 +91,9 @@ HRESULT InitEnemy(void)
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
 
 		g_Enemy[i].hitPos = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 爆発の中心
-		g_Enemy[i].pos_old = XMFLOAT3(0.0f, ENEMY_OFFSET_Y, 0.0f);	// 一歩前の座標
-		g_Enemy[i].hitSpd = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
-		g_Enemy[i].isHit = FALSE;					// TRUE:当たってる
-		g_Enemy[i].move = FALSE;					// 奥へ移動するフラグ TRUE:移動する
-		g_Enemy[i].hitTime = 0;						// 奥へ移動するフラグ TRUE:移動する
-
-		g_Enemy[i].hitMove = ENEMY_HIT_MOVE;		// 当たり判定後アニメーション用、移動スピード
+		g_Enemy[i].hitRot = XMFLOAT3(0.0f, 0.0f, 0.0f);				// 当たり判定後アニメーション用スピード
+		g_Enemy[i].isHit = FALSE;									// TRUE:当たってる
+		g_Enemy[i].hitTime = 0;										// タイミング管理用
 
 
 		g_Enemy[i].liveCount = 0;		// 生存時間をリセット
@@ -251,11 +247,6 @@ void UpdateEnemy(void)
 			// エネミーの消去アニメーション
 			if (g_Enemy[i].isHit == TRUE)				// 攻撃が当たってるか？
 			{											// Yes
-				
-				//g_Enemy[i].pos_old.x = g_Enemy[i].pos.x;
-				//g_Enemy[i].pos_old.y = g_Enemy[i].pos.y;
-				//g_Enemy[i].pos_old.z = g_Enemy[i].pos.z;
-
 				//BOOL ans = TRUE;
 
 				//// ほかのパトカーとぶつかってないか？
@@ -278,23 +269,26 @@ void UpdateEnemy(void)
 				//}
 
 
-				//XMFLOAT3 temp = XMFLOAT3(g_Enemy[i].pos.x - g_Enemy[i].hitPos.x, g_Enemy[i].pos.y - g_Enemy[i].hitPos.y, g_Enemy[i].pos.z - g_Enemy[i].hitPos.z);
-				//float lenSq = (temp.x * temp.x) + (temp.y * temp.y) + (temp.z * temp.z);
-
-				//if (lenSq > 5000)
-				//{
-				//	g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
-				//	g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
-				//	g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
-				//}
 				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
-				//５回移動する
+				// 縮まる処理
 				if ((blast[0].shrink) && (g_Enemy[i].hitTime > 0))
 				{
-					g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / 5.0f;
-					g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / 5.0f;
-					g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / 5.0f;
+					g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / ENEMY_HIT_MOVE;
+					g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / ENEMY_HIT_MOVE;
+					g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / ENEMY_HIT_MOVE;
+
+					// ランダムに回転させる
+					g_Enemy[i].hitRot.x = RamdomFloat(2, 6.28f, -6.28f);
+					g_Enemy[i].hitRot.y = RamdomFloat(2, 6.28f, -6.28f);
+					g_Enemy[i].hitRot.z = RamdomFloat(2, 6.28f, -6.28f);
+
+					if (g_Enemy[i].hitTime == 15)
+					{
+						g_Enemy[i].rot.x += g_Enemy[i].hitRot.x;
+						g_Enemy[i].rot.y += g_Enemy[i].hitRot.y;
+						g_Enemy[i].rot.z += g_Enemy[i].hitRot.z;
+					}
 
 					g_Enemy[i].hitTime--;
 				}
@@ -302,29 +296,26 @@ void UpdateEnemy(void)
 
 
 				//if (ans)
-				//if (blast[0].move == FALSE)
-				//if (g_Enemy[i].move == FALSE)
-				{
-					//g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / 5.0f;
-					//g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / 5.0f;
-					//g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / 5.0f;
-
-					//g_Enemy[i].pos.x -= g_Enemy[i].hitSpd.x;
-					//g_Enemy[i].pos.y -= g_Enemy[i].hitSpd.y;
-					//g_Enemy[i].pos.z -= g_Enemy[i].hitSpd.z;
-
-				}
-
-
-				//if ((g_Enemy[i].pos.x == g_Enemy[i].pos_old.x) &&
-				//	(g_Enemy[i].pos.y == g_Enemy[i].pos_old.y) &&
-				//	(g_Enemy[i].pos.z == g_Enemy[i].pos_old.z))
 				//{
-				//	g_Enemy[i].move = TRUE;
+				//	g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / ENEMY_HIT_MOVE;
+				//	g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / ENEMY_HIT_MOVE;
+				//	g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / ENEMY_HIT_MOVE;
 				//}
-			
-				
 
+
+				// 爆弾と一緒に落下する
+				BOOL camera = GetCameraSwitch();
+
+				if (camera == FALSE && blast[0].move == FALSE)
+				{
+					g_Enemy[i].pos.y -= BLAST_DOWN / BLASE_DOWN_SPEED;
+
+					if (g_Enemy[i].pos.y < ENEMY_OFFSET_Y)
+					{
+						g_Enemy[i].pos.y = ENEMY_OFFSET_Y;
+					}
+				}
+				
 				//爆弾と一緒に奥へ移動する
 				if (blast[0].move == TRUE) /*&& (g_Enemy[i].move == TRUE)*/ //&& (g_Enemy[i].hitTime == 0))
 				{
@@ -351,7 +342,7 @@ void UpdateEnemy(void)
 
 
 #ifdef _DEBUG	// デバッグ情報を表示する
-	PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_Enemy[0].hitSpd.x, g_Enemy[0].hitSpd.y, g_Enemy[0].hitSpd.z);
+	//PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_Enemy[0].hitSpd.x, g_Enemy[0].hitSpd.y, g_Enemy[0].hitSpd.z);
 #endif
 
 }
@@ -427,7 +418,7 @@ void SetEnemy(void)
 			g_Enemy[i].pos.z = ENEMY_POP_Z;
 			g_Enemy[i].pos.y = ENEMY_OFFSET_Y;
 			g_Enemy[i].isHit = FALSE;
-			g_Enemy[i].move = FALSE;
+			g_Enemy[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 			// x座標はランダム
 			g_Enemy[i].pos.x = (float)(rand() % ENEMY_POP_X) - ((float)ENEMY_POP_X / 2.0f);

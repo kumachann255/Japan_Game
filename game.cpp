@@ -453,10 +453,6 @@ void CheckHit(void)
 				enemy[i].hitPos.y = blast[p].pos.y + offsetY;
 				enemy[i].hitPos.z = blast[p].pos.z + offsetZ;
 
-				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
-				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
-				enemy[i].hitSpd.z = (enemy[i].pos.x - enemy[i].hitPos.z) * enemy[i].hitMove;
-
 				ReleaseShadow(enemy[i].shadowIdx);
 
 				// ƒXƒRƒA‚ð‘«‚·
