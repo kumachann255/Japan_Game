@@ -43,6 +43,7 @@ struct PLAYER
 	INTERPOLATION_DATA	*tbl_adr;	// アニメデータのテーブル先頭アドレス
 	int					tbl_size;	// 登録したテーブルのレコード総数
 	float				move_time;	// 実行時間
+	BOOL				action;
 
 	// 親は、NULL、子供は親のアドレスを入れる
 	PLAYER				*parent;	// 自分が親ならNULL、自分が子供なら親のplayerアドレス
@@ -65,3 +66,7 @@ void DrawPlayer(void);
 PLAYER *GetPlayer(void);
 
 void SetPlayerDamage(int damage);
+
+void SetStayMotion(void);
+
+void SetBomthrowMotion(void);
