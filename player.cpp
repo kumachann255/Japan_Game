@@ -19,7 +19,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define	MODEL_CAR					"data/MODEL/car.obj"			// 読み込むモデル名
+#define	MODEL_CAR					"data/MODEL/car2.obj"			// 読み込むモデル名
 
 #define	MODEL_PLAYER_PARTS_H		"data/MODEL/head.obj"			// 読み込むモデル名
 #define	MODEL_PLAYER_PARTS_B		"data/MODEL/body.obj"			// 読み込むモデル名
@@ -75,14 +75,24 @@ static char *g_ModelName[PLAYER_PARTS_MAX] = {
 //*****************************************************************************
 // 待機時のモーションテーブル
 //*****************************************************************************
+//static INTERPOLATION_DATA s_car[] = {
+//	// pos,								rot,						 scl,						 frame
+//	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+//	{ XMFLOAT3(0.0f, 10.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+//	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+//
+//
+//};
+
+
 static INTERPOLATION_DATA s_head[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(0.0f, 20.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.9f, 0.9f, 0.9f), 60 * 1.0f },
+	{ XMFLOAT3(0.0f, 20.0f, 0.0f), XMFLOAT3(0.0f, XM_PI, 0.0f), XMFLOAT3(0.9f, 0.9f, 0.9f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA s_body[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(4.0f, 8.0f, -15.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), 60 * 1.0f },
+	{ XMFLOAT3(4.0f, 8.0f, -30.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA s_R_hand[] = {
@@ -101,7 +111,7 @@ static INTERPOLATION_DATA s_R_hand[] = {
 
 static INTERPOLATION_DATA s_R_reg[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(7.0f, -15.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+	{ XMFLOAT3(7.0f, -13.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA s_L_hand[] = {
@@ -119,7 +129,7 @@ static INTERPOLATION_DATA s_L_hand[] = {
 
 static INTERPOLATION_DATA s_L_reg[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(-7.0f, -15.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+	{ XMFLOAT3(-7.0f, -13.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA s_stick[] = {
@@ -137,7 +147,7 @@ static INTERPOLATION_DATA s_nabe[] = {
 //*****************************************************************************
 static INTERPOLATION_DATA m_head[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(0.0f, 20.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.9f, 0.9f, 0.9f), 60 * 1.0f },
+	{ XMFLOAT3(0.0f, 20.0f, 0.0f), XMFLOAT3(0.0f, XM_PI, 0.0f), XMFLOAT3(0.9f, 0.9f, 0.9f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA m_body[] = {
@@ -184,6 +194,16 @@ static INTERPOLATION_DATA m_nabe[] = {
 };
 
 
+static INTERPOLATION_DATA car[] = {
+	// pos,								rot,						 scl,						 frame
+	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, 7.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+
+
+};
+
+
 //=============================================================================
 // 初期化処理
 //=============================================================================
@@ -192,7 +212,7 @@ HRESULT InitPlayer(void)
 	LoadModel(MODEL_CAR, &g_Player.model);
 	g_Player.load = TRUE;
 
-	g_Player.pos = { 0.0f, PLAYER_OFFSET_Y, 0.0f };
+	g_Player.pos = { 0.0f, PLAYER_OFFSET_Y, 200.0f };
 	g_Player.rot = { 0.0f, 0.0f, 0.0f };
 	g_Player.scl = { 1.0f, 1.0f, 1.0f };
 
@@ -278,7 +298,7 @@ HRESULT InitPlayer(void)
 	LoadModel(MODEL_PLAYER_PARTS_L_HAND, &g_Parts[4].model);	 // ４番目のモデルを読み込む
 	LoadModel(MODEL_PLAYER_PARTS_L_REG,	 &g_Parts[5].model);	 // ５番目のモデルを読み込む
 	LoadModel(MODEL_PLAYER_PARTS_STICK,  &g_Parts[6].model);	 // ６番目のモデルを読み込む
-	LoadModel(MODEL_PLAYER_PARTS_NABE,   &g_Parts[7].model);	 // 7番目のモデルを読み込む
+	LoadModel(MODEL_PLAYER_PARTS_NABE,   &g_Parts[7].model);	 // ７番目のモデルを読み込む
 
 
 	g_Load = TRUE;
@@ -331,6 +351,16 @@ void UpdatePlayer(void)
 	//	g_Player.dir = 0.0f;
 	//}
 
+	g_Player.pos.z -= 3.0f;
+
+	if (g_Player.pos.z <= 0.0f)
+	{
+		g_Player.pos.z = 0.0f;
+	}
+	if (g_Player.pos.z == 0.0f)
+	{
+		SetCarMotion();
+	}
 
 #ifdef _DEBUG
 	if (GetKeyboardPress(DIK_R))
@@ -383,6 +413,50 @@ void UpdatePlayer(void)
 
 
 	// 階層アニメーション
+			// 使われているなら処理する
+	if ((g_Player.use == TRUE) && (g_Player.tbl_adr != NULL))
+	{
+		// 移動処理
+		int		index = (int)g_Player.move_time;
+		float	time = g_Player.move_time - index;
+		int		size = g_Player.tbl_size;
+
+		float dt = 1.0f / g_Player.tbl_adr[index].frame;	// 1フレームで進める時間
+		g_Player.move_time += dt;					// アニメーションの合計時間に足す
+
+		//if ((g_Player.action == TRUE) && (g_Player.move_time >= size - 1) && (i == 4))
+		//{
+		//	SetStayMotion();
+		//	g_Player.action = FALSE;
+
+		//}
+		if (index > (size - 2))	// ゴールをオーバーしていたら、最初へ戻す
+		{
+			g_Player.move_time = 0.0f;
+			index = 0;
+		}
+
+		// 座標を求める	X = StartX + (EndX - StartX) * 今の時間
+		XMVECTOR p1 = XMLoadFloat3(&g_Player.tbl_adr[index + 1].pos);	// 次の場所
+		XMVECTOR p0 = XMLoadFloat3(&g_Player.tbl_adr[index + 0].pos);	// 現在の場所
+		XMVECTOR vec = p1 - p0;
+		XMStoreFloat3(&g_Player.pos, p0 + vec * time);
+
+		// 回転を求める	R = StartX + (EndX - StartX) * 今の時間
+		XMVECTOR r1 = XMLoadFloat3(&g_Player.tbl_adr[index + 1].rot);	// 次の角度
+		XMVECTOR r0 = XMLoadFloat3(&g_Player.tbl_adr[index + 0].rot);	// 現在の角度
+		XMVECTOR rot = r1 - r0;
+		XMStoreFloat3(&g_Player.rot, r0 + rot * time);
+
+		// scaleを求める S = StartX + (EndX - StartX) * 今の時間
+		XMVECTOR s1 = XMLoadFloat3(&g_Player.tbl_adr[index + 1].scl);	// 次のScale
+		XMVECTOR s0 = XMLoadFloat3(&g_Player.tbl_adr[index + 0].scl);	// 現在のScale
+		XMVECTOR scl = s1 - s0;
+		XMStoreFloat3(&g_Player.scl, s0 + scl * time);
+
+	}
+
+
 	for (int i = 0; i < PLAYER_PARTS_MAX; i++)
 	{
 		// 使われているなら処理する
@@ -579,11 +653,27 @@ void SetPlayerDamage(int damage)
 	g_Player.hp -= damage;
 }
 
+
+void SetCarMotion(void)
+{
+	g_Player.tbl_adr = car;	// 再生するアニメデータの先頭アドレスをセット
+	g_Player.tbl_size = sizeof(car) / sizeof(INTERPOLATION_DATA);		// 再生するアニメデータのレコード数をセット
+
+
+}
+
+
+
+
 void SetStayMotion(void)
 {
 //*****************************************************************************
 // 待機時のモーションテーブル
 //*****************************************************************************
+	//g_Player.tbl_adr = s_car;	// 再生するアニメデータの先頭アドレスをセット
+	//g_Player.tbl_size = sizeof(s_car) / sizeof(INTERPOLATION_DATA);		// 再生するアニメデータのレコード数をセット
+
+
 	g_Parts[0].tbl_adr = s_head;	// 再生するアニメデータの先頭アドレスをセット
 	g_Parts[0].tbl_size = sizeof(s_head) / sizeof(INTERPOLATION_DATA);		// 再生するアニメデータのレコード数をセット
 	g_Parts[0].load = 1;

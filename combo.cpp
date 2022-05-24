@@ -12,17 +12,17 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(100)	// テクスチャサイズ
-#define TEXTURE_HEIGHT				(300)	// 
-#define TEXTURE_MAX					(1)		// テクスチャの数
+#define TEXTURE_WIDTH				(100)		// テクスチャサイズ
+#define TEXTURE_HEIGHT				(300)		// 
+#define TEXTURE_MAX					(1)			// テクスチャの数
 
-#define COMBO_POS_Y					(400.0f)	// コンボ表示の高さ
-#define COMBO_SPEED					(5)		// 表示しているコンボの数が増える速度
-#define COMBO_TIME					(120)	// 表示しているコンボの数が切れる時間
+#define COMBO_POS_Y					(360.0f)	// コンボ表示の高さ
+#define COMBO_SPEED					(5)			// 表示しているコンボの数が増える速度
+#define COMBO_TIME					(220)		// 表示しているコンボの数が切れる時間
 
-#define COMBO_MOVE_MAX				(10.0f)	// コンボ表示をどれくらいの高さから落とすか
-#define COMBO_MOVE_SPEED			(3.0f)	// コンボ表示をどれくらいの速さで落とすか
-#define COMBO_MOVE_TIME				(3)		// コンボ表示を何フレームで落とすか
+#define COMBO_MOVE_MAX				(40.0f)		// コンボ表示をどれくらいの高さから落とすか
+#define COMBO_MOVE_SPEED			(5.0f)		// コンボ表示をどれくらいの速さで落とすか
+#define COMBO_MOVE_TIME				(3)			// コンボ表示を何フレームで落とすか
 
 
 //*****************************************************************************
@@ -208,11 +208,11 @@ void DrawCombo(void)
 		// 今回表示する桁の数字
 		float x = (float)(number % 10);
 
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - g_w*i;	// スコアの表示位置X
-		float py = g_Pos.y;			// スコアの表示位置Y
-		float pw = g_w;				// スコアの表示幅
-		float ph = g_h;				// スコアの表示高さ
+		// コンボ数の位置やテクスチャー座標を反映
+		float px = g_Pos.x - g_w*i;	// コンボ数の表示位置X
+		float py = g_Pos.y;			// コンボ数の表示位置Y
+		float pw = g_w;				// コンボ数の表示幅
+		float ph = g_h;				// コンボ数の表示高さ
 
 		float tw = 1.0f / 10;		// テクスチャの幅
 		float th = 1.0f / 1;		// テクスチャの高さ
@@ -233,7 +233,7 @@ void DrawCombo(void)
 
 
 //=============================================================================
-// スコアを加算する
+// コンボ数を加算する
 // 引数:add :追加する点数。マイナスも可能
 //=============================================================================
 void AddCombo(int add)

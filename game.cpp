@@ -22,6 +22,7 @@
 #include "meshwall.h"
 #include "shadow.h"
 #include "fieldobj.h"
+#include "sky.h"
 #include "bullet.h"
 #include "score.h"
 #include "particle.h"
@@ -30,9 +31,9 @@
 #include "debugproc.h"
 #include "timeUI.h"
 #include "damageEF.h"
+#include "enemyHeli.h"
 #include "combo.h"
 #include "playerHP.h"
-
 
 
 //*****************************************************************************
@@ -75,6 +76,9 @@ HRESULT InitGame(void)
 	// エネミーの初期化
 	InitEnemy();
 
+	// エネミーヘリの初期化
+	InitEnemyHeli();
+
 	// 攻撃範囲の初期化
 	InitAttackR();
 
@@ -106,6 +110,9 @@ HRESULT InitGame(void)
 
 	// 木を生やす
 	InitTree();
+
+	// スカイボムの初期化
+	InitSky();
 
 	// 弾の初期化
 	InitBullet();
@@ -166,6 +173,9 @@ void UninitGame(void)
 	// 弾の終了処理
 	UninitBullet();
 
+	// スカイボムの終了処理
+	UninitSky();
+
 	// 木の終了処理
 	UninitTree();
 
@@ -183,6 +193,9 @@ void UninitGame(void)
 
 	// 攻撃範囲の終了処理
 	UninitAttackR();
+
+	// エネミーヘリの終了処理
+	UninitEnemyHeli();
 
 	// エネミーの終了処理
 	UninitEnemy();
@@ -227,6 +240,9 @@ void UpdateGame(void)
 	// エネミーの更新処理
 	UpdateEnemy();
 
+	// エネミーヘリの更新処理
+	UpdateEnemyHeli();
+
 	// 攻撃範囲の更新処理
 	UpdateAttackR();
 
@@ -241,6 +257,9 @@ void UpdateGame(void)
 
 	// 木の更新処理
 	UpdateTree();
+
+	// スカイボムの更新処理
+	UpdateSky();
 
 	// 弾の更新処理
 	UpdateBullet();
@@ -285,6 +304,9 @@ void DrawGame0(void)
 	// 影の描画処理
 	DrawShadow();
 
+	// エネミーヘリの描画処理
+	DrawEnemyHeli();
+
 	// エネミーの描画処理
 	DrawEnemy();
 
@@ -304,7 +326,10 @@ void DrawGame0(void)
 	DrawMeshWall();
 
 	// 木の描画処理
-	DrawTree();
+	//DrawTree();
+
+	// スカイボムの描画処理
+	DrawSky();
 
 	// パーティクルの描画処理
 	DrawParticle();
@@ -411,6 +436,8 @@ void DrawGame(void)
 void CheckHit(void)
 {
 	ENEMY *enemy = GetEnemy();		// エネミーのポインターを初期化
+	ENEMY_HELI *enemyHeli = GetEnemyHeli();		// エネミーのポインターを初期化
+
 	PLAYER *player = GetPlayer();	// プレイヤーのポインターを初期化
 	BULLET *bullet = GetBullet();	// 弾のポインターを初期化
 	BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
@@ -439,8 +466,11 @@ void CheckHit(void)
 
 			if (CollisionBC(blast[p].pos, enemy[i].pos, size, enemy[i].size))
 			{
+				if (enemy[i].isHit == TRUE) break;
+
 				// 敵キャラクターは倒される
 				enemy[i].isHit = TRUE;
+				enemy[i].hitTime = 15;
 
 				offsetX = RamdomFloat(0, 30.0f, -30.0f);
 				offsetY = RamdomFloat(0, 30.0f, ENEMY_OFFSET_Y);
@@ -449,17 +479,6 @@ void CheckHit(void)
 				enemy[i].hitPos.x = blast[p].pos.x + offsetX;
 				enemy[i].hitPos.y = blast[p].pos.y + offsetY;
 				enemy[i].hitPos.z = blast[p].pos.z + offsetZ;
-
-				enemy[i].hitSpd.x = (enemy[i].pos.x - enemy[i].hitPos.x) * enemy[i].hitMove;
-				enemy[i].hitSpd.y = (enemy[i].pos.y - enemy[i].hitPos.y) * enemy[i].hitMove;
-				enemy[i].hitSpd.z = (enemy[i].pos.x - enemy[i].hitPos.z) * enemy[i].hitMove;
-
-				int morphing = GetMorphingNum();
-
-				//if (morphing == 1)
-				{
-					enemy[i].hitTime = 15;
-				}
 
 				ReleaseShadow(enemy[i].shadowIdx);
 
@@ -472,6 +491,53 @@ void CheckHit(void)
 			}
 		}
 	}
+
+	// 敵と爆破オブジェクト
+	for (int i = 0; i < MAX_ENEMY_HELI; i++)
+	{
+		//敵の有効フラグをチェックする
+		if (enemyHeli[i].use == FALSE || enemyHeli[i].isHit == TRUE)
+			continue;
+
+
+		for (int p = 0; p < MAX_BLAST; p++)
+		{
+			//爆破オブジェクトの有効フラグをチェックする
+			if (blast[p].use == FALSE)
+				continue;
+
+			//BCの当たり判定
+			float size = blast[p].size;
+			if (GetMorphing() == 1) size /= 4.0f;
+
+			if (CollisionBC(blast[p].pos, enemyHeli[i].pos, size, enemyHeli[i].size))
+			{
+				if (enemyHeli[i].isHit == TRUE) break;
+
+				// 敵キャラクターは倒される
+				enemyHeli[i].isHit = TRUE;
+				enemyHeli[i].hitTime = 15;
+
+				offsetX = RamdomFloat(0, 30.0f, -30.0f);
+				offsetY = RamdomFloat(0, 30.0f, ENEMY_HELI_OFFSET_Y);
+				offsetZ = RamdomFloat(0, -10.0f, -40.0f);
+
+				enemyHeli[i].hitPos.x = blast[p].pos.x + offsetX;
+				enemyHeli[i].hitPos.y = blast[p].pos.y + offsetY;
+				enemyHeli[i].hitPos.z = blast[p].pos.z + offsetZ;
+
+				ReleaseShadow(enemyHeli[i].shadowIdx);
+
+				// スコアを足す
+				AddScore(100);
+
+				// コンボを足す
+				AddCombo(1);
+				ResetComboTime();
+			}
+		}
+	}
+
 
 
 	//// プレイヤーの弾と敵

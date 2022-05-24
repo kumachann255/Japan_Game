@@ -20,6 +20,8 @@
 #define	MODEL_GUARDRAIL			"data/MODEL/guardrail.obj"	// 読み込むモデル名
 #define	MODEL_POLE				"data/MODEL/denchu.obj"		// 読み込むモデル名
 #define	MODEL_HOUSE				"data/MODEL/house.obj"		// 読み込むモデル名
+#define	MODEL_SIGN00			"data/MODEL/sign00.obj"		// 読み込むモデル名
+#define	MODEL_SIGN01			"data/MODEL/sign01.obj"		// 読み込むモデル名
 
 #define	VALUE_ROTATE			(XM_PI * 0.02f)				// 回転量
 
@@ -27,14 +29,16 @@
 #define FOBJ_X_HOUSE			(350.0f)					// 横に置く場所(家の場合
 #define FOBJ_X_GUAD				(180.0f)					// 横に置く場所(ガードレールの場合
 #define FOBJ_X_POLE				(210.0f)					// 横に置く場所(電柱の場合
+#define FOBJ_X_SIGN				(210.0f)					// 横に置く場所(電柱の場合
 #define FOBF_Z_MAX				(2500.0f)					// オブジェクトを消すz座標
 #define FOBF_Z_START			(0.0f)						// オブジェクトを出すz座標
 #define FOBJ_Y					(50)						// 高さの調整(ランダム限界)
-#define FOBJ_Y_Pole				(40)						// 電柱の高さの調整
+#define FOBJ_Y_Pole				(70)						// 電柱の高さの調整
+#define FOBJ_Y_SIGN				(10)						// 看板の高さの調整
 
 #define FOBJ_DISTANCE			(500.0f)					// オブジェクトの間隔
-
 #define FOBJ_DISTANCE_GUAD		(100.0f)					// ガードレールの間隔
+#define FOBJ_DISTANCE_SIGN		(1200.0f)					// 看板の間隔
 
 enum {
 	left,
@@ -48,6 +52,8 @@ void SetBilding(BOOL LR);
 void SetHouse(BOOL LR);
 void SetGuardrail(BOOL LR);
 void SetPole(BOOL LR);
+void SetSign0(BOOL LR);
+void SetSign1(BOOL LR);
 
 
 //*****************************************************************************
@@ -57,6 +63,8 @@ static FOBJ				g_Bilding[MAX_FOBJ];			// ビル
 static FOBJ				g_House[MAX_FOBJ];				// 家
 static FOBJ				g_Guardrail[MAX_FOBJ_GUAD];		// ガードレール
 static FOBJ				g_Pole[MAX_FOBJ];				// 電柱
+static FOBJ				g_Sign0[MAX_FOBJ_SIGN];			// 看板（日本
+static FOBJ				g_Sign1[MAX_FOBJ_SIGN];			// 看板（英語
 
 static BOOL				g_Load = FALSE;
 
@@ -70,6 +78,8 @@ HRESULT InitTree(void)
 	LoadModel(MODEL_HOUSE, &g_House[0].model);
 	LoadModel(MODEL_GUARDRAIL, &g_Guardrail[0].model);
 	LoadModel(MODEL_POLE, &g_Pole[0].model);
+	LoadModel(MODEL_SIGN00, &g_Sign0[0].model);
+	LoadModel(MODEL_SIGN01, &g_Sign1[0].model);
 
 	for (int i = 0; i < MAX_FOBJ; i++)
 	{
@@ -109,11 +119,23 @@ HRESULT InitTree(void)
 		g_Pole[i].load = TRUE;
 		g_Pole[i].pos = XMFLOAT3(-370.0f, FOBJ_Y_Pole, 340.0f);
 		g_Pole[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
-		g_Pole[i].scl = XMFLOAT3(1.0f, 1.0f, 1.0f);
+		g_Pole[i].scl = XMFLOAT3(2.5f, 2.5f, 2.5f);
 		g_Pole[i].use = FALSE;			// TRUE:生きてる
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Pole[i].model, &g_Pole[i].diffuse[0]);
 	}
+
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		g_Sign0[i].load = TRUE;
+		g_Sign0[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, 340.0f);
+		g_Sign0[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
+		g_Sign0[i].scl = XMFLOAT3(1.5f, 1.5f, 1.5f);
+		g_Sign0[i].use = FALSE;			// TRUE:生きてる
+		// モデルのディフューズを保存しておく。色変え対応の為。
+		GetModelDiffuse(&g_Sign0[i].model, &g_Sign0[i].diffuse[0]);
+	}
+
 
 	// 左側のフィールドオブジェクトの初期配置
 	// ビル
@@ -152,7 +174,6 @@ HRESULT InitTree(void)
 	}
 
 
-
 	// 右側のフィールドオブジェクトの初期配置
 	// ビル
 	for (int i = 0; i < 5; i++)
@@ -189,26 +210,15 @@ HRESULT InitTree(void)
 
 	}
 
+	// 看板
+	for (int i = 0; i < 2; i++)
+	{
+		g_Sign0[i].use = TRUE;
+		g_Sign0[i].pos = XMFLOAT3(FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBJ_DISTANCE_SIGN * (i + 1));
+		g_Sign0[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
+	}
 
-
-	//LoadModel(MODEL_TREE_1, &g_Tree[1].model, 0);
-	//g_Tree[1].load = TRUE;
-	//g_Tree[1].pos = XMFLOAT3(MAP_OFFSET_X, 0.0f, 0.0f);
-	//g_Tree[1].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//g_Tree[1].scl = XMFLOAT3(3.0f, 3.0f, 3.0f);
-	//g_Tree[1].use = FALSE;			// 最初は俯瞰視点の為非表示
-	//// モデルのディフューズを保存しておく。色変え対応の為。
-	//GetModelDiffuse(&g_Tree[1].model, &g_Tree[1].diffuse[0]);
-
-	//LoadModel(MODEL_TREE_2, &g_Tree[2].model, 0);
-	//g_Tree[2].load = TRUE;
-	//g_Tree[2].pos = XMFLOAT3(MAP_OFFSET_X, 0.0f, 0.0f);
-	//g_Tree[2].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//g_Tree[2].scl = XMFLOAT3(3.0f, 3.0f, 3.0f);
-	//g_Tree[2].use = TRUE;			// TRUE:生きてる
-	//// モデルのディフューズを保存しておく。色変え対応の為。
-	//GetModelDiffuse(&g_Tree[2].model, &g_Tree[2].diffuse[0]);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -261,12 +271,12 @@ void UpdateTree(void)
 				g_Bilding[i].use = FALSE;
 				g_Bilding[i].pos.z = 0;
 
-				// ランダムでビルか家を設置
-				int data = rand() % 2;
-
 				// 左右どっちに表示するか
 				BOOL LR = left;
 				if(g_Bilding[i].pos.x > 0) LR = right;
+
+				// ランダムでビルか家を設置
+				int data = rand() % 2;
 
 				switch (data)
 				{
@@ -294,12 +304,12 @@ void UpdateTree(void)
 			{
 				g_House[i].use = FALSE;
 
-				// ランダムでビルか家を設置
-				int data = rand() % 2;
-
 				// 左右どっちに表示するか
 				BOOL LR = left;
 				if (g_House[i].pos.x > 0) LR = right;
+
+				// ランダムでビルか家を設置
+				int data = rand() % 2;
 
 				switch (data)
 				{
@@ -355,6 +365,74 @@ void UpdateTree(void)
 
 				// 電柱設置
 				SetPole(LR);
+			}
+		}
+	}
+
+	// 看板(日本)の処理
+	for (int i = 0; i < MAX_FOBJ; i++)
+	{
+		if (g_Sign0[i].use == TRUE)			// このエネミーが使われている？
+		{									// Yes
+			// 地面と一緒に動く
+			g_Sign0[i].pos.z += FIELD_SPEED;
+
+			if (g_Sign0[i].pos.z >= FOBF_Z_MAX)
+			{
+				g_Sign0[i].use = FALSE;
+
+				// 左右どっちに表示するか
+				BOOL LR = left;
+				if (g_Sign0[i].pos.x > 0) LR = right;
+
+				// ランダムで看板を設置
+				int data = rand() % 2;
+
+				// 看板設置
+				switch (data)
+				{
+				case 0:
+					SetSign0(LR);
+					break;
+
+				case 1:
+					SetSign1(LR);
+					break;
+				}
+			}
+		}
+	}
+
+	// 看板(アメリカ)の処理
+	for (int i = 0; i < MAX_FOBJ; i++)
+	{
+		if (g_Sign1[i].use == TRUE)			// このエネミーが使われている？
+		{									// Yes
+			// 地面と一緒に動く
+			g_Sign1[i].pos.z += FIELD_SPEED;
+
+			if (g_Sign1[i].pos.z >= FOBF_Z_MAX)
+			{
+				g_Sign1[i].use = FALSE;
+
+				// 左右どっちに表示するか
+				BOOL LR = left;
+				if (g_Sign1[i].pos.x > 0) LR = right;
+
+				// ランダムで看板を設置
+				int data = rand() % 2;
+
+				// 看板設置
+				switch (data)
+				{
+				case 0:
+					SetSign0(LR);
+					break;
+
+				case 1:
+					SetSign1(LR);
+					break;
+				}
 			}
 		}
 	}
@@ -489,7 +567,65 @@ void DrawTree(void)
 
 	}
 
+	// 看板(日本)の描画
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		if (g_Sign0[i].use == FALSE) continue;
 
+		// ワールドマトリックスの初期化
+		mtxWorld = XMMatrixIdentity();
+
+		// スケールを反映
+		mtxScl = XMMatrixScaling(g_Sign0[i].scl.x, g_Sign0[i].scl.y, g_Sign0[i].scl.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxScl);
+
+		// 回転を反映
+		mtxRot = XMMatrixRotationRollPitchYaw(g_Sign0[i].rot.x, g_Sign0[i].rot.y + XM_PI, g_Sign0[i].rot.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxRot);
+
+		// 移動を反映
+		mtxTranslate = XMMatrixTranslation(g_Sign0[i].pos.x, g_Sign0[i].pos.y, g_Sign0[i].pos.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+
+		// ワールドマトリックスの設定
+		SetWorldMatrix(&mtxWorld);
+
+		XMStoreFloat4x4(&g_Sign0[i].mtxWorld, mtxWorld);
+
+		// モデル描画
+		DrawModel(&g_Sign0[0].model);
+
+	}
+
+	// 看板(アメリカ)の描画
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		if (g_Sign1[i].use == FALSE) continue;
+
+		// ワールドマトリックスの初期化
+		mtxWorld = XMMatrixIdentity();
+
+		// スケールを反映
+		mtxScl = XMMatrixScaling(g_Sign1[i].scl.x, g_Sign1[i].scl.y, g_Sign1[i].scl.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxScl);
+
+		// 回転を反映
+		mtxRot = XMMatrixRotationRollPitchYaw(g_Sign1[i].rot.x, g_Sign1[i].rot.y + XM_PI, g_Sign1[i].rot.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxRot);
+
+		// 移動を反映
+		mtxTranslate = XMMatrixTranslation(g_Sign1[i].pos.x, g_Sign1[i].pos.y, g_Sign1[i].pos.z);
+		mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+
+		// ワールドマトリックスの設定
+		SetWorldMatrix(&mtxWorld);
+
+		XMStoreFloat4x4(&g_Sign1[i].mtxWorld, mtxWorld);
+
+		// モデル描画
+		DrawModel(&g_Sign1[0].model);
+
+	}
 }
 
 //=============================================================================
@@ -615,6 +751,68 @@ void SetPole(BOOL LR)
 			{	// 左に設置
 				g_Pole[i].pos.x = -FOBJ_X_POLE;
 				g_Pole[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
+			}
+
+			//g_House[i].pos.y -= (float)(rand() % FOBJ_Y);
+
+			return;
+		}
+	}
+}
+
+
+// 看板(日本)を設置
+// LR : L == 0,R == 1
+void SetSign0(BOOL LR)
+{
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		if (g_Sign0[i].use == FALSE)
+		{
+			g_Sign0[i].use = TRUE;
+
+			g_Sign0[i].pos.z = FOBF_Z_START;
+
+			if (LR)
+			{	// 右に設置
+				g_Sign0[i].pos.x = FOBJ_X_SIGN;
+				g_Sign0[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+			}
+			else
+			{	// 左に設置
+				g_Sign0[i].pos.x = -FOBJ_X_SIGN;
+				g_Sign0[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
+			}
+
+			//g_House[i].pos.y -= (float)(rand() % FOBJ_Y);
+
+			return;
+		}
+	}
+}
+
+
+// 看板(アメリカ)を設置
+// LR : L == 0,R == 1
+void SetSign1(BOOL LR)
+{
+	for (int i = 0; i < MAX_FOBJ_SIGN; i++)
+	{
+		if (g_Sign1[i].use == FALSE)
+		{
+			g_Sign1[i].use = TRUE;
+
+			g_Sign1[i].pos.z = FOBF_Z_START;
+
+			if (LR)
+			{	// 右に設置
+				g_Sign1[i].pos.x = FOBJ_X_SIGN;
+				g_Sign1[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
+			}
+			else
+			{	// 左に設置
+				g_Sign1[i].pos.x = -FOBJ_X_SIGN;
+				g_Sign1[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
 			}
 
 			//g_House[i].pos.y -= (float)(rand() % FOBJ_Y);

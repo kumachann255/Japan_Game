@@ -67,6 +67,13 @@ struct MODEL
 	unsigned short	SubsetNum;
 };
 
+// F•Ï‚¦‚æ‚¤ƒ‚ƒfƒ‹
+struct COLOR
+{
+	SUBSET			*SubsetArray;
+	unsigned short	SubsetNum;
+};
+
 
 
 

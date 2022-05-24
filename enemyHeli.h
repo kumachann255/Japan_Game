@@ -1,7 +1,7 @@
 //=============================================================================
 //
-// 爆破と当たり判定処理 [blast.h]
-// Author : 
+// エネミーヘリモデル処理 [enemyHeli.h]
+// Author : 変更
 //
 //=============================================================================
 #pragma once
@@ -10,16 +10,18 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_BLAST			(5)
-#define	BLAST_SIZE			(50.0f)				// 当たり判定の大きさ
+#define MAX_ENEMY_HELI		(1)			// エネミーヘリの数
 
-#define BLAST_DOWN			(20.0f)						// モーフィング後に落ちる高さ
-#define BLASE_DOWN_SPEED	(10.0f)						// 落ちる時間
+#define HELI_PARTS_MAX		(2)			// エネミーヘリのパーツの数
+
+#define	ENEMY_HELI_SIZE		(30.0f)		// 当たり判定の大きさ
+
+#define ENEMY_HELI_OFFSET_Y	(40.0f)		// エネミーヘリの足元をあわせる
 
 //*****************************************************************************
 // 構造体定義
 //*****************************************************************************
-struct BLAST
+struct ENEMY_HELI
 {
 	XMFLOAT4X4			mtxWorld;			// ワールドマトリックス
 	XMFLOAT3			pos;				// モデルの位置
@@ -33,25 +35,32 @@ struct BLAST
 
 	float				spd;				// 移動スピード
 	float				size;				// 当たり判定の大きさ
-	int					life;				// 爆破の残り時間
+	int					shadowIdx;			// 影のインデックス番号
 
-	BOOL				shrink;				// 縮まっているか
+	float				zGoal;				// z座標のプレイヤーに近づく最大距離
 
-	BOOL				move;				// 奥へ移動するかフラグ TRUE:移動する
+	XMFLOAT3			hitPos;				// 爆発の座標
+	XMFLOAT3			hitRot;				// 当たり判定後アニメーション用、毎回の移動量
+	BOOL				isHit;				// 当たってるフラグ TRUE:当たっている
+	BOOL				move;				// 奥へ移動するフラグ TRUE:移動する
+	int					hitTime;			// 移動時間
+	int					liveCount;			// ポップしてからの時間を管理
+
+	BOOL				fuchi;				// リムライトのオンオフ
+
+	float				speed;				// 移動スピード
+	float				time;				// 時間
+	BOOL				switchFlag;			// ベジェ用
+	ENEMY_HELI			*parent;			// エネミーヘリのパーツ
 };
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitBlast(void);
-void UninitBlast(void);
-void UpdateBlast(void);
-void DrawBlast(void);
+HRESULT InitEnemyHeli(void);
+void UninitEnemyHeli(void);
+void UpdateEnemyHeli(void);
+void DrawEnemyHeli(void);
 
-BLAST *GetBlast(void);
+ENEMY_HELI *GetEnemyHeli(void);
 
-void SetBlast(XMFLOAT3 pos);
-BOOL GetCameraSwitch(void);
-void SetCameraSwitch(BOOL data);
-int GetMorphing(void);
-int GetStopTime(void);
