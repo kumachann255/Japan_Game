@@ -72,3 +72,5 @@ void SetCarMotion(void);
 void SetStayMotion(void);
 
 void SetBomthrowMotion(void);
+
+void SetDamageCar(void);

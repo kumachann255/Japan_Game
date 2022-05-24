@@ -71,19 +71,23 @@ static char *g_ModelName[PLAYER_PARTS_MAX] = {
 
 };
 
+//*****************************************************************************
+// 車のモーションテーブル
+//*****************************************************************************
+static INTERPOLATION_DATA car[] = {
+	// pos,								rot,						 scl,						 frame
+	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, 7.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+
+
+};
+
+
 
 //*****************************************************************************
 // 待機時のモーションテーブル
 //*****************************************************************************
-//static INTERPOLATION_DATA s_car[] = {
-//	// pos,								rot,						 scl,						 frame
-//	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
-//	{ XMFLOAT3(0.0f, 10.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
-//	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
-//
-//
-//};
-
 
 static INTERPOLATION_DATA s_head[] = {
 	// pos,								rot,						 scl,						 frame
@@ -152,7 +156,7 @@ static INTERPOLATION_DATA m_head[] = {
 
 static INTERPOLATION_DATA m_body[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(4.0f, 8.0f, -15.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), 60 * 1.0f },
+	{ XMFLOAT3(4.0f, 8.0f, -30.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.5f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA m_R_hand[] = {
@@ -166,7 +170,7 @@ static INTERPOLATION_DATA m_R_hand[] = {
 
 static INTERPOLATION_DATA m_R_reg[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(7.0f, -15.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+	{ XMFLOAT3(7.0f, -13.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA m_L_hand[] = {
@@ -180,7 +184,7 @@ static INTERPOLATION_DATA m_L_hand[] = {
 
 static INTERPOLATION_DATA m_L_reg[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(-7.0f, -15.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
+	{ XMFLOAT3(-7.0f, -13.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 1.0f },
 };
 
 static INTERPOLATION_DATA m_stick[] = {
@@ -194,14 +198,6 @@ static INTERPOLATION_DATA m_nabe[] = {
 };
 
 
-static INTERPOLATION_DATA car[] = {
-	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
-	{ XMFLOAT3(0.0f, 7.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
-	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
-
-
-};
 
 
 //=============================================================================
@@ -279,7 +275,6 @@ HRESULT InitPlayer(void)
 	g_Parts[6].parent = &g_Parts[4];						//	スティックを右手に
 	g_Parts[7].parent = &g_Parts[1];						//	スティックを右手に
 
-	//g_Parts[7].scl = XMFLOAT3(11.0f, 11.0f, 11.0f);
 
 	SetStayMotion();
 
@@ -351,7 +346,7 @@ void UpdatePlayer(void)
 	//	g_Player.dir = 0.0f;
 	//}
 
-	g_Player.pos.z -= 3.0f;
+	g_Player.pos.z -= 2.0f;
 
 	if (g_Player.pos.z <= 0.0f)
 	{
@@ -502,6 +497,8 @@ void UpdatePlayer(void)
 
 		}
 	}
+
+
 
 
 
@@ -762,3 +759,4 @@ void SetBomthrowMotion(void)
 
 
 }
+
