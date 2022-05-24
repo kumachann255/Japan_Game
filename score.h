@@ -13,7 +13,15 @@
 #define SCORE_MAX			(99999)		// スコアの最大値
 #define SCORE_DIGIT			(5)			// 桁数
 
+//#define SCORE_STAGE0_BORDER	(2000)		// ステージ0のクリアスコア
+//#define SCORE_STAGE1_BORDER	(3000)		// ステージ1のクリアスコア
+//#define SCORE_STAGE2_BORDER	(4000)		// ステージ2のクリアスコア
+//#define SCORE_STAGE3_BORDER	(5000)		// ステージ3のクリアスコア
 
+#define SCORE_STAGE0_BORDER	(200)		// ステージ0のクリアスコア
+#define SCORE_STAGE1_BORDER	(200)		// ステージ1のクリアスコア
+#define SCORE_STAGE2_BORDER	(200)		// ステージ2のクリアスコア
+#define SCORE_STAGE3_BORDER	(200)		// ステージ3のクリアスコア
 
 
 //*****************************************************************************

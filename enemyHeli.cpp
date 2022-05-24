@@ -25,8 +25,8 @@
 #define	MODEL_HELI_PARTS		"data/MODEL/puropera.obj"	// “Ç‚İ‚Şƒ‚ƒfƒ‹–¼
 
 #define	VALUE_MOVE				(3.0f)						// ˆÚ“®—Ê
-#define	VALUE_ROTATE			(0.5f)				// ‰ñ“]—Ê
-#define ENEMY_HELI_SPEED		(0.0025f)						// “_–Å‚ÌŠÔŠu
+#define	VALUE_ROTATE			(0.5f)						// ‰ñ“]—Ê
+#define ENEMY_HELI_SPEED		(0.0025f)					// “_–Å‚ÌŠÔŠu
 
 #define ENEMY_HELI_SHADOW_SIZE	(0.4f)						// ‰e‚Ì‘å‚«‚³
 

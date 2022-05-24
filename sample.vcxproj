@@ -141,6 +141,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="combo.h" />
+    <ClInclude Include="countdown.h" />
     <ClInclude Include="damageEF.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="enemy.h" />
@@ -150,8 +151,11 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="logo.h" />
+    <ClInclude Include="logoD.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="meshfield.h" />
+    <ClInclude Include="meshfield2.h" />
     <ClInclude Include="meshwall.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="orbit.h" />
@@ -176,6 +180,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="combo.cpp" />
+    <ClCompile Include="countdown.cpp" />
     <ClCompile Include="damageEF.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -185,8 +190,11 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="logo.cpp" />
+    <ClCompile Include="logoD.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="meshfield.cpp" />
+    <ClCompile Include="meshfield2.cpp" />
     <ClCompile Include="meshwall.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="orbit.cpp" />

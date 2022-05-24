@@ -30,6 +30,10 @@
 
 #include "timeUI.h"
 
+#include "logo.h"
+#include "logoD.h"
+#include "countdown.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -62,6 +66,7 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 int	g_Mode = MODE_GAME;					// 起動時の画面を設定
 
+int g_Stage = stage0;							// 現在のステージ
 
 //=============================================================================
 // メイン関数
@@ -292,6 +297,14 @@ void Update(void)
 	// モードによって処理を分ける
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の更新
+		UpdateLogo();
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の更新
+		UpdateLogoD();
+		break;
+
 	case MODE_TITLE:		// タイトル画面の更新
 		UpdateTitle();
 		break;
@@ -300,8 +313,16 @@ void Update(void)
 		UpdateGame();
 		break;
 
+	case MODE_GAME_COUNT:	// 次のステージまでのカウント画面の更新
+		UpdateCountDown();
+		break;
+
 	case MODE_RESULT:		// リザルト画面の更新
 		UpdateResult();
+		break;
+
+	case MODE_ENDROLL:		// エンドロール画面の更新
+
 		break;
 	}
 
@@ -324,6 +345,40 @@ void Draw(void)
 	// モードによって処理を分ける
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawLogo();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawLogoD();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
 	case MODE_TITLE:		// タイトル画面の描画
 		SetViewPort(TYPE_FULL_SCREEN);
 
@@ -347,6 +402,23 @@ void Draw(void)
 		DrawGame();
 		break;
 
+	case MODE_GAME_COUNT:	// 次のステージまでのカウント画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawCountDown();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
 	case MODE_RESULT:		// リザルト画面の描画
 		SetViewPort(TYPE_FULL_SCREEN);
 
@@ -361,6 +433,16 @@ void Draw(void)
 
 		// ライティングを有効に
 		SetLightEnable(TRUE);
+
+		// Z比較あり
+		SetDepthEnable(TRUE);
+		break;
+
+	case MODE_ENDROLL:		// エンドロール画面の描画
+		// 2Dの物を描画する処理
+		// Z比較なし
+		SetDepthEnable(FALSE);
+
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -408,11 +490,20 @@ void SetMode(int mode)
 {
 	// モードを変える前に全部メモリを解放しちゃう
 
+	// ロゴ画面の終了処理
+	UninitLogo();
+
+	// DirectXで作ってますアピ画面の終了処理
+	UninitLogoD();
+
 	// タイトル画面の終了処理
 	UninitTitle();
 
 	// ゲーム画面の終了処理
 	UninitGame();
+
+	// 次のステージまでのカウント画面の終了処理
+	UninitCountDown();
 
 	// リザルト画面の終了処理
 	UninitResult();
@@ -422,6 +513,14 @@ void SetMode(int mode)
 
 	switch (g_Mode)
 	{
+	case MODE_TITLE_LOGO:	// ロゴ画面の初期化
+		InitLogo();
+		break;
+
+	case MODE_TITLE_DirectX:// DirectXで作ってますアピ画面の初期化
+		InitLogoD();
+		break;
+
 	case MODE_TITLE:
 		// タイトル画面の初期化
 		InitTitle();
@@ -430,6 +529,10 @@ void SetMode(int mode)
 	case MODE_GAME:
 		// ゲーム画面の初期化
 		InitGame();
+		break;
+
+	case MODE_GAME_COUNT:
+		InitCountDown();
 		break;
 
 	case MODE_RESULT:
@@ -492,3 +595,15 @@ float RamdomFloat(int digits, float max, float min)
 //
 //	angle = atan2(高さ, 底辺)
 //}
+
+
+int GetStage(void)
+{
+	return g_Stage;
+}
+
+
+void SetStage(int stage)
+{
+	g_Stage = stage;
+}

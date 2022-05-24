@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// タイトル画面処理 [title.cpp]
+// カウントダウン画面処理 [countdown.cpp]
 // Author : 
 //
 //=============================================================================
@@ -10,18 +10,35 @@
 #include "fade.h"
 #include "sound.h"
 #include "sprite.h"
-#include "title.h"
+#include "countdown.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
 #define TEXTURE_WIDTH				(SCREEN_WIDTH)	// 背景サイズ
 #define TEXTURE_HEIGHT				(SCREEN_HEIGHT)	// 
-#define TEXTURE_MAX					(3)				// テクスチャの数
+#define TEXTURE_MAX					(19)				// テクスチャの数
 
 #define TEXTURE_WIDTH_LOGO			(480)			// ロゴサイズ
 #define TEXTURE_HEIGHT_LOGO			(80)			// 
 
+#define CLEAR_TIME					(300)			// ステージクリアを何フレーム出しておくか
+#define COUNTDOWN					(60)			// 約1秒
+
+#define TEXTURE_STAGE_MAX			(4)				// 1ステージ分のテクスチャは何枚？
+
+#define ADD_TEXTURE					(3)				// 追加のお祝いテクスチャの数
+#define ADD_TEXTURE_SPEED			(15)			// 追加のお祝いテクスチャを何フレームで出すか
+
+#define ADD_TEXTURE_START1			(20)			// 2枚目の追加のお祝いテクスチャを出すまでの時間
+#define ADD_TEXTURE_START2			(20 + ADD_TEXTURE_START1)		// 3枚目の追加のお祝いテクスチャを出すまでの時間
+
+
+enum {
+	cracker = 16,
+	celebration,
+	balloon,
+};
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -34,9 +51,25 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/bg000.jpg",
-	"data/TEXTURE/title_logo.png",
-	"data/TEXTURE/effect000.jpg",
+	"data/TEXTURE/stage_clear0.png",
+	"data/TEXTURE/stage_count03.png",
+	"data/TEXTURE/stage_count02.png",
+	"data/TEXTURE/stage_count01.png",
+	"data/TEXTURE/stage_clear1.png",
+	"data/TEXTURE/stage_count13.png",
+	"data/TEXTURE/stage_count12.png",
+	"data/TEXTURE/stage_count11.png",
+	"data/TEXTURE/stage_clear2.png",
+	"data/TEXTURE/stage_count23.png",
+	"data/TEXTURE/stage_count22.png",
+	"data/TEXTURE/stage_count21.png",
+	"data/TEXTURE/stage_clear3.png",
+	"data/TEXTURE/stage_count33.png",
+	"data/TEXTURE/stage_count32.png",
+	"data/TEXTURE/stage_count31.png",
+	"data/TEXTURE/cracker.png",
+	"data/TEXTURE/celebration.png",
+	"data/TEXTURE/balloon.png",
 };
 
 
@@ -45,8 +78,12 @@ static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
 static int						g_TexNo;					// テクスチャ番号
 
-static float	alpha;
-static BOOL	flag_alpha;
+static BOOL						g_Use2[ADD_TEXTURE];		// TRUE:使っている  FALSE:未使用
+static XMFLOAT3					g_Pos2[ADD_TEXTURE];		// ポリゴンの座標
+
+static int						g_Stage;					// 現在のステージ
+
+static int						g_Count;					// 時間管理
 
 static BOOL						g_Load = FALSE;
 
@@ -54,7 +91,7 @@ static BOOL						g_Load = FALSE;
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitTitle(void)
+HRESULT InitCountDown(void)
 {
 	ID3D11Device *pDevice = GetDevice();
 
@@ -87,12 +124,35 @@ HRESULT InitTitle(void)
 	g_h     = TEXTURE_HEIGHT;
 	g_Pos   = XMFLOAT3(g_w/2, g_h/2, 0.0f);
 	g_TexNo = 0;
+	g_Count = 0;
 
-	alpha = 1.0f;
-	flag_alpha = TRUE;
+	for (int i = 0; i < ADD_TEXTURE; i++)
+	{
+		g_Use2[i] = FALSE;
+		g_Pos2[i] = XMFLOAT3(g_w / 2, g_h / 2, 0.0f);
+	}
 
+	// 最初は隠れている
+	g_Pos2[0].y -= TEXTURE_HEIGHT;
+	g_Pos2[1].y += TEXTURE_HEIGHT;
+	g_Pos2[2].x += TEXTURE_WIDTH;
+
+	g_Stage = GetStage() - 1;
+	switch (g_Stage)
+	{
+	case stage2:
+		g_Use2[2] = TRUE;
+
+	case stage1:
+		g_Use2[1] = TRUE;
+
+	case stage0:
+		g_Use2[0] = TRUE;
+		break;
+
+	}
 	// BGM再生
-	PlaySound(SOUND_LABEL_BGM_sample000);
+	//PlaySound(SOUND_LABEL_BGM_sample000);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -101,7 +161,7 @@ HRESULT InitTitle(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitTitle(void)
+void UninitCountDown(void)
 {
 	if (g_Load == FALSE) return;
 
@@ -126,45 +186,80 @@ void UninitTitle(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateTitle(void)
+void UpdateCountDown(void)
 {
+	// 時間を進める
+	g_Count++;
+	
+	// 時間経過とステージ数に応じて表示するテクスチャを変更
+	if (g_Count <= CLEAR_TIME)
+	{
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage;
+	}
+	else if (g_Count <= CLEAR_TIME + COUNTDOWN)
+	{
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 1;
+	}
+	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 2))
+	{
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 2;
+	}
+	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3))
+	{
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 3;
+		SetFade(FADE_OUT, MODE_GAME);
+	}
+	//else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3) + COUNTDOWN / 2)
+	//{
+	//	g_Count = 0;
+	//	SetFade(FADE_OUT, MODE_GAME);
+	//}
 
-	if (GetKeyboardTrigger(DIK_RETURN))
-	{// Enter押したら、ステージを切り替える
-		SetFade(FADE_OUT, MODE_GAME);
-		//SetFade(FADE_OUT, MODE_RESULT);
-	}
-	// ゲームパッドで入力処理
-	else if (IsButtonTriggered(0, BUTTON_START))
-	{
-		SetFade(FADE_OUT, MODE_GAME);
-	}
-	else if (IsButtonTriggered(0, BUTTON_B))
-	{
-		SetFade(FADE_OUT, MODE_GAME);
-	}
 
-	if (flag_alpha == TRUE)
+
+	//if (GetKeyboardTrigger(DIK_RETURN))
+	//{// Enter押したら、ステージを切り替える
+	//	//SetFade(FADE_OUT, MODE_RESULT);
+	//}
+	//// ゲームパッドで入力処理
+	//else if (IsButtonTriggered(0, BUTTON_START))
+	//{
+	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
+	//}
+	//else if (IsButtonTriggered(0, BUTTON_B))
+	//{
+	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
+	//}
+
+	// お祝いテクスチャ
+	switch (g_Stage)
 	{
-		alpha -= 0.02f;
-		if (alpha <= 0.0f)
+	case 2:
+		if (g_Count >= ADD_TEXTURE_START2)
 		{
-			alpha = 0.0f;
-			flag_alpha = FALSE;
+			g_Pos2[2].x += (g_w / 2 - g_Pos2[2].x) / ADD_TEXTURE_SPEED;
+		}
+
+	case 1:
+		if (g_Count >= ADD_TEXTURE_START1)
+		{
+			g_Pos2[1].y += (g_h / 2 - g_Pos2[1].y) / ADD_TEXTURE_SPEED;
+		}
+
+	case 0:
+		g_Pos2[0].y += (g_h / 2 - g_Pos2[0].y) / ADD_TEXTURE_SPEED;
+		break;
+
+	}
+
+	// クリア画面から変わったらお祝いテクスチャを消す
+	if (g_Count >= CLEAR_TIME)
+	{
+		for (int i = 0; i < ADD_TEXTURE; i++)
+		{
+			g_Use2[i] = FALSE;
 		}
 	}
-	else
-	{
-		alpha += 0.02f;
-		if (alpha >= 1.0f)
-		{
-			alpha = 1.0f;
-			flag_alpha = TRUE;
-		}
-	}
-
-
-
 
 
 
@@ -179,7 +274,7 @@ void UpdateTitle(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawTitle(void)
+void DrawCountDown(void)
 {
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -198,10 +293,10 @@ void DrawTitle(void)
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
 
-	// タイトルの背景を描画
+	// ロゴを描画
 	{
 		// テクスチャ設定
-		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[0]);
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
 		SetSprite(g_VertexBuffer, g_Pos.x, g_Pos.y, g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f);
@@ -210,46 +305,19 @@ void DrawTitle(void)
 		GetDeviceContext()->Draw(4, 0);
 	}
 
-	// タイトルのロゴを描画
+	// お祝いテクスチャを描画
+	for(int i = 0 ; i < ADD_TEXTURE ; i++)
 	{
+		if (!g_Use2[i]) continue;
+
 		// テクスチャ設定
-		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[1]);
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[cracker + i]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		//	SetSprite(g_VertexBuffer, g_Pos.x, g_Pos.y, TEXTURE_WIDTH_LOGO, TEXTURE_HEIGHT_LOGO, 0.0f, 0.0f, 1.0f, 1.0f);
-		SetSpriteColor(g_VertexBuffer, g_Pos.x, g_Pos.y, TEXTURE_WIDTH_LOGO, TEXTURE_HEIGHT_LOGO, 0.0f, 0.0f, 1.0f, 1.0f,
-						XMFLOAT4(1.0f, 1.0f, 1.0f, alpha));
+		SetSprite(g_VertexBuffer, g_Pos2[i].x, g_Pos2[i].y, g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f);
 
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
 	}
 
-//	// 加減算のテスト
-//	SetBlendState(BLEND_MODE_ADD);		// 加算合成
-////	SetBlendState(BLEND_MODE_SUBTRACT);	// 減算合成
-//	for(int i=0; i<30; i++)
-//	{
-//		// テクスチャ設定
-//		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[2]);
-//
-//		// １枚のポリゴンの頂点とテクスチャ座標を設定
-//		float dx = 100.0f;
-//		float dy = 100.0f;
-//		float sx = (float)(rand() % 100);
-//		float sy = (float)(rand() % 100);
-//
-//
-//		SetSpriteColor(g_VertexBuffer, dx+sx, dy+sy, 50, 50, 0.0f, 0.0f, 1.0f, 1.0f,
-//			XMFLOAT4(0.3f, 0.3f, 1.0f, 0.5f));
-//
-//		// ポリゴン描画
-//		GetDeviceContext()->Draw(4, 0);
-//	}
-//	SetBlendState(BLEND_MODE_ALPHABLEND);	// 半透明処理を元に戻す
-
 }
-
-
-
-
-
