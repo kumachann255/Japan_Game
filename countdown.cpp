@@ -17,17 +17,28 @@
 //*****************************************************************************
 #define TEXTURE_WIDTH				(SCREEN_WIDTH)	// 背景サイズ
 #define TEXTURE_HEIGHT				(SCREEN_HEIGHT)	// 
-#define TEXTURE_MAX					(16)				// テクスチャの数
+#define TEXTURE_MAX					(19)				// テクスチャの数
 
 #define TEXTURE_WIDTH_LOGO			(480)			// ロゴサイズ
 #define TEXTURE_HEIGHT_LOGO			(80)			// 
 
-#define CLEAR_TIME					(120)			// ステージクリアを何フレーム出しておくか
+#define CLEAR_TIME					(300)			// ステージクリアを何フレーム出しておくか
 #define COUNTDOWN					(60)			// 約1秒
 
 #define TEXTURE_STAGE_MAX			(4)				// 1ステージ分のテクスチャは何枚？
 
+#define ADD_TEXTURE					(3)				// 追加のお祝いテクスチャの数
+#define ADD_TEXTURE_SPEED			(15)			// 追加のお祝いテクスチャを何フレームで出すか
 
+#define ADD_TEXTURE_START1			(20)			// 2枚目の追加のお祝いテクスチャを出すまでの時間
+#define ADD_TEXTURE_START2			(20 + ADD_TEXTURE_START1)		// 3枚目の追加のお祝いテクスチャを出すまでの時間
+
+
+enum {
+	cracker = 16,
+	celebration,
+	balloon,
+};
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
@@ -56,6 +67,9 @@ static char *g_TexturName[TEXTURE_MAX] = {
 	"data/TEXTURE/stage_count33.png",
 	"data/TEXTURE/stage_count32.png",
 	"data/TEXTURE/stage_count31.png",
+	"data/TEXTURE/cracker.png",
+	"data/TEXTURE/celebration.png",
+	"data/TEXTURE/balloon.png",
 };
 
 
@@ -63,6 +77,11 @@ static BOOL						g_Use;						// TRUE:使っている  FALSE:未使用
 static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
 static int						g_TexNo;					// テクスチャ番号
+
+static BOOL						g_Use2[ADD_TEXTURE];		// TRUE:使っている  FALSE:未使用
+static XMFLOAT3					g_Pos2[ADD_TEXTURE];		// ポリゴンの座標
+
+static int						g_Stage;					// 現在のステージ
 
 static int						g_Count;					// 時間管理
 
@@ -107,6 +126,31 @@ HRESULT InitCountDown(void)
 	g_TexNo = 0;
 	g_Count = 0;
 
+	for (int i = 0; i < ADD_TEXTURE; i++)
+	{
+		g_Use2[i] = FALSE;
+		g_Pos2[i] = XMFLOAT3(g_w / 2, g_h / 2, 0.0f);
+	}
+
+	// 最初は隠れている
+	g_Pos2[0].y -= TEXTURE_HEIGHT;
+	g_Pos2[1].y += TEXTURE_HEIGHT;
+	g_Pos2[2].x += TEXTURE_WIDTH;
+
+	g_Stage = GetStage() - 1;
+	switch (g_Stage)
+	{
+	case stage2:
+		g_Use2[2] = TRUE;
+
+	case stage1:
+		g_Use2[1] = TRUE;
+
+	case stage0:
+		g_Use2[0] = TRUE;
+		break;
+
+	}
 	// BGM再生
 	//PlaySound(SOUND_LABEL_BGM_sample000);
 
@@ -147,24 +191,22 @@ void UpdateCountDown(void)
 	// 時間を進める
 	g_Count++;
 	
-	int stage = GetStage() - 1;
-
 	// 時間経過とステージ数に応じて表示するテクスチャを変更
 	if (g_Count <= CLEAR_TIME)
 	{
-		g_TexNo = TEXTURE_STAGE_MAX * stage;
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage;
 	}
 	else if (g_Count <= CLEAR_TIME + COUNTDOWN)
 	{
-		g_TexNo = TEXTURE_STAGE_MAX * stage + 1;
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 1;
 	}
 	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 2))
 	{
-		g_TexNo = TEXTURE_STAGE_MAX * stage + 2;
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 2;
 	}
 	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3))
 	{
-		g_TexNo = TEXTURE_STAGE_MAX * stage + 3;
+		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 3;
 		SetFade(FADE_OUT, MODE_GAME);
 	}
 	//else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3) + COUNTDOWN / 2)
@@ -175,20 +217,49 @@ void UpdateCountDown(void)
 
 
 
-	if (GetKeyboardTrigger(DIK_RETURN))
-	{// Enter押したら、ステージを切り替える
-		//SetFade(FADE_OUT, MODE_RESULT);
-	}
-	// ゲームパッドで入力処理
-	else if (IsButtonTriggered(0, BUTTON_START))
+	//if (GetKeyboardTrigger(DIK_RETURN))
+	//{// Enter押したら、ステージを切り替える
+	//	//SetFade(FADE_OUT, MODE_RESULT);
+	//}
+	//// ゲームパッドで入力処理
+	//else if (IsButtonTriggered(0, BUTTON_START))
+	//{
+	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
+	//}
+	//else if (IsButtonTriggered(0, BUTTON_B))
+	//{
+	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
+	//}
+
+	// お祝いテクスチャ
+	switch (g_Stage)
 	{
-		SetFade(FADE_OUT, MODE_TITLE_DirectX);
-	}
-	else if (IsButtonTriggered(0, BUTTON_B))
-	{
-		SetFade(FADE_OUT, MODE_TITLE_DirectX);
+	case 2:
+		if (g_Count >= ADD_TEXTURE_START2)
+		{
+			g_Pos2[2].x += (g_w / 2 - g_Pos2[2].x) / ADD_TEXTURE_SPEED;
+		}
+
+	case 1:
+		if (g_Count >= ADD_TEXTURE_START1)
+		{
+			g_Pos2[1].y += (g_h / 2 - g_Pos2[1].y) / ADD_TEXTURE_SPEED;
+		}
+
+	case 0:
+		g_Pos2[0].y += (g_h / 2 - g_Pos2[0].y) / ADD_TEXTURE_SPEED;
+		break;
+
 	}
 
+	// クリア画面から変わったらお祝いテクスチャを消す
+	if (g_Count >= CLEAR_TIME)
+	{
+		for (int i = 0; i < ADD_TEXTURE; i++)
+		{
+			g_Use2[i] = FALSE;
+		}
+	}
 
 
 
@@ -233,4 +304,20 @@ void DrawCountDown(void)
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
 	}
+
+	// お祝いテクスチャを描画
+	for(int i = 0 ; i < ADD_TEXTURE ; i++)
+	{
+		if (!g_Use2[i]) continue;
+
+		// テクスチャ設定
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[cracker + i]);
+
+		// １枚のポリゴンの頂点とテクスチャ座標を設定
+		SetSprite(g_VertexBuffer, g_Pos2[i].x, g_Pos2[i].y, g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// ポリゴン描画
+		GetDeviceContext()->Draw(4, 0);
+	}
+
 }
