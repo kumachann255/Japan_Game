@@ -257,54 +257,6 @@ void UninitMeshField2(void)
 void UpdateMeshField2(void)
 {
 
-	//return;	// 処理をスキップ！
-
-	// 波の処理
-	float dt = 0.03f;
-
-	for (int i = 0; i < (g_nNumBlockZField + 1) * (g_nNumBlockXField + 1); i++)
-	{
-		g_Vertex[i].Position.z += FIELD_SPEED;
-
-		if (g_Vertex[i].Position.z > 2200)
-		{
-			g_Vertex[i].Position.z -= g_nNumBlockZField * g_fBlockSizeZField;
-		}
-
-	}
-
-
-
-
-
-	//for (int z = 0; z < g_nNumBlockZField; z++)
-	//{
-	//	for (int x = 0; x < g_nNumBlockXField; x++)
-	//	{
-	//		float dx = g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.x - g_Center.x;
-	//		float dz = g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.z - g_Center.z;
-
-	//		// 波紋の中心点からの距離を得る
-	//		float len = (float)sqrt(dx * dx + dz * dz);
-
-	//		// 波の高さを、sin関数で得る
-	//	//	g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.y = 0.0f;
-	//		g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.y = sinf(-g_Time * g_wave_frequency + len * g_wave_correction) * g_wave_amplitude;
-	//	}
-
-	//}
-	//g_Time += dt;
-
-
-	// 頂点バッファに値をセットする
-	D3D11_MAPPED_SUBRESOURCE msr;
-	GetDeviceContext()->Map(g_VertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
-
-	// 全頂点情報を毎回上書きしているのはDX11ではこの方が早いからです
-	memcpy(pVtx, g_Vertex, sizeof(VERTEX_3D)*g_nNumVertexField);
-
-	GetDeviceContext()->Unmap(g_VertexBuffer, 0);
 
 }
 
