@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ヘリエネミーモデル処理 [enemyHeli.cpp]
-// Author : 
+// Author : hennkousitayo
 //
 //=============================================================================
 #include "main.h"
@@ -25,8 +25,8 @@
 #define	MODEL_HELI_PARTS		"data/MODEL/puropera.obj"	// 読み込むモデル名
 
 #define	VALUE_MOVE				(3.0f)						// 移動量
-#define	VALUE_ROTATE			(0.5f)				// 回転量
-#define ENEMY_HELI_SPEED		(0.0025f)						// 点滅の間隔
+#define	VALUE_ROTATE			(0.5f)						// 回転量
+#define ENEMY_HELI_SPEED		(0.0025f)					// 点滅の間隔
 
 #define ENEMY_HELI_SHADOW_SIZE	(0.4f)						// 影の大きさ
 

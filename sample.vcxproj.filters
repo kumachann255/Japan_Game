@@ -35,6 +35,9 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="sky.cpp" />
     <ClCompile Include="meshfield2.cpp" />
+    <ClCompile Include="logo.cpp" />
+    <ClCompile Include="logoD.cpp" />
+    <ClCompile Include="countdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -71,5 +74,8 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="sky.h" />
     <ClInclude Include="meshfield2.h" />
+    <ClInclude Include="logo.h" />
+    <ClInclude Include="logoD.h" />
+    <ClInclude Include="countdown.h" />
   </ItemGroup>
 </Project>

@@ -46,7 +46,7 @@ HRESULT InitSky(void)
 
 		g_Sky[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		g_Sky[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		g_Sky[i].scl = XMFLOAT3(60.0f, 60.0f, 60.0f);
+		g_Sky[i].scl = XMFLOAT3(80.0f, 60.0f, 80.0f);
 
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Sky[0].model, &g_Sky[0].diffuse[0]);

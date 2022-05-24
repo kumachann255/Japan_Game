@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// スコア処理 [score.h]
+// カウントダウン画面処理 [countdown.h]
 // Author : 
 //
 //=============================================================================
@@ -10,25 +10,16 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define SCORE_MAX			(99999)		// スコアの最大値
-#define SCORE_DIGIT			(5)			// 桁数
 
-#define SCORE_STAGE0_BORDER	(200)		// ステージ0のクリアスコア
-#define SCORE_STAGE1_BORDER	(3000)		// ステージ1のクリアスコア
-#define SCORE_STAGE2_BORDER	(4000)		// ステージ2のクリアスコア
-#define SCORE_STAGE3_BORDER	(5000)		// ステージ3のクリアスコア
 
 
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-HRESULT InitScore(void);
-void UninitScore(void);
-void UpdateScore(void);
-void DrawScore(void);
-
-void AddScore(int add);
-int GetScore(void);
+HRESULT InitCountDown(void);
+void UninitCountDown(void);
+void UpdateCountDown(void);
+void DrawCountDown(void);
 
 
