@@ -19,6 +19,7 @@
 #include "bom.h"
 #include "blast.h"
 #include "meshfield.h"
+#include "meshfield2.h"
 #include "meshwall.h"
 #include "shadow.h"
 #include "fieldobj.h"
@@ -66,7 +67,7 @@ HRESULT InitGame(void)
 
 	// フィールドの初期化
 	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
-	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 8, 8, 700.0f, 400.0f);
+	InitMeshField2(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 2, 2000.0f, 2000.0f);
 
 	// ライトを有効化	// 影の初期化処理
 	InitShadow();
@@ -184,6 +185,7 @@ void UninitGame(void)
 	UninitMeshWall();
 
 	// 地面の終了処理
+	UninitMeshField2();
 	UninitMeshField();
 
 	// 爆破オブジェクトの終了処理
@@ -234,6 +236,7 @@ void UpdateGame(void)
 
 	// 地面処理の更新
 	UpdateMeshField();
+	UpdateMeshField2();
 
 	// プレイヤーの更新処理
 	UpdatePlayer();
@@ -301,6 +304,7 @@ void DrawGame0(void)
 	// 3Dの物を描画する処理
 	// 地面の描画処理
 	DrawMeshField();
+	DrawMeshField2();
 
 	// 影の描画処理
 	DrawShadow();
@@ -330,7 +334,7 @@ void DrawGame0(void)
 	//DrawTree();
 
 	// スカイボムの描画処理
-	DrawSky();
+	//DrawSky();
 
 	// パーティクルの描画処理
 	DrawParticle();
