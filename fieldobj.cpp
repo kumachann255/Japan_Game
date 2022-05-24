@@ -353,7 +353,7 @@ void UpdateTree(void)
 		if (g_Guardrail[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
 			// 地面と一緒に動く
-//			g_Guardrail[i].pos.z += FIELD_SPEED;
+			g_Guardrail[i].pos.z += FIELD_SPEED;
 
 			if (g_Guardrail[i].pos.z >= FOBF_Z_MAX)
 			{

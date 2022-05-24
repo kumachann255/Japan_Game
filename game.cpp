@@ -67,10 +67,7 @@ HRESULT InitGame(void)
 
 	// フィールドの初期化
 	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
-	InitMeshField2(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 2, 2000.0f, 2000.0f);
-
-	//InitMeshField(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 1, 5000.0f, 5000.0f);
-
+	InitMeshField2(XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 2, 2000.0f, 2000.0f);
 
 	// ライトを有効化	// 影の初期化処理
 	InitShadow();
@@ -336,8 +333,8 @@ void DrawGame0(void)
 	// 木の描画処理
 	DrawTree();
 
-	// スカイボムの描画処理
-	//DrawSky();
+	// スカイドームの描画処理
+	DrawSky();
 
 	// パーティクルの描画処理
 	DrawParticle();
