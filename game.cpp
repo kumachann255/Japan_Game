@@ -35,6 +35,7 @@
 #include "enemyHeli.h"
 #include "combo.h"
 #include "playerHP.h"
+#include "gameUI.h"
 
 
 //*****************************************************************************
@@ -125,6 +126,9 @@ HRESULT InitGame(void)
 	// コンボの初期化
 	InitCombo();
 
+	// UIの初期化
+	InitGameUI();
+
 	// 制限時間の初期化
 	InitTime();
 
@@ -165,6 +169,9 @@ void UninitGame(void)
 
 	// 時間の終了処理
 	UninitTime();
+
+	// UIの終了処理
+	UninitGameUI();
 
 	// コンボの終了処理
 	UninitCombo();
@@ -286,6 +293,9 @@ void UpdateGame(void)
 	// コンボの更新処理
 	UpdateCombo();
 
+	// UIの更新処理
+	UpdateGameUI();
+
 	// 時間の更新処理
 	UpdateTime();
 
@@ -362,6 +372,9 @@ void DrawGame0(void)
 
 	// 時間の描画処理
 	DrawTime();
+
+	// UIの描画処理
+	DrawGameUI();
 
 	// プレイヤーのHPの描画処理
 	DrawPlayerHP();

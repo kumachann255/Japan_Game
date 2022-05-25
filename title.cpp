@@ -131,16 +131,22 @@ void UpdateTitle(void)
 
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{// Enter押したら、ステージを切り替える
+		SetStage(stage0);
 		SetFade(FADE_OUT, MODE_GAME);
 		//SetFade(FADE_OUT, MODE_RESULT);
+
+		// mainスコアを初期化
+		ResetMainScore();
 	}
 	// ゲームパッドで入力処理
 	else if (IsButtonTriggered(0, BUTTON_START))
 	{
+		SetStage(stage0);
 		SetFade(FADE_OUT, MODE_GAME);
 	}
 	else if (IsButtonTriggered(0, BUTTON_B))
 	{
+		SetStage(stage0);
 		SetFade(FADE_OUT, MODE_GAME);
 	}
 

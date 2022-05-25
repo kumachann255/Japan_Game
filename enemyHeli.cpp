@@ -197,8 +197,8 @@ void UninitEnemyHeli(void)
 //=============================================================================
 void UpdateEnemyHeli(void)
 {
-	// popˆ—
-	{
+	if (GetStage() != tutorial)
+	{	// popˆ—
 		count++;
 		int useCount = 0;
 
