@@ -1,28 +1,43 @@
 //=============================================================================
 //
-// スコア処理 [score.cpp]
+// ゲームUI処理 [gameUI.cpp]
 // Author : 
 //
 //=============================================================================
 #include "main.h"
 #include "renderer.h"
-#include "score.h"
-#include "sprite.h"
 #include "gameUI.h"
+#include "sprite.h"
+#include "score.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(40)	// キャラサイズ
-#define TEXTURE_HEIGHT				(80)	// 
+#define HOWTO_WIDTH					(120.0f)// キャラサイズ
+#define HOWTO_HEIGHT				(80.0f)	// 
 
-#define TEXTURE1_WIDTH				(26)	// キャラサイズ
-#define TEXTURE1_HEIGHT				(46)	// 
+#define SCORE0_WIDTH				(100.0f)// キャラサイズ
+#define SCORE0_HEIGHT				(50.0f)	// 
 
-#define BORDER_OFFSET_X				(0.0f)	// x座標の調整
-#define BORDER_OFFSET_Y				(70.0f)	// y座標の調整
+#define SCORE1_WIDTH				(100.0f)// キャラサイズ
+#define SCORE1_HEIGHT				(50.0f)	// 
 
-#define TEXTURE_MAX					(1)		// テクスチャの数
+#define TEXTURE_MAX					(6)		// テクスチャの数
+
+#define MOVE_VOLUME					(20.0f)	// カーブの半径
+#define MOVE_SPEED					(0.1f)	// カーブの速度
+
+
+enum {
+	HowTo,
+	score0,
+	score1,
+	under,
+	up,
+	right,
+
+
+};
 
 
 //*****************************************************************************
@@ -36,17 +51,24 @@
 static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
+
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/number16x32.png",
+	"data/TEXTURE/hoetouse_ui.png",
+	"data/TEXTURE/score_00.png",
+	"data/TEXTURE/score_01.png",
+	"data/TEXTURE/partypeople_down.png",
+	"data/TEXTURE/partypeople_up.png",
+	"data/TEXTURE/partypeople_right.png",
 };
 
-
-static BOOL						g_Use;						// TRUE:使っている  FALSE:未使用
-static float					g_w, g_h;					// 幅と高さ
-static XMFLOAT3					g_Pos;						// ポリゴンの座標
-static int						g_TexNo;					// テクスチャ番号
+static UI						g_UI[TEXTURE_MAX];			// UI
 
 static int						g_Score;					// スコア
+
+static BOOL						g_Border;					// 目標スコアを超えているかどうか
+static int						g_BorderScore;				// 目標スコア
+
+static float					g_time;
 
 static BOOL						g_Load = FALSE;
 
@@ -54,7 +76,7 @@ static BOOL						g_Load = FALSE;
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitScore(void)
+HRESULT InitGameUI(void)
 {
 	ID3D11Device *pDevice = GetDevice();
 
@@ -81,14 +103,81 @@ HRESULT InitScore(void)
 	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
 
 
-	// プレイヤーの初期化
-	g_Use   = TRUE;
-	g_w     = TEXTURE_WIDTH;
-	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 930.0f, 50.0f, 0.0f };
-	g_TexNo = 0;
+	// 初期化
+	for (int i = 0; i < TEXTURE_MAX; i++)
+	{
+		g_UI[i].use = TRUE;
+		g_UI[i].texNo = i;
+
+		// お祝いテクスチャは最初非表示
+		if (i >= under)
+		{
+			g_UI[i].use = FALSE;
+			g_UI[i].pos = { SCREEN_WIDTH / 2 ,SCREEN_HEIGHT / 2 , 0.0f };
+			g_UI[i].w = SCREEN_WIDTH;
+			g_UI[i].h = SCREEN_HEIGHT;
+		}
+
+		switch (i)
+		{
+		case HowTo:
+			g_UI[i].pos = { 100.0f , 500.0f , 0.0f };
+			g_UI[i].w = HOWTO_WIDTH;
+			g_UI[i].h = HOWTO_HEIGHT;
+
+			break;
+
+		case score0:
+			g_UI[i].pos = { 700.0f , 50.0f , 0.0f };
+			g_UI[i].w = SCORE0_WIDTH;
+			g_UI[i].h = SCORE0_HEIGHT;
+
+			break;
+
+		case score1:
+			g_UI[i].pos = { 750.0f , 120.0f , 0.0f };
+			g_UI[i].w = SCORE1_WIDTH;
+			g_UI[i].h = SCORE1_HEIGHT;
+
+			break;
+
+
+		}
+
+
+	}
+
+
+	// 目標スコアの初期化
+	switch (GetStage())
+	{
+	case stage0:
+	case tutorial:
+		g_BorderScore = SCORE_STAGE0_BORDER;
+
+		break;
+
+	case stage1:
+		g_BorderScore = SCORE_STAGE1_BORDER;
+
+		break;
+
+	case stage2:
+		g_BorderScore = SCORE_STAGE2_BORDER;
+
+		break;
+
+	case stage3:
+		g_BorderScore = SCORE_STAGE3_BORDER;
+
+		break;
+
+	}
+
 
 	g_Score = 0;	// スコアの初期化
+	g_time = 0.0f;
+	g_Border = FALSE;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -97,7 +186,7 @@ HRESULT InitScore(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitScore(void)
+void UninitGameUI(void)
 {
 	if (g_Load == FALSE) return;
 
@@ -122,9 +211,43 @@ void UninitScore(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateScore(void)
+void UpdateGameUI(void)
 {
-	SetMainScore(g_Score);
+	// 目標スコアを超えたらお祝いテクスチャを表示
+	if (g_BorderScore <= GetScore())
+	{
+		for (int i = under; i < under + 3; i++)
+		{
+			g_UI[i].use = TRUE;
+		}
+	}
+
+	// お祝いテクスチャの処理
+	for (int i = under; i < under + 3; i++)
+	{
+		switch (i)
+		{
+		case under:
+			g_UI[i].pos.y = SCREEN_HEIGHT / 2 + (cosf(g_time) * MOVE_VOLUME) + MOVE_VOLUME;
+
+			break;
+
+		case up:
+			g_UI[i].pos.y = SCREEN_HEIGHT / 2 - (cosf(g_time) * MOVE_VOLUME) - MOVE_VOLUME;
+
+			break;
+
+		case right:
+			g_UI[i].pos.x = SCREEN_WIDTH / 2 - (sinf(g_time) * MOVE_VOLUME) + MOVE_VOLUME;
+			break;
+		}
+	}
+
+	g_time += MOVE_SPEED;
+
+
+
+
 
 #ifdef _DEBUG	// デバッグ情報を表示する
 	//char *str = GetDebugStr();
@@ -137,7 +260,7 @@ void UpdateScore(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawScore(void)
+void DrawGameUI(void)
 {
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -156,87 +279,25 @@ void DrawScore(void)
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
 
-	// テクスチャ設定
-	GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
-
-	// 桁数分処理する
-	int number = g_Score;
-	for (int i = 0; i < SCORE_DIGIT; i++)
+	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
-		// 今回表示する桁の数字
-		float x = (float)(number % 10);
+		if (!g_UI[i].use) continue;
 
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - g_w*i;	// スコアの表示位置X
-		float py = g_Pos.y;			// スコアの表示位置Y
-		float pw = g_w;				// スコアの表示幅
-		float ph = g_h;				// スコアの表示高さ
-
-		float tw = 1.0f / 10;		// テクスチャの幅
-		float th = 1.0f / 1;		// テクスチャの高さ
-		float tx = x * tw;			// テクスチャの左上X座標
-		float ty = 0.0f;			// テクスチャの左上Y座標
+		// テクスチャ設定
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[i]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		SetSpriteColor(g_VertexBuffer, px, py, pw, ph, tx, ty, tw, th,
-			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+		SetSprite(g_VertexBuffer, g_UI[i].pos.x, g_UI[i].pos.y, g_UI[i].w, g_UI[i].h, 0.0f, 0.0f, 1.0f, 1.0f);
 
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
-
-		// 次の桁へ
-		number /= 10;
 	}
-
-	// 桁数分処理する
-	number = GetBorderScore();
-	for (int i = 0; i < SCORE_DIGIT; i++)
-	{
-		// 今回表示する桁の数字
-		float x = (float)(number % 10);
-
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - TEXTURE1_WIDTH * i + BORDER_OFFSET_X;	// スコアの表示位置X
-		float py = g_Pos.y + BORDER_OFFSET_Y;			// スコアの表示位置Y
-		float pw = TEXTURE1_WIDTH;	// スコアの表示幅
-		float ph = TEXTURE1_HEIGHT;	// スコアの表示高さ
-
-		float tw = 1.0f / 10;		// テクスチャの幅
-		float th = 1.0f / 1;		// テクスチャの高さ
-		float tx = x * tw;			// テクスチャの左上X座標
-		float ty = 0.0f;			// テクスチャの左上Y座標
-
-		// １枚のポリゴンの頂texBuffer, px, py, pw, ph, tx, ty, tw, th,
-		SetSpriteColor(g_VertexBuffer, px, py, pw, ph, tx, ty, tw, th,
-			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-
-		// ポリゴン描画
-		GetDeviceContext()->Draw(4, 0);
-
-		// 次の桁へ
-		number /= 10;
-	}
-
 }
 
 
-//=============================================================================
-// スコアを加算する
-// 引数:add :追加する点数。マイナスも可能
-//=============================================================================
-void AddScore(int add)
+
+// 目標スコアを返す
+int GetBorderScore(void)
 {
-	g_Score += add;
-	if (g_Score > SCORE_MAX)
-	{
-		g_Score = SCORE_MAX;
-	}
-
+	return g_BorderScore;
 }
-
-
-int GetScore(void)
-{
-	return g_Score;
-}
-

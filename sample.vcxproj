@@ -149,6 +149,7 @@
     <ClInclude Include="fade.h" />
     <ClInclude Include="fieldobj.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameUI.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="logo.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="fieldobj.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameUI.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="logo.cpp" />
