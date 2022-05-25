@@ -134,6 +134,9 @@ void UpdateTitle(void)
 		SetStage(stage0);
 		SetFade(FADE_OUT, MODE_GAME);
 		//SetFade(FADE_OUT, MODE_RESULT);
+
+		// mainスコアを初期化
+		ResetMainScore();
 	}
 	// ゲームパッドで入力処理
 	else if (IsButtonTriggered(0, BUTTON_START))
