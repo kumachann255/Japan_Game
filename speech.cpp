@@ -37,6 +37,11 @@
 #define SPEECH_BOM_X				(SCREEN_CENTER_X / 2)	// コンボの表示座標
 #define SPEECH_BOM_Y				(SCREEN_CENTER_Y / 2)	// コンボの表示座標
 
+#define SCALE_BIG_TIME				(10)		// 吹き出しが大きくなる時間
+#define SCALE_SMOLL_TIME			(5)			// 吹き出しが小さくなる時間
+#define SCALE_SPEED					(1.01f)		// 吹き出しが大きくなる速度
+#define SCALE_DOWN					(0.8f)		// 吹き出しが小さくなる速度
+
 
 enum {
 	go,
@@ -181,7 +186,19 @@ void UpdateSpeech(void)
 		}
 
 
+		// コンボの吹き出しは発生時に大きくなる
+		// if ((g_Speech[i].combo) && (g_Speech[i].life > SPEECH_LIFE - COMBO_SCALE_TIME))
+		if ((g_Speech[i].life > SPEECH_LIFE - SCALE_BIG_TIME))
+			{
+			g_Speech[i].w *= SCALE_SPEED;
+			g_Speech[i].h *= SCALE_SPEED;
 
+		}
+		else if (g_Speech[i].life <= SCALE_SMOLL_TIME)
+		{
+			g_Speech[i].w *= SCALE_DOWN;
+			g_Speech[i].h *= SCALE_DOWN;
+		}
 
 
 	}
@@ -272,8 +289,8 @@ void SetBomSpeech(void)
 
 			g_Speech[i].texNo = data + bam;
 
-			int x = RamdomFloat(1, SPEECH_BOM_X, -SPEECH_BOM_X);
-			int y = RamdomFloat(1, SPEECH_BOM_Y, -SPEECH_BOM_Y);
+			float x = RamdomFloat(1, SPEECH_BOM_X, -SPEECH_BOM_X);
+			float y = RamdomFloat(1, SPEECH_BOM_Y, -SPEECH_BOM_Y);
 
 			if (x > 0)
 			{

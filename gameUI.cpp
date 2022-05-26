@@ -13,19 +13,19 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define HOWTO_WIDTH					(120.0f)// キャラサイズ
-#define HOWTO_HEIGHT				(80.0f)	// 
+#define HOWTO_WIDTH					(330.0f)	// キャラサイズ
+#define HOWTO_HEIGHT				(120.0f)	// 
 
-#define SCORE0_WIDTH				(100.0f)// キャラサイズ
-#define SCORE0_HEIGHT				(50.0f)	// 
+#define SCORE0_WIDTH				(100.0f)	// キャラサイズ
+#define SCORE0_HEIGHT				(50.0f)		// 
 
-#define SCORE1_WIDTH				(100.0f)// キャラサイズ
-#define SCORE1_HEIGHT				(50.0f)	// 
+#define SCORE1_WIDTH				(120.0f)	// キャラサイズ
+#define SCORE1_HEIGHT				(40.0f)		// 
 
-#define TEXTURE_MAX					(6)		// テクスチャの数
+#define TEXTURE_MAX					(6)			// テクスチャの数
 
-#define MOVE_VOLUME					(20.0f)	// カーブの半径
-#define MOVE_SPEED					(0.1f)	// カーブの速度
+#define MOVE_VOLUME					(20.0f)		// カーブの半径
+#define MOVE_SPEED					(0.1f)		// カーブの速度
 
 
 enum {
@@ -121,7 +121,7 @@ HRESULT InitGameUI(void)
 		switch (i)
 		{
 		case HowTo:
-			g_UI[i].pos = { 100.0f , 500.0f , 0.0f };
+			g_UI[i].pos = { 170.0f , 480.0f , 0.0f };
 			g_UI[i].w = HOWTO_WIDTH;
 			g_UI[i].h = HOWTO_HEIGHT;
 
@@ -141,10 +141,7 @@ HRESULT InitGameUI(void)
 
 			break;
 
-
 		}
-
-
 	}
 
 
@@ -244,8 +241,6 @@ void UpdateGameUI(void)
 	}
 
 	g_time += MOVE_SPEED;
-
-
 
 
 
