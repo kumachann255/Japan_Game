@@ -9,6 +9,8 @@
 #include "speech.h"
 #include "sprite.h"
 
+#include "sound.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -258,6 +260,9 @@ void SetStartSpeech(void)
 	{
 		if (!g_Speech[i].use)
 		{
+			// SEのセット
+			PlaySound(SOUND_LABEL_SE_carHorn01);
+
 			g_Speech[i].use = TRUE;
 			g_Speech[i].life = SPEECH_LIFE;
 			g_Speech[i].combo = FALSE;

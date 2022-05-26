@@ -17,6 +17,8 @@
 #include "bom.h"
 #include "speech.h"
 
+#include "sound.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -649,6 +651,9 @@ PLAYER *GetPlayer(void)
 
 void SetPlayerDamage(int damage)
 {
+	// SEのセット
+	PlaySound(SOUND_LABEL_SE_damagedSound01);
+
 	g_Player.hp -= damage;
 
 	SetDamageSpeech();

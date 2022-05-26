@@ -19,6 +19,8 @@
 #include "player.h"
 #include "fade.h"
 
+#include "sound.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -342,6 +344,9 @@ void UpdateEnemy(void)
 			{											// Yes
 				//BOOL ans = TRUE;
 
+				// SEの停止
+				StopSound(SOUND_LABEL_SE_siren01);
+
 				//// ほかのパトカーとぶつかってないか？
 				//for (int j = 0; j < MAX_ENEMY; j++)
 				//{
@@ -516,6 +521,9 @@ void SetEnemy(void)
 	{
 		if (g_Enemy[i].use == FALSE)
 		{
+			// SEのセット
+			PlaySound(SOUND_LABEL_SE_siren01);
+
 			g_Enemy[i].use = TRUE;
 			g_Enemy[i].pos.z = ENEMY_POP_Z;
 			g_Enemy[i].pos.y = ENEMY_OFFSET_Y;

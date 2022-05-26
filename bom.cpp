@@ -17,6 +17,8 @@
 #include "attackRange.h"
 #include "blast.h"
 
+#include "sound.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -202,8 +204,12 @@ BOM *GetBom()
 //=============================================================================
 void SetBom(void)
 {
+
 	if ((g_Bom.use == FALSE) && (coolTime <= 0))
 	{
+		// SEのセット
+		PlaySound(SOUND_LABEL_SE_throwingSound01);
+
 		g_Bom.use = TRUE;
 		g_Bom.time = 0.0f;
 
@@ -234,10 +240,6 @@ void SetBom(void)
 		g_Bom.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 		coolTime = BOM_COOL;
-
-		// 投擲音
-		// PlaySound(SOUND_LABEL_SE_shot000);
-
 
 	}
 }

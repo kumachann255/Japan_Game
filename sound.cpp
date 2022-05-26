@@ -32,17 +32,36 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 // 各音素材のパラメータ
 SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
+	// BGM
 	{ (char*)"data/BGM/sample000.wav", -1 },	// BGM0
 	{ (char*)"data/BGM/bgm_maoudamashii_neorock73.wav", -1 },	// BGM1
 	{ (char*)"data/BGM/sample001.wav", -1 },	// BGM2
-	{ (char*)"data/SE/bomb000.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/defend000.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/defend001.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/hit000.wav", 0 },			// 弾発射音
-	{ (char*)"data/SE/laser000.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/lockon000.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/shot000.wav", 0 },		// 弾発射音
-	{ (char*)"data/SE/shot001.wav", 0 },		// ヒット音
+
+	//// SE
+	{ (char*)"data/SE/booingSound01.wav", 0 },		// ブーイング音
+	{ (char*)"data/SE/carHorn01.wav", 0 },			// 車のクラクション音
+	{ (char*)"data/SE/Cheers00.wav", 0 },			// 歓声音0
+	{ (char*)"data/SE/Cheers01.wav", 0 },			// 歓声音1
+	{ (char*)"data/SE/Cheers02.wav", 0 },			// 歓声音2
+	{ (char*)"data/SE/Cheers03.wav", 0 },			// 歓声音3
+	{ (char*)"data/SE/Cheers04.wav", 0 },			// 歓声音4
+	{ (char*)"data/SE/Cheers05.wav", 0 },			// 歓声音5
+	{ (char*)"data/SE/collisionSound01.wav", 0 },	// 車の衝突音
+	{ (char*)"data/SE/comboSound01.wav", 0 },		// コンボの音（できれば爆弾破裂時の音と交換）
+	{ (char*)"data/SE/countdownSound01.wav", 0 },	// 10秒前カウントダウン
+	{ (char*)"data/SE/damagedSound01.wav", 0 },		// ダメージ音
+	{ (char*)"data/SE/explosionSound01.wav", 0 },	// 粘着物の爆発音
+	{ (char*)"data/SE/gunShot01.wav", 0 },			// 銃声1
+	{ (char*)"data/SE/gunShot02.wav", 0 },			// 銃声2
+	{ (char*)"data/SE/propellerSound01.wav", -1 },	// プロペラ音
+	{ (char*)"data/SE/shrinkageSound01.wav", 0 },	// 粘着物の収縮音
+	{ (char*)"data/SE/siren01.wav", 0 },			// パトカー音
+	{ (char*)"data/SE/stickingSound01.wav", 0 },	// 粘着物の張り付き音
+	{ (char*)"data/SE/stirringSound01.wav", 0 },	// 粘着かき混ぜ
+	{ (char*)"data/SE/throwingSound01.wav", 0 },	// 粘着物投擲音
+	{ (char*)"data/SE/titleClick01.wav", 0 },		// タイトルモード選択音1
+	{ (char*)"data/SE/titleClick02.wav", 0 },		// タイトルモード選択音2
+
 };
 
 //=============================================================================
@@ -178,7 +197,11 @@ BOOL InitSound(HWND hWnd)
 
 		// オーディオバッファの登録
 		g_apSourceVoice[nCntSound]->SubmitSourceBuffer(&buffer);
+
 	}
+
+	SetSouceVoice(SOUND_LABEL_SE_carHorn01, 0.1f);
+
 
 	return TRUE;
 }
@@ -378,3 +401,11 @@ HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwB
 	return S_OK;
 }
 
+//=============================================================================
+// ソースボイスの音量調整（0.0f ~ 1.0fで調整）
+//=============================================================================
+void SetSouceVoice(int label, float volume)
+{
+	g_apSourceVoice[label]->SetVolume(volume);
+	return;
+}
