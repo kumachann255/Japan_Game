@@ -15,6 +15,8 @@
 #include "bullet.h"
 #include "meshfield.h"
 #include "bom.h"
+#include "speech.h"
+
 
 //*****************************************************************************
 // É}ÉNÉçíËã`
@@ -648,6 +650,9 @@ PLAYER *GetPlayer(void)
 void SetPlayerDamage(int damage)
 {
 	g_Player.hp -= damage;
+
+	SetDamageSpeech();
+
 }
 
 

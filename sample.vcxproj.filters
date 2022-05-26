@@ -39,6 +39,7 @@
     <ClCompile Include="logoD.cpp" />
     <ClCompile Include="countdown.cpp" />
     <ClCompile Include="gameUI.cpp" />
+    <ClCompile Include="speech.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -79,5 +80,6 @@
     <ClInclude Include="logoD.h" />
     <ClInclude Include="countdown.h" />
     <ClInclude Include="gameUI.h" />
+    <ClInclude Include="speech.h" />
   </ItemGroup>
 </Project>

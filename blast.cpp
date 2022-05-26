@@ -13,6 +13,7 @@
 #include "shadow.h"
 #include "blast.h"
 #include "meshfield.h"
+#include "speech.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -372,6 +373,9 @@ void SetBlast(XMFLOAT3 pos)
 
 			// 爆発音
 			// PlaySound(SOUND_LABEL_SE_shot000);
+
+			// 吹き出しを表示
+			SetBomSpeech();
 
 			return;
 		}
