@@ -71,6 +71,8 @@ int g_Stage = tutorial;							// 現在のステージ
 
 int g_Score[stage_max] = { 0, 0, 0, 0 };	// 各ステージのスコアを保存
 
+int g_ComboMax = 0;								// 最大コンボ数を保存
+
 //=============================================================================
 // メイン関数
 //=============================================================================
@@ -648,4 +650,21 @@ void ResetMainScore(void)
 	{
 		g_Score[i] = 0;
 	}
+}
+
+
+// 最大コンボ数を保存
+void SetComboMax(int combo)
+{
+	if (g_ComboMax < combo)
+	{
+		g_ComboMax = combo;
+	}
+}
+
+
+// 最大コンボ数を取得
+int GetCobmoMax(void)
+{
+	return g_ComboMax;
 }

@@ -41,6 +41,7 @@
     <ClCompile Include="endroll.cpp" />
     <ClCompile Include="gameUI.cpp" />
     <ClCompile Include="speech.cpp" />
+    <ClCompile Include="tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -83,5 +84,6 @@
     <ClInclude Include="endroll.h" />
     <ClInclude Include="gameUI.h" />
     <ClInclude Include="speech.h" />
+    <ClInclude Include="tutorial.h" />
   </ItemGroup>
 </Project>

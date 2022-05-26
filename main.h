@@ -108,3 +108,5 @@ void SetStage(int stage);
 void SetMainScore(int score);
 int GetMainScore(int stage);
 void ResetMainScore(void);
+void SetComboMax(int combo);
+int GetCobmoMax(void);
