@@ -12,6 +12,8 @@
 #include "player.h"
 #include "bom.h"
 #include "blast.h"
+#include "player.h"
+
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -38,8 +40,12 @@
 #define CAMERA_OFFSET	(1.0f)				// •âŠÔ‚Ì‹–—e”ÍˆÍ’l
 #define CAMERA_VALUE	(10.0f)				// •âŠÔ‚Ì‘¬“x
 
-#define CAMERA_SHAKE_MAX		(3)				// ‰æ–Ê‚ª—h‚ê‚éÅ‘å’l
-#define CAMERA_SHAKE_INTERVAL	(2)				// ‰æ–Ê‚ª—h‚ê‚éŠÔŠu
+#define CAMERA_SHAKE_MAX		(1.5f)		// ‰æ–Ê‚ª—h‚ê‚éÅ‘å’l
+#define CAMERA_SHAKE_INTERVAL	(2)			// ‰æ–Ê‚ª—h‚ê‚éŠÔŠu
+
+#define CAMERA_MOVE_SPEED		(0.02f)		// ƒJƒƒ‰‚ª“®‚­ƒXƒs[ƒh
+#define CAMERA_DISTANCE			(50.0f)		// ’Ž‹“_‚©‚çƒJƒƒ‰‚Ü‚Å‚Ì‹——£
+//#define CAMERA_
 
 //*****************************************************************************
 // ƒOƒ[ƒoƒ‹•Ï”
@@ -51,6 +57,11 @@ static int				g_ViewPortType = TYPE_FULL_SCREEN;
 static BOOL				g_Shake;		// ‰æ–Ê—h‚ê‚ð‚·‚é‚©‚Ç‚¤‚©
 static int				g_ShakeCount;	// ‰æ–Ê‚ª—h‚ê‚éŽc‚èŽžŠÔ
 static XMFLOAT3			g_ShakePos;		// ‚Ç‚Ì‚­‚ç‚¢—h‚ç‚·‚©‚Ì‹——£‚ð•Û‘¶
+
+static BOOL				g_Move;			// 
+static float			g_Rot;			// ƒJƒƒ‰‚Ì‰ñ“]Šp“x
+
+static XMFLOAT3			g_pos = {0.0f , 15.0f , 25.0f};
 
 
 //=============================================================================
@@ -126,12 +137,26 @@ void UpdateCamera(void)
 	}
 	else
 	{
-		//SetCameraAT(pPlayer->pos);
+		SetCameraAT(pPlayer->pos);
 		g_Camera.pos = { POS_X_CAM, POS_Y_CAM, POS_Z_CAM };
 	}
 
+	if (g_Move)
+	{
+		g_Camera.pos.x = g_pos.x - sinf(g_Rot) * CAMERA_DISTANCE;
+		g_Camera.pos.z = g_pos.z - cosf(g_Rot) * CAMERA_DISTANCE;
+		g_Camera.pos.y = 30.0f;
+		g_Rot += CAMERA_MOVE_SPEED;
+	}
 
-
+	if (GetKeyboardPress(DIK_O))
+	{
+		g_Move = TRUE;
+	}
+	else
+	{
+		g_Move = FALSE;
+	}
 
 
 #ifdef _DEBUG
@@ -386,6 +411,10 @@ void SetCameraAT(XMFLOAT3 pos)
 		}
 
 
+	}
+	else if(g_Move)
+	{
+		g_Camera.at = g_pos;
 	}
 	else
 	{

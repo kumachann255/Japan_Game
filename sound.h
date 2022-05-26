@@ -36,3 +36,5 @@ void PlaySound(int label);
 void StopSound(int label);
 void StopSound(void);
 
+void SetMasterVolume(float volume);
+void SetSourceVolume(int label, float volume);
