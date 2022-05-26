@@ -33,16 +33,11 @@
 #define	MODEL_PLAYER_PARTS_NABE		"data/MODEL/nabe.obj"			// 読み込むモデル名
 
 
-
-
-
-
-
 #define	VALUE_MOVE			(2.0f)							// 移動量
 #define	VALUE_ROTATE		(XM_PI * 0.02f)					// 回転量
 
 #define PLAYER_SHADOW_SIZE	(1.0f)							// 影の大きさ
-#define PLAYER_OFFSET_Y		(7.0f)							// プレイヤーの足元をあわせる
+#define PLAYER_OFFSET_Y		(13.0f)							// プレイヤーの足元をあわせる
 
 #define PLAYER_PARTS_MAX	(8)								// プレイヤーのパーツの数
 
@@ -78,9 +73,9 @@ static char *g_ModelName[PLAYER_PARTS_MAX] = {
 //*****************************************************************************
 static INTERPOLATION_DATA car[] = {
 	// pos,								rot,						 scl,						 frame
-	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
-	{ XMFLOAT3(0.0f, 7.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
-	{ XMFLOAT3(0.0f, 7.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, PLAYER_OFFSET_Y, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, PLAYER_OFFSET_Y + 0.8f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
+	{ XMFLOAT3(0.0f, PLAYER_OFFSET_Y, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), 60 * 0.6f },
 
 
 };

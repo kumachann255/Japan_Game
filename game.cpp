@@ -505,9 +505,9 @@ void CheckHit(void)
 				enemy[i].isHit = TRUE;
 				enemy[i].hitTime = 15;
 
-				offsetX = RamdomFloat(0, 30.0f, -30.0f);
-				offsetY = RamdomFloat(0, 30.0f, ENEMY_OFFSET_Y);
-				offsetZ = RamdomFloat(0, -10.0f, -40.0f);
+				offsetX = RamdomFloat(0, 20.0f, -20.0f);
+				offsetY = RamdomFloat(0, 20.0f, ENEMY_OFFSET_Y);
+				offsetZ = RamdomFloat(0, -10.0f, -20.0f);
 
 				enemy[i].hitPos.x = blast[p].pos.x + offsetX;
 				enemy[i].hitPos.y = blast[p].pos.y + offsetY;
@@ -525,7 +525,7 @@ void CheckHit(void)
 		}
 	}
 
-	// 敵と爆破オブジェクト
+	// 敵(ヘリ)と爆破オブジェクト
 	for (int i = 0; i < MAX_ENEMY_HELI; i++)
 	{
 		//敵の有効フラグをチェックする
@@ -551,9 +551,9 @@ void CheckHit(void)
 				enemyHeli[i].isHit = TRUE;
 				enemyHeli[i].hitTime = 15;
 
-				offsetX = RamdomFloat(0, 30.0f, -30.0f);
-				offsetY = RamdomFloat(0, 30.0f, ENEMY_HELI_OFFSET_Y);
-				offsetZ = RamdomFloat(0, -10.0f, -40.0f);
+				offsetX = RamdomFloat(0, 5.0f, -5.0f);
+				offsetY = RamdomFloat(0, 5.0f, ENEMY_HELI_OFFSET_Y - 20.0f);
+				offsetZ = RamdomFloat(0, 0.0f, -5.0f);
 
 				enemyHeli[i].hitPos.x = blast[p].pos.x + offsetX;
 				enemyHeli[i].hitPos.y = blast[p].pos.y + offsetY;

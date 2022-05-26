@@ -12,17 +12,17 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define GO_WIDTH					(400.0f)	// キャラサイズ
-#define GO_HEIGHT					(400.0f)	// 
+#define GO_WIDTH					(450.0f)	// キャラサイズ
+#define GO_HEIGHT					(450.0f)	// 
 
-#define BOM_WIDTH					(250.0f)	// キャラサイズ
-#define BOM_HEIGHT					(250.0f)	// 
+#define BOM_WIDTH					(200.0f)	// キャラサイズ
+#define BOM_HEIGHT					(200.0f)	// 
 
 #define COMBO_WIDTH					(150.0f)	// キャラサイズ
 #define COMBO_HEIGHT				(150.0f)	// 
 
-#define DAMAGE_WIDTH				(350.0f)	// キャラサイズ
-#define DAMAGE_HEIGHT				(350.0f)	// 
+#define DAMAGE_WIDTH				(200.0f)	// キャラサイズ
+#define DAMAGE_HEIGHT				(200.0f)	// 
 
 #define TEXTURE_MAX					(9)		// テクスチャの数
 
@@ -289,8 +289,8 @@ void SetBomSpeech(void)
 
 			g_Speech[i].texNo = data + bam;
 
-			float x = RamdomFloat(1, SPEECH_BOM_X, -SPEECH_BOM_X);
-			float y = RamdomFloat(1, SPEECH_BOM_Y, -SPEECH_BOM_Y);
+			float x = RamdomFloat(1, SPEECH_BOM_X / 2, -SPEECH_BOM_X / 2);
+			float y = RamdomFloat(1, SPEECH_BOM_Y / 2, -SPEECH_BOM_Y / 2);
 
 			if (x > 0)
 			{
@@ -309,11 +309,6 @@ void SetBomSpeech(void)
 			{
 				g_Speech[i].pos.y = SCREEN_CENTER_Y - SPEECH_BOM_Y / 2 + x;
 			}
-
-
-
-			//g_Speech[i].pos.x = SCREEN_CENTER_X + RamdomFloat(1, SPEECH_RAND_MAX, -SPEECH_RAND_MAX);
-			//g_Speech[i].pos.y = SCREEN_CENTER_Y + RamdomFloat(1, SPEECH_RAND_MAX / 3.0f, -SPEECH_RAND_MAX / 3.0f);
 
 			return;
 		}

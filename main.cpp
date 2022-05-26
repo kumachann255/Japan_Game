@@ -67,7 +67,7 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 int	g_Mode = MODE_TITLE;					// 起動時の画面を設定
 
-int g_Stage = stage0;							// 現在のステージ
+int g_Stage = tutorial;							// 現在のステージ
 
 int g_Score[stage_max] = { 0, 0, 0, 0 };	// 各ステージのスコアを保存
 
