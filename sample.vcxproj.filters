@@ -38,6 +38,7 @@
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="logoD.cpp" />
     <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="endroll.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -77,5 +78,6 @@
     <ClInclude Include="logo.h" />
     <ClInclude Include="logoD.h" />
     <ClInclude Include="countdown.h" />
+    <ClInclude Include="endroll.h" />
   </ItemGroup>
 </Project>
