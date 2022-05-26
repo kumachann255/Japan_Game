@@ -38,6 +38,7 @@
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="logoD.cpp" />
     <ClCompile Include="countdown.cpp" />
+    <ClCompile Include="endroll.cpp" />
     <ClCompile Include="gameUI.cpp" />
     <ClCompile Include="speech.cpp" />
   </ItemGroup>
@@ -79,6 +80,7 @@
     <ClInclude Include="logo.h" />
     <ClInclude Include="logoD.h" />
     <ClInclude Include="countdown.h" />
+    <ClInclude Include="endroll.h" />
     <ClInclude Include="gameUI.h" />
     <ClInclude Include="speech.h" />
   </ItemGroup>

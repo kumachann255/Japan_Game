@@ -26,6 +26,7 @@
 #include "title.h"
 #include "game.h"
 #include "result.h"
+#include "endroll.h"
 #include "fade.h"
 
 #include "timeUI.h"
@@ -64,7 +65,7 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 #endif
 
-int	g_Mode = MODE_GAME;					// 起動時の画面を設定
+int	g_Mode = MODE_TITLE;					// 起動時の画面を設定
 
 int g_Stage = stage0;							// 現在のステージ
 
@@ -324,7 +325,7 @@ void Update(void)
 		break;
 
 	case MODE_ENDROLL:		// エンドロール画面の更新
-
+		UpdateEndroll();
 		break;
 	}
 
@@ -445,6 +446,13 @@ void Draw(void)
 		// Z比較なし
 		SetDepthEnable(FALSE);
 
+		// ライティングを無効
+		SetLightEnable(FALSE);
+
+		DrawEndroll();
+
+		// ライティングを有効に
+		SetLightEnable(TRUE);
 
 		// Z比較あり
 		SetDepthEnable(TRUE);
@@ -510,6 +518,9 @@ void SetMode(int mode)
 	// リザルト画面の終了処理
 	UninitResult();
 
+	// エンドロール画面の終了処理
+	UninitResult();
+
 
 	g_Mode = mode;	// 次のモードをセットしている
 
@@ -540,6 +551,11 @@ void SetMode(int mode)
 	case MODE_RESULT:
 		// リザルト画面の初期化
 		InitResult();
+		break;
+
+	case MODE_ENDROLL:
+		// エンドロール画面の初期化
+		InitEndroll();
 		break;
 
 		// ゲーム終了時の処理
