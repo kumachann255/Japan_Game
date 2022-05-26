@@ -36,6 +36,7 @@
 #include "combo.h"
 #include "playerHP.h"
 #include "gameUI.h"
+#include "speech.h"
 
 
 //*****************************************************************************
@@ -146,6 +147,9 @@ HRESULT InitGame(void)
 	// ダメージエフェクトの初期化
 	InitDamageEF();
 
+	// 吹き出しの初期化
+	InitSpeech();
+
 	// BGM再生
 	//PlaySound(SOUND_LABEL_BGM_sample001);
 
@@ -157,6 +161,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	// 吹き出しの終了処理
+	UninitSpeech();
+
 	// ダメージエフェクトの終了処理
 	UninitDamageEF();
 
@@ -306,6 +313,9 @@ void UpdateGame(void)
 
 	// ダメージエフェクトの更新処理
 	UpdateDamageEF();
+
+	// 吹き出しの更新処理
+	UpdateSpeech();
 }
 
 //=============================================================================
@@ -383,6 +393,9 @@ void DrawGame0(void)
 
 	// ダメージエフェクトの描画処理
 	DrawDamageEF();
+
+	// 吹き出しの描画処理
+	DrawSpeech();
 
 
 	// ライティングを有効に

@@ -8,6 +8,8 @@
 #include "renderer.h"
 #include "combo.h"
 #include "sprite.h"
+#include "speech.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -141,6 +143,9 @@ void UpdateCombo(void)
 		g_Combo++;
 		// コンボ数が増える音
 		// PlaySound(SOUND_LABEL_SE_shot000);
+
+		// 吹き出しを表示
+		SetComboSpeech();
 
 		SetComboMove();
 	}

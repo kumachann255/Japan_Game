@@ -21,6 +21,9 @@
 #define	VALUE_MOVE			(5.0f)						// ˆÚ“®—Ê
 #define	VALUE_ROTATE		(XM_PI * 0.02f)				// ‰ñ“]—Ê
 
+#define RANGE_ELEA_X		(160.0f)					// ”š’e‚ð“Š‚°‚ç‚ê‚é”ÍˆÍ
+#define RANGE_ELEA_Z_FLONT	(300.0f)					// ”š’e‚ð“Š‚°‚ç‚ê‚é”ÍˆÍ
+#define RANGE_ELEA_Z_BACK	(50.0f)					// ”š’e‚ð“Š‚°‚ç‚ê‚é”ÍˆÍ
 
 
 //*****************************************************************************
@@ -44,7 +47,7 @@ HRESULT InitAttackR(void)
 	LoadModel(MODEL_ATTACKRANGE, &g_AttackR.model);
 	g_AttackR.load = TRUE;
 
-	g_AttackR.pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	g_AttackR.pos = XMFLOAT3(0.0f, 0.0f, 60.0f);
 	g_AttackR.rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	g_AttackR.scl = XMFLOAT3(3.5f, 4.0f, 3.5f);
 
@@ -105,19 +108,19 @@ void UpdateAttackR(void)
 		// ˆÚ“®‚³‚¹‚¿‚á‚¤
 		if (GetKeyboardPress(DIK_A))
 		{	// ¶‚ÖˆÚ“®
-			g_AttackR.pos.x -= VALUE_MOVE;
+			if(g_AttackR.pos.x > -RANGE_ELEA_X) g_AttackR.pos.x -= VALUE_MOVE;
 		}
 		if (GetKeyboardPress(DIK_D))
 		{	// ‰E‚ÖˆÚ“®
-			g_AttackR.pos.x += VALUE_MOVE;
+			if(g_AttackR.pos.x < RANGE_ELEA_X) g_AttackR.pos.x += VALUE_MOVE;
 		}
 		if (GetKeyboardPress(DIK_W))
 		{	// ã‚ÖˆÚ“®
-			g_AttackR.pos.z += VALUE_MOVE;
+			if(g_AttackR.pos.z < RANGE_ELEA_Z_FLONT) g_AttackR.pos.z += VALUE_MOVE;
 		}
 		if (GetKeyboardPress(DIK_S))
 		{	// ‰º‚ÖˆÚ“®
-			g_AttackR.pos.z -= VALUE_MOVE;
+			if(g_AttackR.pos.z > RANGE_ELEA_Z_BACK) g_AttackR.pos.z -= VALUE_MOVE;
 		}
 
 	}
