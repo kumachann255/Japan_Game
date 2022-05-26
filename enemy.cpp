@@ -17,6 +17,7 @@
 #include "damageEF.h"
 #include "debugproc.h"
 #include "player.h"
+#include "fade.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -144,8 +145,32 @@ void UninitEnemy(void)
 //=============================================================================
 void UpdateEnemy(void)
 {
-	// pop処理
-	{
+	if (GetStage() == tutorial)
+	{	// チュートリアル様に1体出す
+		count++;
+
+		// 時間になったら1体出す
+		if (count == STAGE0_POP_COUNT)
+		{
+			SetEnemy();
+		}
+
+		// エネミーが倒されたら
+		if ((g_Enemy[0].use == FALSE) && (count > STAGE0_POP_COUNT))
+		{
+			// チュートリアル完了のテロップ表示
+
+
+			// Enterを押したらステージ遷移
+			if (GetKeyboardTrigger(DIK_RETURN))
+			{
+				SetStage(stage0);
+				SetFade(FADE_OUT, MODE_GAME);
+			}
+		}
+	}
+	else
+	{	// pop処理
 		count++;
 		int useCount = 0;
 

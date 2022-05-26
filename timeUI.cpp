@@ -87,7 +87,7 @@ HRESULT InitTime(void)
 	g_Use   = TRUE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 880.0f, 80.0f, 0.0f };
+	g_Pos   = { 500.0f, 60.0f, 0.0f };
 	g_TexNo = 0;
 
 	g_Time = 0;	// éûä‘ÇÃèâä˙âª

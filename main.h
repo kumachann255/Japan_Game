@@ -86,7 +86,8 @@ enum {
 	stage1,
 	stage2,
 	stage3,
-	stage4,
+	stage_max,
+	tutorial,
 };
 
 
@@ -104,3 +105,6 @@ int GetMode(void);
 float RamdomFloat(int digits, float max, float min);
 int GetStage(void);
 void SetStage(int stage);
+void SetMainScore(int score);
+int GetMainScore(int stage);
+void ResetMainScore(void);

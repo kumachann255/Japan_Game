@@ -69,6 +69,8 @@ int	g_Mode = MODE_TITLE;					// 起動時の画面を設定
 
 int g_Stage = stage0;							// 現在のステージ
 
+int g_Score[stage_max] = { 0, 0, 0, 0 };	// 各ステージのスコアを保存
+
 //=============================================================================
 // メイン関数
 //=============================================================================
@@ -622,4 +624,28 @@ int GetStage(void)
 void SetStage(int stage)
 {
 	g_Stage = stage;
+}
+
+
+// ステージごとにスコアを保存
+void SetMainScore(int score)
+{
+	g_Score[g_Stage] = score;
+}
+
+
+// スコアを取得
+int GetMainScore(int stage)
+{
+	return g_Score[stage];
+}
+
+
+// mainスコアを初期化
+void ResetMainScore(void)
+{
+	for (int i = 0; i < stage_max; i++)
+	{
+		g_Score[i] = 0;
+	}
 }

@@ -38,7 +38,11 @@
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="logoD.cpp" />
     <ClCompile Include="countdown.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="endroll.cpp" />
+=======
+    <ClCompile Include="gameUI.cpp" />
+>>>>>>> a7bc58104e9ad19549b5e57778bcbda795bae3fa
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="attackRange.h" />
@@ -78,6 +82,10 @@
     <ClInclude Include="logo.h" />
     <ClInclude Include="logoD.h" />
     <ClInclude Include="countdown.h" />
+<<<<<<< HEAD
     <ClInclude Include="endroll.h" />
+=======
+    <ClInclude Include="gameUI.h" />
+>>>>>>> a7bc58104e9ad19549b5e57778bcbda795bae3fa
   </ItemGroup>
 </Project>
