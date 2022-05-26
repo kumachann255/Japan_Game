@@ -250,7 +250,7 @@ void UpdateEnemy(void)
 		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
 			// 生存時間をカウント
-			g_Enemy[i].liveCount++;
+			if(GetStage() != tutorial) g_Enemy[i].liveCount++;
 
 			// 攻撃を食らっていなけらば攻撃処理
 			if (g_Enemy[i].isHit == FALSE)
