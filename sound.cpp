@@ -36,9 +36,10 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
 	// BGM
-	{ (char*)"data/BGM/sample000.wav", -1 },	// BGM0
-	{ (char*)"data/BGM/bgm_maoudamashii_neorock73.wav", -1 },	// BGM1
-	{ (char*)"data/BGM/sample001.wav", -1 },	// BGM2
+	{ (char*)"data/BGM/bgm_title.wav", -1 },	// タイトルBGM
+	{ (char*)"data/BGM/bgm_stage001.wav", -1 },	// ステージBGM1
+	{ (char*)"data/BGM/bgm_stage002.wav", -1 },	// ステージBGM2
+	{ (char*)"data/BGM/bgm_endroll.wav", -1 },	// エンドロールBGM
 
 	//// SE
 	{ (char*)"data/SE/booingSound01.wav", 0 },		// ブーイング音
@@ -211,7 +212,7 @@ BOOL InitSound(HWND hWnd)
 
 	}
 
-	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.1f);
+	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.0f);
 
 
 	return TRUE;

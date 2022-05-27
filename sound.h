@@ -14,9 +14,11 @@
 enum 
 {
 	// BGM
-	SOUND_LABEL_BGM_sample000,	// BGM0
-	SOUND_LABEL_BGM_sample001,	// BGM1
-	SOUND_LABEL_BGM_sample002,	// BGM2
+	SOUND_LABEL_BGM_bgm_title,		// タイトルBGM
+	SOUND_LABEL_BGM_bgm_stage001,	// ステージBGM1
+	SOUND_LABEL_BGM_bgm_stage002,	// ステージBGM2
+	SOUND_LABEL_BGM_bgm_endroll,	// エンドロールBGM
+
 
 	//// SE
 	SOUND_LABEL_SE_booingSound01,		// ブーイング音

@@ -324,6 +324,10 @@ void SetBomSpeech(void)
 // コンボ数が増えた時の吹き出し
 void SetComboSpeech(void)
 {
+	// SEの挿入
+	PlaySound(SOUND_LABEL_SE_shrinkingSound01);
+
+
 	// コンボの吹き出しをまず消す
 	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
@@ -361,6 +365,9 @@ void SetComboSpeech(void)
 // ダメージを受けた時の吹き出し
 void SetDamageSpeech(void)
 {
+	// SEの挿入（破壊されている段階でブーイングを入れる処理）
+	PlaySound(SOUND_LABEL_SE_booingSound01);
+
 	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
 		if (!g_Speech[i].use)

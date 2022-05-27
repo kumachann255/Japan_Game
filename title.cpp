@@ -121,7 +121,7 @@ HRESULT InitTitle(void)
 	exit_pos = XMFLOAT3(g_w / 2.7f, g_h - 40, 0.0f);
 
 	// BGM再生
-	PlaySound(SOUND_LABEL_BGM_sample000);
+	PlaySound(SOUND_LABEL_BGM_bgm_title);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -204,6 +204,10 @@ void UpdateTitle(void)
 	{
 		if (GetKeyboardTrigger(DIK_D) || GetKeyboardTrigger(DIK_A))
 		{// S/W押したら、選択を切り替える
+
+			// SEの挿入（切り替え音）
+			PlaySound(SOUND_LABEL_SE_titleClick02);
+
 			if (start_texno == 3)
 			{
 				start_texno--;
@@ -231,6 +235,10 @@ void UpdateTitle(void)
 
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{// Enter押したら、ステージを切り替える
+
+			// SEの挿入（モード選択音）
+			PlaySound(SOUND_LABEL_SE_titleClick01);
+
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
@@ -254,6 +262,10 @@ void UpdateTitle(void)
 		// ゲームパッドで入力処理
 		if (IsButtonTriggered(0, BUTTON_LEFT) || IsButtonTriggered(0, BUTTON_RIGHT))
 		{// S/W押したら、選択を切り替える
+
+			// SEの挿入（切り替え音）
+			PlaySound(SOUND_LABEL_SE_titleClick02);
+
 			if (start_texno == 3)
 			{
 				start_texno--;
@@ -270,6 +282,9 @@ void UpdateTitle(void)
 
 		else if (IsButtonTriggered(0, BUTTON_START))
 		{
+			// SEの挿入（モード選択音）
+			PlaySound(SOUND_LABEL_SE_titleClick01);
+
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
@@ -289,6 +304,9 @@ void UpdateTitle(void)
 		}
 		else if (IsButtonTriggered(0, BUTTON_B))
 		{
+			// SEの挿入（モード選択音）
+			PlaySound(SOUND_LABEL_SE_titleClick01);
+
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
