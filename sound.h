@@ -56,3 +56,5 @@ void StopSound(int label);
 void StopSound(void);
 void SetSouceVoice(int label, float volume);
 
+void SetMasterVolume(float volume);
+void SetSourceVolume(int label, float volume);
