@@ -250,7 +250,7 @@ void UpdateEnemy(void)
 		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
 			// 生存時間をカウント
-			g_Enemy[i].liveCount++;
+			if(GetStage() != tutorial) g_Enemy[i].liveCount++;
 
 			// 攻撃を食らっていなけらば攻撃処理
 			if (g_Enemy[i].isHit == FALSE)
@@ -524,9 +524,11 @@ void SetEnemy(void)
 
 			// x座標はランダム
 			g_Enemy[i].pos.x = (float)(rand() % ENEMY_POP_X) - ((float)ENEMY_POP_X / 2.0f);
+			if (GetStage() == tutorial) g_Enemy[i].pos.x = 0.0f;
 
 			// 到達地点もランダム
 			g_Enemy[i].zGoal = (float)(rand() % ENEMY_GOAL_Z_OFFSET) + ENEMY_GOAL_Z;
+			if (GetStage() == tutorial) g_Enemy[i].zGoal = 150.0f;
 
 			g_Enemy[i].liveCount = 0;
 

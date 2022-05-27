@@ -4,6 +4,7 @@
 //
 //=============================================================================
 #include "sound.h"
+#include <DirectXMath.h>
 
 //*****************************************************************************
 // パラメータ構造体定義
@@ -25,6 +26,8 @@ HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwB
 //*****************************************************************************
 IXAudio2 *g_pXAudio2 = NULL;								// XAudio2オブジェクトへのインターフェイス
 IXAudio2MasteringVoice *g_pMasteringVoice = NULL;			// マスターボイス
+IXAudio2SubmixVoice *g_apSubmixVoice;						// サブミックスボイス
+
 IXAudio2SourceVoice *g_apSourceVoice[SOUND_LABEL_MAX] = {};	// ソースボイス
 BYTE *g_apDataAudio[SOUND_LABEL_MAX] = {};					// オーディオデータ
 DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
@@ -83,6 +86,14 @@ BOOL InitSound(HWND hWnd)
 		// COMライブラリの終了処理
 		CoUninitialize();
 
+		return FALSE;
+	}
+
+	// サブミックスボイスの生成
+	hr = g_pXAudio2->CreateSubmixVoice(&g_apSubmixVoice, 2, 44800);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "サブミックスの生成に失敗！", "警告！", MB_ICONWARNING);
 		return FALSE;
 	}
 
@@ -233,12 +244,12 @@ void PlaySound(int label)
 	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
 	buffer.AudioBytes = g_aSizeAudio[label];
 	buffer.pAudioData = g_apDataAudio[label];
-	buffer.Flags      = XAUDIO2_END_OF_STREAM;
-	buffer.LoopCount  = g_aParam[label].nCntLoop;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	buffer.LoopCount = g_aParam[label].nCntLoop;
 
 	// 状態取得
 	g_apSourceVoice[label]->GetState(&xa2state);
-	if(xa2state.BuffersQueued != 0)
+	if (xa2state.BuffersQueued != 0)
 	{// 再生中
 		// 一時停止
 		g_apSourceVoice[label]->Stop(0);
@@ -246,6 +257,11 @@ void PlaySound(int label)
 		// オーディオバッファの削除
 		g_apSourceVoice[label]->FlushSourceBuffers();
 	}
+
+	// ソースボイスの出力をサブミックスボイスに切り替え
+	XAUDIO2_SEND_DESCRIPTOR send = { 0, g_apSubmixVoice };
+	XAUDIO2_VOICE_SENDS sendlist = { 1, &send };
+	g_apSourceVoice[label]->SetOutputVoices(&sendlist);
 
 	// オーディオバッファの登録
 	g_apSourceVoice[label]->SubmitSourceBuffer(&buffer);
@@ -376,5 +392,22 @@ HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwB
 	}
 	
 	return S_OK;
+}
+
+
+// マスターボイスの音量調節(0.0f ~ 1.0fで調整)
+void SetMasterVolume(float volume)
+{
+	volume *= volume;
+	g_pMasteringVoice->SetVolume(volume);
+	return;
+}
+
+
+// ソースボイスの音量調整(0.0f ~ 1.0fで調整)
+void SetSourceVolume(int label, float volume)
+{
+	g_apSourceVoice[label]->SetVolume(volume);
+	return;
 }
 
