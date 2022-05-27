@@ -36,6 +36,7 @@
 #include "combo.h"
 #include "playerHP.h"
 #include "gameUI.h"
+#include "speech.h"
 
 
 //*****************************************************************************
@@ -68,6 +69,8 @@ HRESULT InitGame(void)
 
 	// フィールドの初期化
 	InitMeshField(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 7, 700.0f, 400.0f);
+	//InitMeshField(XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 1, 5000.0f, 5000.0f);
+
 	InitMeshField2(XMFLOAT3(0.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), 1, 2, 2000.0f, 2000.0f);
 
 	// ライトを有効化	// 影の初期化処理
@@ -144,6 +147,9 @@ HRESULT InitGame(void)
 	// ダメージエフェクトの初期化
 	InitDamageEF();
 
+	// 吹き出しの初期化
+	InitSpeech();
+
 	// BGM再生
 	//PlaySound(SOUND_LABEL_BGM_sample001);
 
@@ -155,6 +161,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	// 吹き出しの終了処理
+	UninitSpeech();
+
 	// ダメージエフェクトの終了処理
 	UninitDamageEF();
 
@@ -304,6 +313,9 @@ void UpdateGame(void)
 
 	// ダメージエフェクトの更新処理
 	UpdateDamageEF();
+
+	// 吹き出しの更新処理
+	UpdateSpeech();
 }
 
 //=============================================================================
@@ -381,6 +393,9 @@ void DrawGame0(void)
 
 	// ダメージエフェクトの描画処理
 	DrawDamageEF();
+
+	// 吹き出しの描画処理
+	DrawSpeech();
 
 
 	// ライティングを有効に

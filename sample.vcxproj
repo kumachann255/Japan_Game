@@ -144,6 +144,7 @@
     <ClInclude Include="countdown.h" />
     <ClInclude Include="damageEF.h" />
     <ClInclude Include="debugproc.h" />
+    <ClInclude Include="endroll.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemyHeli.h" />
     <ClInclude Include="fade.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="shadow.h" />
     <ClInclude Include="sky.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="speech.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="timeUI.h" />
     <ClInclude Include="title.h" />
@@ -184,6 +186,7 @@
     <ClCompile Include="countdown.cpp" />
     <ClCompile Include="damageEF.cpp" />
     <ClCompile Include="debugproc.cpp" />
+    <ClCompile Include="endroll.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemyHeli.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -209,6 +212,7 @@
     <ClCompile Include="shadow.cpp" />
     <ClCompile Include="sky.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="speech.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="timeUI.cpp" />
     <ClCompile Include="title.cpp" />

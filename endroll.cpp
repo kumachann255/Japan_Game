@@ -1,29 +1,26 @@
 //=============================================================================
 //
-// スコア処理 [score.cpp]
-// Author : 
+// エンドロール画面処理 [endroll.cpp]
+// Author :
 //
 //=============================================================================
 #include "main.h"
 #include "renderer.h"
-#include "score.h"
+#include "endroll.h"
+#include "input.h"
+#include "fade.h"
+#include "sound.h"
 #include "sprite.h"
-#include "gameUI.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(40)	// キャラサイズ
-#define TEXTURE_HEIGHT				(80)	// 
-
-#define TEXTURE1_WIDTH				(26)	// キャラサイズ
-#define TEXTURE1_HEIGHT				(46)	// 
-
-#define BORDER_OFFSET_X				(0.0f)	// x座標の調整
-#define BORDER_OFFSET_Y				(70.0f)	// y座標の調整
-
-#define TEXTURE_MAX					(1)		// テクスチャの数
-
+#define TEXTURE_WIDTH				(SCREEN_WIDTH)	// 背景サイズ
+#define TEXTURE_HEIGHT				(3445)			// 
+#define TEXTURE_MAX					(1)				// テクスチャの数
+#define START_ROLL					(80)			// スクロール開始
+#define STOP_ROLL					(230)			// スクロール停止
+#define SPEED_ROLL					(1.5f)			// スクロールの速度
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -37,7 +34,7 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/time0.png",
+	"data/TEXTURE/ending.png",
 };
 
 
@@ -46,15 +43,17 @@ static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
 static int						g_TexNo;					// テクスチャ番号
 
-static int						g_Score;					// スコア
+static float					startPosY, endPosY;			// 文字がスクロールし始めた時の位置, スクロール終わった後の位置
+static float					g_offset;					// 画像の移動量
+static int						endTime;					// タイトルモードへの自動遷移を管理
+static int						startTime;					// スクロール開始時間
 
-static BOOL						g_Load = FALSE;
-
+static BOOL						g_Load = FALSE;	
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitScore(void)
+HRESULT InitEndroll(void)
 {
 	ID3D11Device *pDevice = GetDevice();
 
@@ -81,15 +80,24 @@ HRESULT InitScore(void)
 	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
 
 
-	// プレイヤーの初期化
+	// 変数の初期化
 	g_Use   = TRUE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 930.0f, 50.0f, 0.0f };
+	g_Pos   = { 0.0f, 0.0f, 0.0f };
 	g_TexNo = 0;
 
-	g_Score = 0;	// スコアの初期化
+	startPosY = g_Pos.y;
+	endPosY = (float)(0.0f - (TEXTURE_HEIGHT - SCREEN_HEIGHT));
+	g_offset = SPEED_ROLL;
 
+	startTime = 0;
+	endTime = 0;
+
+
+	// BGM再生
+	//PlaySound(SOUND_LABEL_BGM_ending);
+	
 	g_Load = TRUE;
 	return S_OK;
 }
@@ -97,7 +105,7 @@ HRESULT InitScore(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void UninitScore(void)
+void UninitEndroll(void)
 {
 	if (g_Load == FALSE) return;
 
@@ -122,22 +130,59 @@ void UninitScore(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void UpdateScore(void)
+void UpdateEndroll(void)
 {
-	SetMainScore(g_Score);
+	startTime++;
 
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//char *str = GetDebugStr();
-	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
+	if (startTime > START_ROLL)
+	{
+		//文字をスクロールさせる処理
+		startPosY -= g_offset;
+
+		if (startPosY < endPosY)
+		{
+			startPosY = endPosY;
+		}
+
+		if (startPosY == endPosY)
+		{
+			endTime++;
+
+			if (endTime > STOP_ROLL)
+			{
+				SetFade(FADE_OUT, MODE_TITLE);
+				startTime = 0;
+				endTime = 0;
+			}
+		}
+	}
+
+
+
+
+	// スキップ処理
+	if (GetKeyboardTrigger(DIK_RETURN))
+	{// Enter押したら、ステージを切り替える
+		SetFade(FADE_OUT, MODE_TITLE);
+	}
+	// ゲームパッドで入力処理
+	else if (IsButtonTriggered(0, BUTTON_START))
+	{
+		SetFade(FADE_OUT, MODE_TITLE);
+	}
+	else if (IsButtonTriggered(0, BUTTON_B))
+	{
+		SetFade(FADE_OUT, MODE_TITLE);
+	}
+
 	
-#endif
 
 }
 
 //=============================================================================
 // 描画処理
 //=============================================================================
-void DrawScore(void)
+void DrawEndroll(void)
 {
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -156,87 +201,19 @@ void DrawScore(void)
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
 
-	// テクスチャ設定
-	GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
 
-	// 桁数分処理する
-	int number = g_Score;
-	for (int i = 0; i < SCORE_DIGIT; i++)
+	// リザルトの背景を描画
 	{
-		// 今回表示する桁の数字
-		float x = (float)(number % 10);
-
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - g_w*i;	// スコアの表示位置X
-		float py = g_Pos.y;			// スコアの表示位置Y
-		float pw = g_w;				// スコアの表示幅
-		float ph = g_h;				// スコアの表示高さ
-
-		float tw = 1.0f / 10;		// テクスチャの幅
-		float th = 1.0f / 1;		// テクスチャの高さ
-		float tx = x * tw;			// テクスチャの左上X座標
-		float ty = 0.0f;			// テクスチャの左上Y座標
+		// テクスチャ設定
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[0]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		SetSpriteColor(g_VertexBuffer, px, py, pw, ph, tx, ty, tw, th,
-			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+		SetSpriteLeftTop(g_VertexBuffer, g_Pos.x, startPosY, g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f);
 
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
-
-		// 次の桁へ
-		number /= 10;
-	}
-
-	// 桁数分処理する
-	number = GetBorderScore();
-	for (int i = 0; i < SCORE_DIGIT; i++)
-	{
-		// 今回表示する桁の数字
-		float x = (float)(number % 10);
-
-		// スコアの位置やテクスチャー座標を反映
-		float px = g_Pos.x - TEXTURE1_WIDTH * i + BORDER_OFFSET_X;	// スコアの表示位置X
-		float py = g_Pos.y + BORDER_OFFSET_Y;			// スコアの表示位置Y
-		float pw = TEXTURE1_WIDTH;	// スコアの表示幅
-		float ph = TEXTURE1_HEIGHT;	// スコアの表示高さ
-
-		float tw = 1.0f / 10;		// テクスチャの幅
-		float th = 1.0f / 1;		// テクスチャの高さ
-		float tx = x * tw;			// テクスチャの左上X座標
-		float ty = 0.0f;			// テクスチャの左上Y座標
-
-		// １枚のポリゴンの頂texBuffer, px, py, pw, ph, tx, ty, tw, th,
-		SetSpriteColor(g_VertexBuffer, px, py, pw, ph, tx, ty, tw, th,
-			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-
-		// ポリゴン描画
-		GetDeviceContext()->Draw(4, 0);
-
-		// 次の桁へ
-		number /= 10;
 	}
 
 }
 
-
-//=============================================================================
-// スコアを加算する
-// 引数:add :追加する点数。マイナスも可能
-//=============================================================================
-void AddScore(int add)
-{
-	g_Score += add;
-	if (g_Score > SCORE_MAX)
-	{
-		g_Score = SCORE_MAX;
-	}
-
-}
-
-
-int GetScore(void)
-{
-	return g_Score;
-}
 

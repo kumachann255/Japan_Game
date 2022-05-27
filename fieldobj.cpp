@@ -25,13 +25,13 @@
 
 #define	VALUE_ROTATE			(XM_PI * 0.02f)				// 回転量
 
-#define FOBJ_X					(390.0f)					// 横に置く場所
-#define FOBJ_X_HOUSE			(350.0f)					// 横に置く場所(家の場合
+#define FOBJ_X					(430.0f)					// 横に置く場所
+#define FOBJ_X_HOUSE			(400.0f)					// 横に置く場所(家の場合
 #define FOBJ_X_GUAD				(180.0f)					// 横に置く場所(ガードレールの場合
 #define FOBJ_X_POLE				(210.0f)					// 横に置く場所(電柱の場合
 #define FOBJ_X_SIGN				(210.0f)					// 横に置く場所(電柱の場合
-#define FOBF_Z_MAX				(2500.0f)					// オブジェクトを消すz座標
-#define FOBF_Z_START			(0.0f)						// オブジェクトを出すz座標
+#define FOBF_Z_MAX				(2000.0f)					// オブジェクトを消すz座標
+#define FOBF_Z_START			(-500.0f)					// オブジェクトを出すz座標
 #define FOBJ_Y					(50)						// 高さの調整(ランダム限界)
 #define FOBJ_Y_Pole				(70)						// 電柱の高さの調整
 #define FOBJ_Y_SIGN				(10)						// 看板の高さの調整
@@ -86,7 +86,7 @@ HRESULT InitTree(void)
 		g_Bilding[i].load = TRUE;
 		g_Bilding[i].pos = XMFLOAT3(-370.0f, 0.0f, 0.0f);
 		g_Bilding[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
-		g_Bilding[i].scl = XMFLOAT3(10.0f, 10.0f, 10.0f);
+		g_Bilding[i].scl = XMFLOAT3(18.0f, 18.0f, 18.0f);
 		g_Bilding[i].use = FALSE;			// TRUE:生きてる
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Bilding[i].model, &g_Bilding[i].diffuse[0]);
@@ -97,7 +97,7 @@ HRESULT InitTree(void)
 		g_House[i].load = TRUE;
 		g_House[i].pos = XMFLOAT3(-370.0f, 0.0f, 0.0f);
 		g_House[i].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
-		g_House[i].scl = XMFLOAT3(10.0f, 10.0f, 10.0f);
+		g_House[i].scl = XMFLOAT3(11.0f, 11.0f, 11.0f);
 		g_House[i].use = FALSE;			// TRUE:生きてる
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_House[i].model, &g_House[i].diffuse[0]);
@@ -153,7 +153,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_Bilding[i].use = TRUE;
-		g_Bilding[i].pos = XMFLOAT3(-FOBJ_X_HOUSE, 0.0f, FOBJ_DISTANCE * i);
+		g_Bilding[i].pos = XMFLOAT3(-FOBJ_X_HOUSE, 0.0f, FOBF_Z_START + FOBJ_DISTANCE * i);
 		g_Bilding[i].rot = XMFLOAT3(0.0f, -1.57f, 0.0f);
 	}
 
@@ -161,7 +161,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_House[i].use = TRUE;
-		g_House[i].pos = XMFLOAT3(-FOBJ_X_HOUSE, 0.0f, FOBJ_DISTANCE * i + FOBJ_DISTANCE / 2.0f);
+		g_House[i].pos = XMFLOAT3(-FOBJ_X_HOUSE, 0.0f, FOBF_Z_START + FOBJ_DISTANCE * i + FOBJ_DISTANCE / 2.0f);
 		g_House[i].rot = XMFLOAT3(0.0f, -1.57f, 0.0f);
 
 	}
@@ -170,7 +170,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 25; i++)
 	{
 		g_Guardrail[i].use = TRUE;
-		g_Guardrail[i].pos = XMFLOAT3(-FOBJ_X_GUAD, 0.0f, FOBJ_DISTANCE_GUAD * i);
+		g_Guardrail[i].pos = XMFLOAT3(-FOBJ_X_GUAD, 0.0f, FOBF_Z_START + FOBJ_DISTANCE_GUAD * i);
 		g_Guardrail[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
 
 	}
@@ -179,7 +179,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_Pole[i].use = TRUE;
-		g_Pole[i].pos = XMFLOAT3(-FOBJ_X_POLE, FOBJ_Y_Pole, FOBJ_DISTANCE * i);
+		g_Pole[i].pos = XMFLOAT3(-FOBJ_X_POLE, FOBJ_Y_Pole, FOBF_Z_START + FOBJ_DISTANCE * i);
 		g_Pole[i].rot = XMFLOAT3(0.0f, 3.14f, 0.0f);
 
 	}
@@ -188,7 +188,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 2; i++)
 	{
 		g_Sign1[i].use = TRUE;
-		g_Sign1[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBJ_DISTANCE_SIGN * (i + 1) - FOBJ_DISTANCE_SIGN / 2.0f);
+		g_Sign1[i].pos = XMFLOAT3(-FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBF_Z_START + FOBJ_DISTANCE_SIGN * (i + 1) - FOBJ_DISTANCE_SIGN / 2.0f);
 		g_Sign1[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	}
@@ -199,7 +199,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_Bilding[i + 5].use = TRUE;
-		g_Bilding[i + 5].pos = XMFLOAT3(FOBJ_X_HOUSE, 0.0f, FOBJ_DISTANCE * i + FOBJ_DISTANCE / 2.0f);
+		g_Bilding[i + 5].pos = XMFLOAT3(FOBJ_X_HOUSE, 0.0f, FOBF_Z_START + FOBJ_DISTANCE * i + FOBJ_DISTANCE / 2.0f);
 		g_Bilding[i + 5].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 	}
 
@@ -207,7 +207,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_House[i + 5].use = TRUE;
-		g_House[i + 5].pos = XMFLOAT3(FOBJ_X_HOUSE, 0.0f, FOBJ_DISTANCE * i);
+		g_House[i + 5].pos = XMFLOAT3(FOBJ_X_HOUSE, 0.0f, FOBF_Z_START + FOBJ_DISTANCE * i);
 		g_House[i + 5].rot = XMFLOAT3(0.0f, 1.57f, 0.0f);
 
 	}
@@ -216,7 +216,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 25; i++)
 	{
 		g_Guardrail[i + 25].use = TRUE;
-		g_Guardrail[i + 25].pos = XMFLOAT3(FOBJ_X_GUAD, 0.0f, FOBJ_DISTANCE_GUAD * i);
+		g_Guardrail[i + 25].pos = XMFLOAT3(FOBJ_X_GUAD, 0.0f, FOBF_Z_START + FOBJ_DISTANCE_GUAD * i);
 		g_Guardrail[i + 25].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	}
@@ -225,7 +225,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 5; i++)
 	{
 		g_Pole[i + 5].use = TRUE;
-		g_Pole[i + 5].pos = XMFLOAT3(FOBJ_X_POLE, FOBJ_Y_Pole, FOBJ_DISTANCE * i);
+		g_Pole[i + 5].pos = XMFLOAT3(FOBJ_X_POLE, FOBJ_Y_Pole, FOBF_Z_START + FOBJ_DISTANCE * i);
 		g_Pole[i + 5].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	}
@@ -234,7 +234,7 @@ HRESULT InitTree(void)
 	for (int i = 0; i < 2; i++)
 	{
 		g_Sign0[i].use = TRUE;
-		g_Sign0[i].pos = XMFLOAT3(FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBJ_DISTANCE_SIGN * (i + 1));
+		g_Sign0[i].pos = XMFLOAT3(FOBJ_X_SIGN, FOBJ_Y_SIGN, FOBF_Z_START + FOBJ_DISTANCE_SIGN * (i + 1));
 		g_Sign0[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	}
