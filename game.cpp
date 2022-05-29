@@ -151,7 +151,11 @@ HRESULT InitGame(void)
 	InitSpeech();
 
 	// BGM再生
-	//PlaySound(SOUND_LABEL_BGM_sample001);
+	PlaySound(SOUND_LABEL_BGM_bgm_stage001);
+
+	// 連続再生のSEを再生
+	PlaySound(SOUND_LABEL_SE_stirringSound01);
+
 
 	return S_OK;
 }

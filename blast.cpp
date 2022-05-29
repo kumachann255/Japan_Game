@@ -15,6 +15,8 @@
 #include "meshfield.h"
 #include "speech.h"
 
+#include "sound.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -353,6 +355,9 @@ void SetBlast(XMFLOAT3 pos)
 	{
 		if (g_Blast[i].use == FALSE)
 		{
+			// SEのセット
+			PlaySound(SOUND_LABEL_SE_stickingSound01);
+
 			g_Blast[i].use = TRUE;
 			g_Blast[i].move = FALSE;
 			g_Blast[i].shrink = FALSE;
