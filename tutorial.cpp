@@ -9,6 +9,8 @@
 #include "tutorial.h"
 #include "sprite.h"
 #include "score.h"
+#include "input.h"
+#include "fade.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -16,9 +18,9 @@
 #define TEXTURE_WIDTH				(330.0f)	// ƒLƒƒƒ‰ƒTƒCƒY
 #define TEXTURE_HEIGHT				(120.0f)	// 
 
-#define TEXTURE_MAX					(9)			// ƒeƒNƒXƒ`ƒƒ‚Ì”
+#define TEXTURE_MAX					(10)			// ƒeƒNƒXƒ`ƒƒ‚Ì”
 
-
+#define TEXTURE_OFFSET_Y			(50.0f)		// •\¦ˆÊ’u’²®
 
 //*****************************************************************************
 // ƒvƒƒgƒ^ƒCƒvéŒ¾
@@ -33,249 +35,205 @@ static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// ƒeƒNƒXƒ`ƒ
 
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/hoetouse_ui.png",
-	"data/TEXTURE/score_00.png",
-	"data/TEXTURE/score_01.png",
-	"data/TEXTURE/partypeople_down.png",
-	"data/TEXTURE/partypeople_up.png",
-	"data/TEXTURE/partypeople_right.png",
-	"data/TEXTURE/partypeople_down.png",
-	"data/TEXTURE/partypeople_up.png",
-	"data/TEXTURE/partypeople_right.png",
+	"data/TEXTURE/tutorial00.png",
+	"data/TEXTURE/tutorial01.png",
+	"data/TEXTURE/tutorial02.png",
+	"data/TEXTURE/tutorial03.png",
+	"data/TEXTURE/tutorial04.png",
+	"data/TEXTURE/tutorial05.png",
+	"data/TEXTURE/tutorial06.png",
+	"data/TEXTURE/tutorial07.png",
+	"data/TEXTURE/tutorial08.png",
 };
 
-static TUTORIAL					g_Tutorial[TEXTURE_MAX];	// 
+enum {
+	tutorial00,
+	tutorial01,
+	tutorial02,
+	tutorial03,
+	tutorial04,
+	tutorial05,
+	tutorial06,
+	tutorial07,
+	tutorial08,
+};
 
-static int						g_Score;					// ƒXƒRƒA
-
-static BOOL						g_Border;					// –Ú•WƒXƒRƒA‚ğ’´‚¦‚Ä‚¢‚é‚©‚Ç‚¤‚©
-static int						g_BorderScore;				// –Ú•WƒXƒRƒA
+static TUTORIAL					g_Tutorial[2];	// 0F­‚µ‚­‚ç‚¢”wŒi@1FƒeƒLƒXƒg
 
 static float					g_time;
+
+static BOOL						g_EnemyDead;
 
 static BOOL						g_Load = FALSE;
 
 
-////=============================================================================
-//// ‰Šú‰»ˆ—
-////=============================================================================
-//HRESULT InitGameUI(void)
-//{
-//	ID3D11Device *pDevice = GetDevice();
-//
-//	//ƒeƒNƒXƒ`ƒƒ¶¬
-//	for (int i = 0; i < TEXTURE_MAX; i++)
-//	{
-//		g_Texture[i] = NULL;
-//		D3DX11CreateShaderResourceViewFromFile(GetDevice(),
-//			g_TexturName[i],
-//			NULL,
-//			NULL,
-//			&g_Texture[i],
-//			NULL);
-//	}
-//
-//
-//	// ’¸“_ƒoƒbƒtƒ@¶¬
-//	D3D11_BUFFER_DESC bd;
-//	ZeroMemory(&bd, sizeof(bd));
-//	bd.Usage = D3D11_USAGE_DYNAMIC;
-//	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
-//	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-//	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-//	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
-//
-//
-//	// ‰Šú‰»
-//	for (int i = 0; i < TEXTURE_MAX; i++)
-//	{
-//		g_UI[i].use = TRUE;
-//		g_UI[i].texNo = i;
-//
-//		// ‚¨j‚¢ƒeƒNƒXƒ`ƒƒ‚ÍÅ‰”ñ•\¦
-//		if (i >= under)
-//		{
-//			g_UI[i].use = FALSE;
-//			g_UI[i].pos = { SCREEN_WIDTH / 2 ,SCREEN_HEIGHT / 2 , 0.0f };
-//			g_UI[i].w = SCREEN_WIDTH;
-//			g_UI[i].h = SCREEN_HEIGHT;
-//		}
-//
-//		switch (i)
-//		{
-//		case HowTo:
-//			g_UI[i].pos = { 170.0f , 480.0f , 0.0f };
-//			g_UI[i].w = HOWTO_WIDTH;
-//			g_UI[i].h = HOWTO_HEIGHT;
-//
-//			break;
-//
-//		case score0:
-//			g_UI[i].pos = { 700.0f , 50.0f , 0.0f };
-//			g_UI[i].w = SCORE0_WIDTH;
-//			g_UI[i].h = SCORE0_HEIGHT;
-//
-//			break;
-//
-//		case score1:
-//			g_UI[i].pos = { 750.0f , 120.0f , 0.0f };
-//			g_UI[i].w = SCORE1_WIDTH;
-//			g_UI[i].h = SCORE1_HEIGHT;
-//
-//			break;
-//
-//		}
-//	}
-//
-//
-//	// –Ú•WƒXƒRƒA‚Ì‰Šú‰»
-//	switch (GetStage())
-//	{
-//	case stage0:
-//	case tutorial:
-//		g_BorderScore = SCORE_STAGE0_BORDER;
-//
-//		break;
-//
-//	case stage1:
-//		g_BorderScore = SCORE_STAGE1_BORDER;
-//
-//		break;
-//
-//	case stage2:
-//		g_BorderScore = SCORE_STAGE2_BORDER;
-//
-//		break;
-//
-//	case stage3:
-//		g_BorderScore = SCORE_STAGE3_BORDER;
-//
-//		break;
-//
-//	}
-//
-//
-//	g_Score = 0;	// ƒXƒRƒA‚Ì‰Šú‰»
-//	g_time = 0.0f;
-//	g_Border = FALSE;
-//
-//	g_Load = TRUE;
-//	return S_OK;
-//}
-//
-////=============================================================================
-//// I—¹ˆ—
-////=============================================================================
-//void UninitGameUI(void)
-//{
-//	if (g_Load == FALSE) return;
-//
-//	if (g_VertexBuffer)
-//	{
-//		g_VertexBuffer->Release();
-//		g_VertexBuffer = NULL;
-//	}
-//
-//	for (int i = 0; i < TEXTURE_MAX; i++)
-//	{
-//		if (g_Texture[i])
-//		{
-//			g_Texture[i]->Release();
-//			g_Texture[i] = NULL;
-//		}
-//	}
-//
-//	g_Load = FALSE;
-//}
-//
-////=============================================================================
-//// XVˆ—
-////=============================================================================
-//void UpdateGameUI(void)
-//{
-//	// –Ú•WƒXƒRƒA‚ğ’´‚¦‚½‚ç‚¨j‚¢ƒeƒNƒXƒ`ƒƒ‚ğ•\¦
-//	if (g_BorderScore <= GetScore())
-//	{
-//		for (int i = under; i < under + 3; i++)
-//		{
-//			g_UI[i].use = TRUE;
-//		}
-//	}
-//
-//	// ‚¨j‚¢ƒeƒNƒXƒ`ƒƒ‚Ìˆ—
-//	for (int i = under; i < under + 3; i++)
-//	{
-//		switch (i)
-//		{
-//		case under:
-//			g_UI[i].pos.y = SCREEN_HEIGHT / 2 + (cosf(g_time) * MOVE_VOLUME) + MOVE_VOLUME;
-//
-//			break;
-//
-//		case up:
-//			g_UI[i].pos.y = SCREEN_HEIGHT / 2 - (cosf(g_time) * MOVE_VOLUME) - MOVE_VOLUME;
-//
-//			break;
-//
-//		case right:
-//			g_UI[i].pos.x = SCREEN_WIDTH / 2 - (sinf(g_time) * MOVE_VOLUME) + MOVE_VOLUME;
-//			break;
-//		}
-//	}
-//
-//	g_time += MOVE_SPEED;
-//
-//
-//
-//#ifdef _DEBUG	// ƒfƒoƒbƒOî•ñ‚ğ•\¦‚·‚é
-//	//char *str = GetDebugStr();
-//	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
-//	
-//#endif
-//
-//}
-//
-////=============================================================================
-//// •`‰æˆ—
-////=============================================================================
-//void DrawGameUI(void)
-//{
-//	// ’¸“_ƒoƒbƒtƒ@İ’è
-//	UINT stride = sizeof(VERTEX_3D);
-//	UINT offset = 0;
-//	GetDeviceContext()->IASetVertexBuffers(0, 1, &g_VertexBuffer, &stride, &offset);
-//
-//	// ƒ}ƒgƒŠƒNƒXİ’è
-//	SetWorldViewProjection2D();
-//
-//	// ƒvƒŠƒ~ƒeƒBƒuƒgƒ|ƒƒWİ’è
-//	GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-//
-//	// ƒ}ƒeƒŠƒAƒ‹İ’è
-//	MATERIAL material;
-//	ZeroMemory(&material, sizeof(material));
-//	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-//	SetMaterial(material);
-//
-//	for (int i = 0; i < TEXTURE_MAX; i++)
-//	{
-//		if (!g_UI[i].use) continue;
-//
-//		// ƒeƒNƒXƒ`ƒƒİ’è
-//		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[i]);
-//
-//		// ‚P–‡‚Ìƒ|ƒŠƒSƒ“‚Ì’¸“_‚ÆƒeƒNƒXƒ`ƒƒÀ•W‚ğİ’è
-//		SetSprite(g_VertexBuffer, g_UI[i].pos.x, g_UI[i].pos.y, g_UI[i].w, g_UI[i].h, 0.0f, 0.0f, 1.0f, 1.0f);
-//
-//		// ƒ|ƒŠƒSƒ“•`‰æ
-//		GetDeviceContext()->Draw(4, 0);
-//	}
-//}
+//=============================================================================
+// ‰Šú‰»ˆ—
+//=============================================================================
+HRESULT InitTutorial(void)
+{
+	ID3D11Device *pDevice = GetDevice();
+
+	//ƒeƒNƒXƒ`ƒƒ¶¬
+	for (int i = 0; i < TEXTURE_MAX; i++)
+	{
+		g_Texture[i] = NULL;
+		D3DX11CreateShaderResourceViewFromFile(GetDevice(),
+			g_TexturName[i],
+			NULL,
+			NULL,
+			&g_Texture[i],
+			NULL);
+	}
 
 
+	// ’¸“_ƒoƒbƒtƒ@¶¬
+	D3D11_BUFFER_DESC bd;
+	ZeroMemory(&bd, sizeof(bd));
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
 
-// –Ú•WƒXƒRƒA‚ğ•Ô‚·
-//int GetBorderScore(void)
-//{
-//	return g_BorderScore;
-//}
+
+	// ‰Šú‰»
+	for (int i = 0; i < 2; i++)
+	{
+		g_Tutorial[i].use = TRUE;
+		g_Tutorial[i].pos = { SCREEN_WIDTH / 2 ,SCREEN_HEIGHT / 2 , 0.0f };
+		g_Tutorial[i].texNo = i;
+
+		if (i == 0)
+		{	// ”wŒi
+			g_Tutorial[i].w = SCREEN_WIDTH;
+			g_Tutorial[i].h = SCREEN_HEIGHT;
+		}
+		else
+		{	// ƒeƒLƒXƒg
+			g_Tutorial[i].w = SCREEN_WIDTH;
+			g_Tutorial[i].h = SCREEN_HEIGHT;
+
+			g_Tutorial[i].pos.y -= TEXTURE_OFFSET_Y;
+
+		}
+	}
+
+
+	g_time = 0.0f;
+	g_EnemyDead = FALSE;
+	g_Load = TRUE;
+	return S_OK;
+}
+
+//=============================================================================
+// I—¹ˆ—
+//=============================================================================
+void UninitTutorial(void)
+{
+	if (g_Load == FALSE) return;
+
+	if (g_VertexBuffer)
+	{
+		g_VertexBuffer->Release();
+		g_VertexBuffer = NULL;
+	}
+
+	for (int i = 0; i < TEXTURE_MAX; i++)
+	{
+		if (g_Texture[i])
+		{
+			g_Texture[i]->Release();
+			g_Texture[i] = NULL;
+		}
+	}
+
+	g_Load = FALSE;
+}
+
+//=============================================================================
+// XVˆ—
+//=============================================================================
+void UpdateTutorial(void)
+{
+	if (GetKeyboardTrigger(DIK_RETURN))
+	{
+		// “G‚ğ“|‚·‘O‚Ü‚Å‚Ìƒ`ƒ…[ƒgƒŠƒAƒ‹
+		if (!g_EnemyDead)
+		{
+			if (g_Tutorial[1].texNo < tutorial05) g_Tutorial[1].texNo++;
+			else if (g_Tutorial[1].texNo == tutorial05)
+			{	// “G‚ğ“|‚·ƒtƒF[ƒY‚És‚Á‚½‚çƒ`ƒ…[ƒgƒŠƒAƒ‹‚ğÁ‚·
+				for (int i = 0; i < 2; i++)
+				{
+					g_Tutorial[i].use = FALSE;
+				}
+			}
+		}
+		else
+		{	// “G‚ğ“|‚µ‚½Œã‚Ìƒ`ƒ…[ƒgƒŠƒAƒ‹
+			if (g_Tutorial[1].texNo <= tutorial08) g_Tutorial[1].texNo++;
+		}
+
+		// ƒ`ƒ…[ƒgƒŠƒAƒ‹ƒeƒLƒXƒg‚ªÅŒã‚Ü‚ÅŒ¾‚Á‚Ä‚¢‚½‚çƒ`ƒ…[ƒgƒŠƒAƒ‹I—¹
+		if (g_Tutorial[1].texNo == tutorial08)
+		{
+			SetStage(stage0);
+			SetFade(FADE_OUT, MODE_GAME);
+		}
+	}
+
+	// “G‚ª“|‚³‚ê‚Ä‚¢‚½‚çÄ“xƒ`ƒ…[ƒgƒŠƒAƒ‹‚ğ•\¦
+	if (g_EnemyDead)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			g_Tutorial[i].use = TRUE;
+		}
+	}
+
+
+#ifdef _DEBUG	// ƒfƒoƒbƒOî•ñ‚ğ•\¦‚·‚é
+	//char *str = GetDebugStr();
+	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
+	
+#endif
+
+}
+
+//=============================================================================
+// •`‰æˆ—
+//=============================================================================
+void DrawTutorial(void)
+{
+	// ’¸“_ƒoƒbƒtƒ@İ’è
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+	GetDeviceContext()->IASetVertexBuffers(0, 1, &g_VertexBuffer, &stride, &offset);
+
+	// ƒ}ƒgƒŠƒNƒXİ’è
+	SetWorldViewProjection2D();
+
+	// ƒvƒŠƒ~ƒeƒBƒuƒgƒ|ƒƒWİ’è
+	GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// ƒ}ƒeƒŠƒAƒ‹İ’è
+	MATERIAL material;
+	ZeroMemory(&material, sizeof(material));
+	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	SetMaterial(material);
+
+	for (int i = 0; i < TEXTURE_MAX; i++)
+	{
+		if (!g_Tutorial[i].use) continue;
+
+		// ƒeƒNƒXƒ`ƒƒİ’è
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[i]);
+
+		// ‚P–‡‚Ìƒ|ƒŠƒSƒ“‚Ì’¸“_‚ÆƒeƒNƒXƒ`ƒƒÀ•W‚ğİ’è
+		SetSprite(g_VertexBuffer, g_Tutorial[i].pos.x, g_Tutorial[i].pos.y, g_Tutorial[i].w, g_Tutorial[i].h, 0.0f, 0.0f, 1.0f, 1.0f);
+
+		// ƒ|ƒŠƒSƒ“•`‰æ
+		GetDeviceContext()->Draw(4, 0);
+	}
+}

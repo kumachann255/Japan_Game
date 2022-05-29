@@ -37,6 +37,7 @@
 #include "playerHP.h"
 #include "gameUI.h"
 #include "speech.h"
+#include "tutorial.h"
 
 
 //*****************************************************************************

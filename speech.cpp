@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "speech.h"
 #include "sprite.h"
+#include "combo.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -15,14 +16,14 @@
 #define GO_WIDTH					(450.0f)	// キャラサイズ
 #define GO_HEIGHT					(450.0f)	// 
 
-#define BOM_WIDTH					(200.0f)	// キャラサイズ
-#define BOM_HEIGHT					(200.0f)	// 
+#define BOM_WIDTH					(300.0f)	// キャラサイズ
+#define BOM_HEIGHT					(300.0f)	// 
 
 #define COMBO_WIDTH					(150.0f)	// キャラサイズ
 #define COMBO_HEIGHT				(150.0f)	// 
 
-#define DAMAGE_WIDTH				(200.0f)	// キャラサイズ
-#define DAMAGE_HEIGHT				(200.0f)	// 
+#define DAMAGE_WIDTH				(300.0f)	// キャラサイズ
+#define DAMAGE_HEIGHT				(300.0f)	// 
 
 #define TEXTURE_MAX					(9)		// テクスチャの数
 
@@ -47,9 +48,9 @@ enum {
 	go,
 	bam,
 	boom,
+	yeah,
 	crash,
 	smash,
-	yeah,
 	party,
 	oops,
 	ouch,
@@ -73,9 +74,9 @@ static char *g_TexturName[TEXTURE_MAX] = {
 	"data/TEXTURE/speech_go.png",
 	"data/TEXTURE/speech_bam.png",
 	"data/TEXTURE/speech_boom.png",
+	"data/TEXTURE/speech_yeah.png",
 	"data/TEXTURE/speech_crash.png",
 	"data/TEXTURE/speech_smash.png",
-	"data/TEXTURE/speech_yeah.png",
 	"data/TEXTURE/speech_party.png",
 	"data/TEXTURE/speech_oops.png",
 	"data/TEXTURE/speech_ouch.png",
@@ -282,8 +283,8 @@ void SetBomSpeech(void)
 			g_Speech[i].use = TRUE;
 			g_Speech[i].life = SPEECH_LIFE;
 			g_Speech[i].combo = FALSE;
-			g_Speech[i].w = GO_WIDTH;
-			g_Speech[i].h = GO_HEIGHT;
+			g_Speech[i].w = BOM_WIDTH;
+			g_Speech[i].h = BOM_HEIGHT;
 
 			int data = rand() % 2;
 
@@ -339,9 +340,23 @@ void SetComboSpeech(void)
 			g_Speech[i].w = COMBO_WIDTH;
 			g_Speech[i].h = COMBO_HEIGHT;
 
-			int data = rand() % 4;
-
-			g_Speech[i].texNo = data + crash;
+			// コンボ数に応じてテクスチャを変更
+			if (GetCombo() > COMBO_BONUS_2)
+			{
+				g_Speech[i].texNo = crash;
+			}
+			else if (GetCombo() > COMBO_BONUS_1)
+			{
+				g_Speech[i].texNo = smash;
+			}
+			else if (GetCombo() > COMBO_BONUS_0)
+			{
+				g_Speech[i].texNo = party;
+			}
+			else
+			{
+				g_Speech[i].texNo = yeah;
+			}
 
 			g_Speech[i].pos = { SPEECH_COMBO_X , SPEECH_COMBO_Y, 0.0f };
 
@@ -363,8 +378,8 @@ void SetDamageSpeech(void)
 			g_Speech[i].use = TRUE;
 			g_Speech[i].life = SPEECH_LIFE;
 			g_Speech[i].combo = FALSE;
-			g_Speech[i].w = GO_WIDTH;
-			g_Speech[i].h = GO_HEIGHT;
+			g_Speech[i].w = DAMAGE_WIDTH;
+			g_Speech[i].h = DAMAGE_HEIGHT;
 
 			int data = rand() % 2;
 
