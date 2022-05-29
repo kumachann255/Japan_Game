@@ -191,6 +191,7 @@ BOOL InitSound(HWND hWnd)
 		g_apSourceVoice[nCntSound]->SubmitSourceBuffer(&buffer);
 	}
 
+
 	return TRUE;
 }
 
