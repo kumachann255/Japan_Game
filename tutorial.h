@@ -26,10 +26,9 @@ struct TUTORIAL
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
-//HRESULT InitGameUI(void);
-//void UninitGameUI(void);
-//void UpdateGameUI(void);
-//void DrawGameUI(void);
-//
-//int GetBorderScore(void);
+HRESULT InitTutorial(void);
+void UninitTutorial(void);
+void UpdateTutorial(void);
+void DrawTutorial(void);
 
+void SetTutorialEnemy(BOOL data);

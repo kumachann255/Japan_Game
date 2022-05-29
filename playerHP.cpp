@@ -14,12 +14,12 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(50)	// キャラサイズ
-#define TEXTURE_HEIGHT				(50)	// 
-#define TEXTURE_MAX					(1)		// テクスチャの数
+#define TEXTURE_WIDTH				(200)	// キャラサイズ
+#define TEXTURE_HEIGHT				(200)	// 
+#define TEXTURE_MAX					(4)		// テクスチャの数
 
-#define TEXTURE_HP_DISTANCE			(40)			// 隣のハートとの幅
-#define HP_MAX_X					(5)				// 横に並べる個数
+#define TEXTRUE_X					(130.0f)	// HPの表示位置
+#define TEXTRUE_Y					(130.0f)	// HPの表示位置
 
 
 //*****************************************************************************
@@ -34,7 +34,10 @@ static ID3D11Buffer				*g_VertexBuffer = NULL;		// 頂点情報
 static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// テクスチャ情報
 
 static char *g_TexturName[TEXTURE_MAX] = {
-	"data/TEXTURE/HP.png",
+	"data/TEXTURE/HP1.png",
+	"data/TEXTURE/HP2.png",
+	"data/TEXTURE/HP3.png",
+	"data/TEXTURE/HP4.png",
 };
 
 
@@ -80,7 +83,7 @@ HRESULT InitPlayerHP(void)
 	g_Use   = TRUE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
-	g_Pos   = { 50.0f, 40.0f, 0.0f };
+	g_Pos   = { TEXTRUE_X, TEXTRUE_Y, 0.0f };
 	g_TexNo = 0;
 
 	g_Load = TRUE;
@@ -117,6 +120,26 @@ void UninitPlayerHP(void)
 //=============================================================================
 void UpdatePlayerHP(void)
 {
+	PLAYER *player = GetPlayer();
+
+	if (player->hp < PLAYER_MAX_HP / TEXTURE_MAX)
+	{
+		g_TexNo = 3;
+	}
+	else if (player->hp < PLAYER_MAX_HP / TEXTURE_MAX * 2)
+	{
+		g_TexNo = 2;
+	}
+	else if (player->hp < PLAYER_MAX_HP / TEXTURE_MAX * 3)
+	{
+		g_TexNo = 1;
+	}
+	else
+	{
+		g_TexNo = 0;
+	}
+
+
 
 
 #ifdef _DEBUG	// デバッグ情報を表示する
@@ -154,42 +177,10 @@ void DrawPlayerHP(void)
 	// テクスチャ設定
 	GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
 
-	// HPを描画
-	for (int i = 0; i < player->hp; i++)
-	{
-		int x = i % HP_MAX_X;
-		int y = i / HP_MAX_X;
+	// １枚のポリゴンの頂点とテクスチャ座標を設定
+	SetSpriteColor(g_VertexBuffer, g_Pos.x, g_Pos.y, g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f,
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
-		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		SetSpriteColor(g_VertexBuffer,
-			g_Pos.x + TEXTURE_HP_DISTANCE * x,
-			g_Pos.y + TEXTURE_HP_DISTANCE * y,
-			g_w, g_h, 0.0f, 0.0f, 1.0f, 1.0f,
-			XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-
-		// ポリゴン描画
-		GetDeviceContext()->Draw(4, 0);
-	}
+	// ポリゴン描画
+	GetDeviceContext()->Draw(4, 0);
 }
-
-
-////=============================================================================
-//// スコアを加算する
-//// 引数:add :追加する点数。マイナスも可能
-////=============================================================================
-//void AddPlayerHP(int add)
-//{
-//	g_Score += add;
-//	if (g_Score > SCORE_MAX)
-//	{
-//		g_Score = SCORE_MAX;
-//	}
-//
-//}
-//
-//
-//int GetPlayerHP(void)
-//{
-//	return g_Score;
-//}
-

@@ -218,7 +218,6 @@ BOOL InitSound(HWND hWnd)
 
 	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.0f);
 
-
 	return TRUE;
 }
 

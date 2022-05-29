@@ -9,6 +9,7 @@
 #include "combo.h"
 #include "sprite.h"
 #include "speech.h"
+#include "score.h"
 
 
 //*****************************************************************************
@@ -25,6 +26,7 @@
 #define COMBO_MOVE_MAX				(40.0f)		// コンボ表示をどれくらいの高さから落とすか
 #define COMBO_MOVE_SPEED			(5.0f)		// コンボ表示をどれくらいの速さで落とすか
 #define COMBO_MOVE_TIME				(3)			// コンボ表示を何フレームで落とすか
+
 
 
 //*****************************************************************************
@@ -148,6 +150,29 @@ void UpdateCombo(void)
 		SetComboSpeech();
 
 		SetComboMove();
+
+		// ボーナス数
+		int bonus = 0;
+
+		// コンボ数に応じてボーナス
+		if (g_Combo > COMBO_BONUS_2)
+		{
+			bonus = COMBO_BONUS_2_VALUE;
+		}
+		else if (g_Combo > COMBO_BONUS_1)
+		{
+			bonus = COMBO_BONUS_1_VALUE;
+		}
+		else if (g_Combo > COMBO_BONUS_0)
+		{
+			bonus = COMBO_BONUS_0_VALUE;
+		}
+
+		for (int i = 0; i < bonus; i++)
+		{
+			AddScore(100);
+		}
+
 	}
 
 	// 時間を進める
