@@ -65,13 +65,13 @@ char	g_DebugStr[2048] = WINDOW_NAME;		// デバッグ文字表示用
 
 #endif
 
-int	g_Mode = MODE_GAME;					// 起動時の画面を設定
+int	g_Mode = MODE_RESULT;					// 起動時の画面を設定
 
 int g_Stage = tutorial;							// 現在のステージ
 
-int g_Score[stage_max] = { 0, 0, 0, 0 };	// 各ステージのスコアを保存
+int g_Score[stage_max] = { 10, 20, 30, 10040 };	// 各ステージのスコアを保存
 
-int g_ComboMax = 0;								// 最大コンボ数を保存
+int g_ComboMax = 30;								// 最大コンボ数を保存
 
 //=============================================================================
 // メイン関数
@@ -664,7 +664,7 @@ void SetComboMax(int combo)
 
 
 // 最大コンボ数を取得
-int GetCobmoMax(void)
+int GetComboMax(void)
 {
 	return g_ComboMax;
 }
