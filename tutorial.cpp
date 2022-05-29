@@ -35,6 +35,7 @@ static ID3D11ShaderResourceView	*g_Texture[TEXTURE_MAX] = { NULL };	// ÉeÉNÉXÉ`É
 
 
 static char *g_TexturName[TEXTURE_MAX] = {
+	"data/TEXTURE/fade_black.png",
 	"data/TEXTURE/tutorial00.png",
 	"data/TEXTURE/tutorial01.png",
 	"data/TEXTURE/tutorial02.png",
@@ -47,7 +48,7 @@ static char *g_TexturName[TEXTURE_MAX] = {
 };
 
 enum {
-	tutorial00,
+	tutorial00 = 1,
 	tutorial01,
 	tutorial02,
 	tutorial03,
@@ -119,6 +120,15 @@ HRESULT InitTutorial(void)
 		}
 	}
 
+	// É`ÉÖÅ[ÉgÉäÉAÉãà»äOÇÕégÇÌÇ»Ç¢
+	if (GetStage() != tutorial)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			g_Tutorial[i].use = FALSE;
+		}
+	}
+
 
 	g_time = 0.0f;
 	g_EnemyDead = FALSE;
@@ -156,43 +166,46 @@ void UninitTutorial(void)
 //=============================================================================
 void UpdateTutorial(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN))
+	// É`ÉÖÅ[ÉgÉäÉAÉãà»äOÇÕégÇÌÇ»Ç¢
+	if (GetStage() == tutorial)
 	{
-		// ìGÇì|Ç∑ëOÇ‹Ç≈ÇÃÉ`ÉÖÅ[ÉgÉäÉAÉã
-		if (!g_EnemyDead)
+		if (GetKeyboardTrigger(DIK_RETURN))
 		{
-			if (g_Tutorial[1].texNo < tutorial05) g_Tutorial[1].texNo++;
-			else if (g_Tutorial[1].texNo == tutorial05)
-			{	// ìGÇì|Ç∑ÉtÉFÅ[ÉYÇ…çsÇ¡ÇΩÇÁÉ`ÉÖÅ[ÉgÉäÉAÉãÇè¡Ç∑
-				for (int i = 0; i < 2; i++)
-				{
-					g_Tutorial[i].use = FALSE;
+			// ìGÇì|Ç∑ëOÇ‹Ç≈ÇÃÉ`ÉÖÅ[ÉgÉäÉAÉã
+			if (!g_EnemyDead)
+			{
+				if (g_Tutorial[1].texNo < tutorial05) g_Tutorial[1].texNo++;
+				else if (g_Tutorial[1].texNo == tutorial05)
+				{	// ìGÇì|Ç∑ÉtÉFÅ[ÉYÇ…çsÇ¡ÇΩÇÁÉ`ÉÖÅ[ÉgÉäÉAÉãÇè¡Ç∑
+					for (int i = 0; i < 2; i++)
+					{
+						g_Tutorial[i].use = FALSE;
+					}
 				}
 			}
-		}
-		else
-		{	// ìGÇì|ÇµÇΩå„ÇÃÉ`ÉÖÅ[ÉgÉäÉAÉã
-			if (g_Tutorial[1].texNo <= tutorial08) g_Tutorial[1].texNo++;
+			else
+			{	// ìGÇì|ÇµÇΩå„ÇÃÉ`ÉÖÅ[ÉgÉäÉAÉã
+				if (g_Tutorial[1].texNo <= tutorial08) g_Tutorial[1].texNo++;
+			}
+
+			// É`ÉÖÅ[ÉgÉäÉAÉãÉeÉLÉXÉgÇ™ç≈å„Ç‹Ç≈åæÇ¡ÇƒÇ¢ÇΩÇÁÉ`ÉÖÅ[ÉgÉäÉAÉãèIóπ
+			if (g_Tutorial[1].texNo == tutorial08)
+			{
+				SetStage(stage0);
+				SetFade(FADE_OUT, MODE_GAME);
+			}
 		}
 
-		// É`ÉÖÅ[ÉgÉäÉAÉãÉeÉLÉXÉgÇ™ç≈å„Ç‹Ç≈åæÇ¡ÇƒÇ¢ÇΩÇÁÉ`ÉÖÅ[ÉgÉäÉAÉãèIóπ
-		if (g_Tutorial[1].texNo == tutorial08)
+		// ìGÇ™ì|Ç≥ÇÍÇƒÇ¢ÇΩÇÁçƒìxÉ`ÉÖÅ[ÉgÉäÉAÉãÇï\é¶
+		if (g_EnemyDead)
 		{
-			SetStage(stage0);
-			SetFade(FADE_OUT, MODE_GAME);
+			for (int i = 0; i < 2; i++)
+			{
+				g_Tutorial[i].use = TRUE;
+			}
 		}
+
 	}
-
-	// ìGÇ™ì|Ç≥ÇÍÇƒÇ¢ÇΩÇÁçƒìxÉ`ÉÖÅ[ÉgÉäÉAÉãÇï\é¶
-	if (g_EnemyDead)
-	{
-		for (int i = 0; i < 2; i++)
-		{
-			g_Tutorial[i].use = TRUE;
-		}
-	}
-
-
 #ifdef _DEBUG	// ÉfÉoÉbÉOèÓïÒÇï\é¶Ç∑ÇÈ
 	//char *str = GetDebugStr();
 	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
@@ -223,15 +236,26 @@ void DrawTutorial(void)
 	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	SetMaterial(material);
 
+	XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
 		if (!g_Tutorial[i].use) continue;
+
+		if (i == 0)
+		{
+			color.w = 0.3f;
+		}
+		else
+		{
+			color.w = 1.0f;
+		}
 
 		// ÉeÉNÉXÉ`ÉÉê›íË
 		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[i]);
 
 		// ÇPñáÇÃÉ|ÉäÉSÉìÇÃí∏ì_Ç∆ÉeÉNÉXÉ`ÉÉç¿ïWÇê›íË
-		SetSprite(g_VertexBuffer, g_Tutorial[i].pos.x, g_Tutorial[i].pos.y, g_Tutorial[i].w, g_Tutorial[i].h, 0.0f, 0.0f, 1.0f, 1.0f);
+		SetSpriteColor(g_VertexBuffer, g_Tutorial[i].pos.x, g_Tutorial[i].pos.y, g_Tutorial[i].w, g_Tutorial[i].h, 0.0f, 0.0f, 1.0f, 1.0f, color);
 
 		// É|ÉäÉSÉìï`âÊ
 		GetDeviceContext()->Draw(4, 0);

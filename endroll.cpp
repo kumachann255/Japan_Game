@@ -96,7 +96,7 @@ HRESULT InitEndroll(void)
 
 
 	// BGMçƒê∂
-	//PlaySound(SOUND_LABEL_BGM_ending);
+	PlaySound(SOUND_LABEL_BGM_bgm_endroll);
 	
 	g_Load = TRUE;
 	return S_OK;
