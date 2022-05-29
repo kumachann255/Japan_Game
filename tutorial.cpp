@@ -15,12 +15,13 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_WIDTH				(330.0f)	// キャラサイズ
-#define TEXTURE_HEIGHT				(120.0f)	// 
+#define TEXTURE_WIDTH				(500.0f)	// キャラサイズ
+#define TEXTURE_HEIGHT				(300.0f)	// 
 
 #define TEXTURE_MAX					(10)			// テクスチャの数
 
-#define TEXTURE_OFFSET_Y			(50.0f)		// 表示位置調整
+#define TEXTURE_OFFSET_Y			(60.0f)		// 表示位置調整
+#define TEXTURE_OFFSET_X			(180.0f)	// 表示位置調整
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -112,10 +113,11 @@ HRESULT InitTutorial(void)
 		}
 		else
 		{	// テキスト
-			g_Tutorial[i].w = SCREEN_WIDTH;
-			g_Tutorial[i].h = SCREEN_HEIGHT;
+			g_Tutorial[i].w = TEXTURE_WIDTH;
+			g_Tutorial[i].h = TEXTURE_HEIGHT;
 
 			g_Tutorial[i].pos.y -= TEXTURE_OFFSET_Y;
+			g_Tutorial[i].pos.x -= TEXTURE_OFFSET_X;
 
 		}
 	}
@@ -171,6 +173,13 @@ void UpdateTutorial(void)
 	{
 		if (GetKeyboardTrigger(DIK_RETURN))
 		{
+			// チュートリアルテキストが最後まで言っていたらチュートリアル終了
+			if (g_Tutorial[1].texNo == tutorial08)
+			{
+				SetStage(stage0);
+				SetFade(FADE_OUT, MODE_GAME);
+			}
+
 			// 敵を倒す前までのチュートリアル
 			if (!g_EnemyDead)
 			{
@@ -185,14 +194,7 @@ void UpdateTutorial(void)
 			}
 			else
 			{	// 敵を倒した後のチュートリアル
-				if (g_Tutorial[1].texNo <= tutorial08) g_Tutorial[1].texNo++;
-			}
-
-			// チュートリアルテキストが最後まで言っていたらチュートリアル終了
-			if (g_Tutorial[1].texNo == tutorial08)
-			{
-				SetStage(stage0);
-				SetFade(FADE_OUT, MODE_GAME);
+				if (g_Tutorial[1].texNo < tutorial08) g_Tutorial[1].texNo++;
 			}
 		}
 
@@ -238,7 +240,7 @@ void DrawTutorial(void)
 
 	XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	for (int i = 0; i < TEXTURE_MAX; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		if (!g_Tutorial[i].use) continue;
 
@@ -252,7 +254,7 @@ void DrawTutorial(void)
 		}
 
 		// テクスチャ設定
-		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[i]);
+		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_Tutorial[i].texNo]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
 		SetSpriteColor(g_VertexBuffer, g_Tutorial[i].pos.x, g_Tutorial[i].pos.y, g_Tutorial[i].w, g_Tutorial[i].h, 0.0f, 0.0f, 1.0f, 1.0f, color);
@@ -260,4 +262,12 @@ void DrawTutorial(void)
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
 	}
+}
+
+
+// 敵を倒したかどうかを確認する関数
+void SetTutorialEnemy(BOOL data)
+{
+	g_EnemyDead = data;
+	if (g_Tutorial[1].texNo < tutorial06) g_Tutorial[1].texNo++;
 }
