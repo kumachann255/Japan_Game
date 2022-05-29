@@ -69,9 +69,9 @@ int	g_Mode = MODE_RESULT;					// 起動時の画面を設定
 
 int g_Stage = tutorial;							// 現在のステージ
 
-int g_Score[stage_max] = { 100, 20, 90, 1110 };	// 各ステージのスコアを保存
+int g_Score[stage_max] = { 10, 20, 30, 10040 };	// 各ステージのスコアを保存
 
-int g_ComboMax = 0;								// 最大コンボ数を保存
+int g_ComboMax = 30;								// 最大コンボ数を保存
 
 //=============================================================================
 // メイン関数
@@ -664,7 +664,7 @@ void SetComboMax(int combo)
 
 
 // 最大コンボ数を取得
-int GetCobmoMax(void)
+int GetComboMax(void)
 {
 	return g_ComboMax;
 }

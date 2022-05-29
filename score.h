@@ -11,7 +11,8 @@
 // マクロ定義
 //*****************************************************************************
 #define SCORE_MAX			(99999)		// スコアの最大値
-#define SCORE_DIGIT			(5)			// 桁数
+#define SCORE_DIGIT			(5)			// ステージ桁数
+#define COMBO_MAX_DIGIT		(3)			// 最大コンボの桁数
 
 //#define SCORE_STAGE0_BORDER	(2000)		// ステージ0のクリアスコア
 //#define SCORE_STAGE1_BORDER	(3000)		// ステージ1のクリアスコア
