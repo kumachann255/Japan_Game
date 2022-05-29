@@ -37,6 +37,7 @@ enum
 	SOUND_LABEL_SE_gunShot01,			// 銃声1
 	SOUND_LABEL_SE_gunShot02,			// 銃声2
 	SOUND_LABEL_SE_propellerSound01,	// プロペラ音
+	SOUND_LABEL_SE_selectBomb01,		// タイトルの選択音
 	SOUND_LABEL_SE_shrinkingSound01,	// 粘着物の収縮音
 	SOUND_LABEL_SE_siren01,				// パトカー音
 	SOUND_LABEL_SE_stickingSound01,		// 粘着物の張り付き音
@@ -44,6 +45,9 @@ enum
 	SOUND_LABEL_SE_throwingSound01,		// 粘着物投擲音
 	SOUND_LABEL_SE_titleClick01,		// タイトルモード選択音1
 	SOUND_LABEL_SE_titleClick02,		// タイトルモード選択音2
+	SOUND_LABEL_SE_titleClick03,		// タイトルモード選択音3
+	SOUND_LABEL_SE_titleClick04,		// タイトルモード選択音4
+
 
 	SOUND_LABEL_MAX,	// MAX
 };

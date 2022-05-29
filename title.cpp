@@ -206,7 +206,7 @@ void UpdateTitle(void)
 		{// S/W押したら、選択を切り替える
 
 			// SEの挿入（切り替え音）
-			PlaySound(SOUND_LABEL_SE_titleClick02);
+			PlaySound(SOUND_LABEL_SE_titleClick04);
 
 			if (start_texno == 3)
 			{
@@ -237,7 +237,7 @@ void UpdateTitle(void)
 		{// Enter押したら、ステージを切り替える
 
 			// SEの挿入（モード選択音）
-			PlaySound(SOUND_LABEL_SE_titleClick01);
+			PlaySound(SOUND_LABEL_SE_selectBomb01);
 
 			if (start_texno == 3)
 			{
@@ -264,7 +264,7 @@ void UpdateTitle(void)
 		{// S/W押したら、選択を切り替える
 
 			// SEの挿入（切り替え音）
-			PlaySound(SOUND_LABEL_SE_titleClick02);
+			PlaySound(SOUND_LABEL_SE_titleClick04);
 
 			if (start_texno == 3)
 			{
@@ -283,7 +283,7 @@ void UpdateTitle(void)
 		else if (IsButtonTriggered(0, BUTTON_START))
 		{
 			// SEの挿入（モード選択音）
-			PlaySound(SOUND_LABEL_SE_titleClick01);
+			PlaySound(SOUND_LABEL_SE_selectBomb01);
 
 			if (start_texno == 3)
 			{
@@ -305,7 +305,7 @@ void UpdateTitle(void)
 		else if (IsButtonTriggered(0, BUTTON_B))
 		{
 			// SEの挿入（モード選択音）
-			PlaySound(SOUND_LABEL_SE_titleClick01);
+			PlaySound(SOUND_LABEL_SE_selectBomb01);
 
 			if (start_texno == 3)
 			{

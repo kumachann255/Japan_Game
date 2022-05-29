@@ -58,6 +58,7 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{ (char*)"data/SE/gunShot01.wav", 0 },			// 銃声1
 	{ (char*)"data/SE/gunShot02.wav", 0 },			// 銃声2
 	{ (char*)"data/SE/propellerSound01.wav", -1 },	// プロペラ音
+	{ (char*)"data/SE/selectBomb01.wav", 0 },		// タイトル選択音
 	{ (char*)"data/SE/shrinkageSound01.wav", 0 },	// 粘着物の収縮音
 	{ (char*)"data/SE/siren01.wav", 0 },			// パトカー音
 	{ (char*)"data/SE/stickingSound01.wav", 0 },	// 粘着物の張り付き音
@@ -65,6 +66,9 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{ (char*)"data/SE/throwingSound01.wav", 0 },	// 粘着物投擲音
 	{ (char*)"data/SE/titleClick01.wav", 0 },		// タイトルモード選択音1
 	{ (char*)"data/SE/titleClick02.wav", 0 },		// タイトルモード選択音2
+	{ (char*)"data/SE/titleClick03.wav", 0 },		// タイトルモード選択音3
+	{ (char*)"data/SE/titleClick04.wav", 0 },		// タイトルモード選択音4
+
 
 };
 
