@@ -57,12 +57,13 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{ (char*)"data/SE/explosionSound01.wav", 0 },	// 粘着物の爆発音
 	{ (char*)"data/SE/gunShot01.wav", 0 },			// 銃声1
 	{ (char*)"data/SE/gunShot02.wav", 0 },			// 銃声2
+	{ (char*)"data/SE/hitSound01.wav", 0 },			// ヒット音
 	{ (char*)"data/SE/propellerSound01.wav", -1 },	// プロペラ音
 	{ (char*)"data/SE/selectBomb01.wav", 0 },		// タイトル選択音
 	{ (char*)"data/SE/shrinkageSound01.wav", 0 },	// 粘着物の収縮音
 	{ (char*)"data/SE/siren01.wav", 0 },			// パトカー音
 	{ (char*)"data/SE/stickingSound01.wav", 0 },	// 粘着物の張り付き音
-	{ (char*)"data/SE/stirringSound01.wav", 0 },	// 粘着かき混ぜ
+	{ (char*)"data/SE/stirringSound01.wav", -1 },	// 粘着かき混ぜ
 	{ (char*)"data/SE/throwingSound01.wav", 0 },	// 粘着物投擲音
 	{ (char*)"data/SE/titleClick01.wav", 0 },		// タイトルモード選択音1
 	{ (char*)"data/SE/titleClick02.wav", 0 },		// タイトルモード選択音2
@@ -216,7 +217,19 @@ BOOL InitSound(HWND hWnd)
 
 	}
 
-	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.0f);
+	// BGMの音量調節
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_title, 0.25f);
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage001, 0.2f);
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage002, 0.2f);
+
+
+	// SEの音量調節
+	SetSourceVolume(SOUND_LABEL_SE_booingSound01, 0.5f);
+	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.25f);
+	SetSourceVolume(SOUND_LABEL_SE_propellerSound01, 0.3f);
+	SetSourceVolume(SOUND_LABEL_SE_siren01, 0.15f);
+	SetSourceVolume(SOUND_LABEL_SE_stirringSound01, 0.5f);
+	SetSourceVolume(SOUND_LABEL_SE_titleClick04, 0.25f);
 
 
 	return TRUE;

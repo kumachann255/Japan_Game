@@ -399,7 +399,7 @@ void DrawGame0(void)
 	DrawDamageEF();
 
 	// 吹き出しの描画処理
-	DrawSpeech();
+	//DrawSpeech();
 
 
 	// ライティングを有効に

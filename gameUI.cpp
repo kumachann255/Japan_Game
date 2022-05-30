@@ -120,6 +120,9 @@ HRESULT InitGameUI(void)
 			g_UI[i].h = SCREEN_HEIGHT;
 		}
 
+		// お祝いサウンドも始めはオフ
+		g_UI[i].soundFlag = FALSE;
+
 		switch (i)
 		{
 		case HowTo:
@@ -218,6 +221,22 @@ void UpdateGameUI(void)
 		for (int i = under; i < under + 3; i++)
 		{
 			g_UI[i].use = TRUE;
+
+			// 条件を満たした時だけ一度だけサウンドを鳴らす
+			switch (g_UI[i].soundFlag)
+			{
+			case TRUE:
+				break;
+
+			case FALSE:
+				if (g_UI[i].soundFlag == FALSE && (g_BorderScore <= GetScore()))
+				{
+					// スコアが規定以上に達したら一度だけSE処理
+					PlaySound(SOUND_LABEL_SE_cheers00);
+					g_UI[i].soundFlag = TRUE;
+				}
+				break;
+			}
 
 		}
 	}

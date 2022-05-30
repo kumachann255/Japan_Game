@@ -36,6 +36,7 @@ enum
 	SOUND_LABEL_SE_explosionSound01,	// 粘着物の爆発音
 	SOUND_LABEL_SE_gunShot01,			// 銃声1
 	SOUND_LABEL_SE_gunShot02,			// 銃声2
+	SOUND_LABEL_SE_hitSound01,			// ヒット音
 	SOUND_LABEL_SE_propellerSound01,	// プロペラ音
 	SOUND_LABEL_SE_selectBomb01,		// タイトルの選択音
 	SOUND_LABEL_SE_shrinkingSound01,	// 粘着物の収縮音

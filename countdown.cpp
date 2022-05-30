@@ -207,16 +207,25 @@ void UpdateCountDown(void)
 	{
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage;
 	}
-	else if (g_Count <= CLEAR_TIME + COUNTDOWN)
+	else if (g_Count == CLEAR_TIME + COUNTDOWN)
 	{
+
+		// SE‚Ì‘}“üiØ‚è‘Ö‚¦‰¹j
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 1;
 	}
-	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 2))
+	else if (g_Count == CLEAR_TIME + (COUNTDOWN * 2))
 	{
+
+		// SE‚Ì‘}“üiØ‚è‘Ö‚¦‰¹j
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 2;
 	}
-	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3))
+	else if (g_Count == CLEAR_TIME + (COUNTDOWN * 3))
 	{
+
+		// SE‚Ì‘}“üiØ‚è‘Ö‚¦‰¹j
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 3;
 		SetFade(FADE_OUT, MODE_GAME);
 	}

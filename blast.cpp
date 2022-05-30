@@ -80,7 +80,7 @@ HRESULT InitBlast(void)
 
 		g_Blast[i].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 		g_Blast[i].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		g_Blast[i].scl = XMFLOAT3(1.3f, 1.3f, 1.3f);
+		g_Blast[i].scl = XMFLOAT3(1.3f, 1.3f, 1.3f); // 基本scl 1.3f
 		g_Blast[i].size = BLAST_SIZE;
 		g_Blast[i].life = 0;
 		g_Blast[i].spd = 0.0f;			// 移動スピードクリア
