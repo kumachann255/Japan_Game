@@ -417,6 +417,9 @@ void DrawGame0(void)
 	// チュートリアルの描画処理
 	DrawTutorial();
 
+	// チュートリアルの描画処理
+	DrawTutorial();
+
 
 	// ライティングを有効に
 	SetLightEnable(TRUE);

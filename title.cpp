@@ -242,7 +242,7 @@ void UpdateTitle(void)
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
-				SetStage(stage0);
+				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
 				//SetFade(FADE_OUT, MODE_TUTORIAL);
 		
@@ -288,7 +288,7 @@ void UpdateTitle(void)
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
-				SetStage(stage0);
+				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
 				//SetFade(FADE_OUT, MODE_TUTORIAL);
 			
@@ -310,7 +310,7 @@ void UpdateTitle(void)
 			if (start_texno == 3)
 			{
 				//PlaySound(SOUND_LABEL_SE_system_02);
-				SetStage(stage0);
+				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
 				//SetFade(FADE_OUT, MODE_TUTORIAL);
 			
