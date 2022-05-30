@@ -116,6 +116,7 @@ static BOOL						g_Load = FALSE;
 //=============================================================================
 HRESULT InitResult(void)
 {
+
 	ID3D11Device *pDevice = GetDevice();
 
 	//テクスチャ生成
@@ -238,6 +239,7 @@ HRESULT InitResult(void)
 			break;
 		}
 	}
+
 
 	// BGM再生
 	PlaySound(SOUND_LABEL_BGM_bgm_stage002);

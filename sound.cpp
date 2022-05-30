@@ -222,7 +222,6 @@ BOOL InitSound(HWND hWnd)
 	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage001, 0.2f);
 	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage002, 0.2f);
 
-
 	// SEÇÃâπó í≤êﬂ
 	SetSourceVolume(SOUND_LABEL_SE_booingSound01, 0.5f);
 	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.25f);
