@@ -19,7 +19,7 @@
 #define TEXTURE_HEIGHT				(90)	// 
 #define TEXTURE_MAX					(2)		// テクスチャの数
 
-#define TIME_MAX					(50)	// 時間制限
+#define TIME_MAX					(30)	// 時間制限
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -134,8 +134,11 @@ void UpdateTime(void)
 	// 終了時間から現在の時間を引いて残り時間を算出する
 	g_Time = (int)(end_time - time(NULL));
 
+	// 時間が0以下にならないように
+	if (g_Time < 0) g_Time = 0;
+
 	// シーン遷移
-	if (g_Time < 0)
+	if (g_Time == 0)
 	{
 		switch (g_stage)
 		{
@@ -145,7 +148,7 @@ void UpdateTime(void)
 				SetStage(stage1);
 				SetFade(FADE_OUT, MODE_GAME_COUNT);
 			}
-			//else SetFade(FADE_OUT, MODE_RESULT);
+			else SetFade(FADE_OUT, MODE_RESULT);
 
 			break;
 

@@ -348,25 +348,8 @@ void UpdateEnemy(void)
 				// SEの停止
 				StopSound(SOUND_LABEL_SE_siren01);
 
-				//// ほかのパトカーとぶつかってないか？
-				//for (int j = 0; j < MAX_ENEMY; j++)
-				//{
-				//	if ((g_Enemy[j].isHit == FALSE) || (i == j)) continue;	// 攻撃に当たってない奴には当たり判定のチェックをスキップ
-
-				//	if (CollisionBC(g_Enemy[i].pos, g_Enemy[j].pos, g_Enemy[i].size - 20.0f, g_Enemy[j].size - 20.0f))
-				//	{
-				//		ans = FALSE;
-				//		break;
-				//	}
-				//
-				//}
-
-				//// 決まった位置まで来てかいか？
-				//if (CollisionBC(g_Enemy[i].pos, g_Enemy[i].hitPos, g_Enemy[i].size, g_Enemy[i].size))
-				//{
-				//	ans = FALSE;
-				//}
-
+				// 色を元に戻す
+				g_Enemy[i].fuchi = FALSE;
 
 				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
