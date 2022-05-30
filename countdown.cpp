@@ -142,25 +142,14 @@ HRESULT InitCountDown(void)
 	{
 	case stage2:
 		g_Use2[2] = TRUE;
-		// SEçƒê∂
-		PlaySound(SOUND_LABEL_SE_cheers05);
-
-		break;
 
 	case stage1:
 		g_Use2[1] = TRUE;
-		// SEçƒê∂
-		PlaySound(SOUND_LABEL_SE_cheers05);
-
-		break;
 
 	case stage0:
 		g_Use2[0] = TRUE;
 		// SEçƒê∂
 		PlaySound(SOUND_LABEL_SE_cheers05);
-
-		break;
-
 	}
 	// BGMçƒê∂
 	//PlaySound(SOUND_LABEL_BGM_sample000);
