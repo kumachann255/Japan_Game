@@ -393,7 +393,7 @@ void UpdatePlayer(void)
 	SetPositionShadow(g_Player.shadowIdx, pos);
 
 	// íeî≠éÀèàóù
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if ((GetKeyboardTrigger(DIK_SPACE)) && (GetCoolTime() == 0))
 	{
 		g_Player.action = TRUE;
 		SetBomthrowMotion();

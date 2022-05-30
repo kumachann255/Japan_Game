@@ -46,3 +46,4 @@ BOM *GetBom(void);
 void SetBom(void);
 BOOL GetBomUse(void);
 float GetBomTime(void);
+int GetCoolTime(void);

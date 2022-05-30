@@ -256,3 +256,9 @@ float GetBomTime(void)
 {
 	return g_Bom.time;
 }
+
+// クールタイムを返す関数
+int GetCoolTime(void)
+{
+	return coolTime;
+}
