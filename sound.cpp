@@ -231,7 +231,6 @@ BOOL InitSound(HWND hWnd)
 	SetSourceVolume(SOUND_LABEL_SE_stirringSound01, 0.5f);
 	SetSourceVolume(SOUND_LABEL_SE_titleClick04, 0.25f);
 
-
 	return TRUE;
 }
 

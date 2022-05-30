@@ -37,6 +37,7 @@
 #include "playerHP.h"
 #include "gameUI.h"
 #include "speech.h"
+#include "tutorial.h"
 
 
 //*****************************************************************************
@@ -150,6 +151,9 @@ HRESULT InitGame(void)
 	// 吹き出しの初期化
 	InitSpeech();
 
+	// チュートリアルの初期化
+	InitTutorial();
+
 	// BGM再生
 	PlaySound(SOUND_LABEL_BGM_bgm_stage001);
 
@@ -165,6 +169,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	// チュートリアルの終了処理
+	UninitTutorial();
+
 	// 吹き出しの終了処理
 	UninitSpeech();
 
@@ -320,6 +327,9 @@ void UpdateGame(void)
 
 	// 吹き出しの更新処理
 	UpdateSpeech();
+
+	// チュートリアルの更新処理
+	UpdateTutorial();
 }
 
 //=============================================================================
@@ -400,6 +410,9 @@ void DrawGame0(void)
 
 	// 吹き出しの描画処理
 	//DrawSpeech();
+
+	// チュートリアルの描画処理
+	DrawTutorial();
 
 
 	// ライティングを有効に

@@ -10,9 +10,16 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define COMBO_MAX			(99)		// コンボ数の最大値
-#define COMBO_DIGIT			(2)			// 桁数
+#define COMBO_MAX					(99)		// コンボ数の最大値
+#define COMBO_DIGIT					(2)			// 桁数
 
+#define COMBO_BONUS_0				(5)			// 何コンボからボーナスを加えるか
+#define COMBO_BONUS_1				(10)		// 何コンボからボーナスを加えるか
+#define COMBO_BONUS_2				(15)		// 何コンボからボーナスを加えるか
+
+#define COMBO_BONUS_0_VALUE			(2)			// どのくらいボーナスを加えるか
+#define COMBO_BONUS_1_VALUE			(3)			// どのくらいボーナスを加えるか
+#define COMBO_BONUS_2_VALUE			(5)			// どのくらいボーナスを加えるか
 
 
 

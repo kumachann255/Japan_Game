@@ -18,6 +18,7 @@
 #include "debugproc.h"
 #include "player.h"
 #include "fade.h"
+#include "tutorial.h"
 
 #include "sound.h"
 
@@ -164,11 +165,11 @@ void UpdateEnemy(void)
 
 
 			// Enterを押したらステージ遷移
-			if (GetKeyboardTrigger(DIK_RETURN))
-			{
-				SetStage(stage0);
-				SetFade(FADE_OUT, MODE_GAME);
-			}
+			//if (GetKeyboardTrigger(DIK_RETURN))
+			//{
+			//	SetStage(stage0);
+			//	SetFade(FADE_OUT, MODE_GAME);
+			//}
 		}
 	}
 	else
@@ -424,6 +425,7 @@ void UpdateEnemy(void)
 				if (blast[0].use == FALSE)
 				{
 					g_Enemy[i].use = FALSE;
+					SetTutorialEnemy(TRUE);
 				}
 			}
 

@@ -26,10 +26,17 @@
 
 #define RESULT_MAX					(17)				// ON/OFFスイッチが必要なテクスチャ数
 
-#define RANK_A_BORDER				(300)
-#define RANK_B_BORDER				(200)
-#define RANK_C_BORDER				(100)
-#define RANK_S_BORDER				(1000)
+// 合計リザルトランクのボーダー
+#define RANK_A_BORDER				(9000)
+#define RANK_B_BORDER				(5000)
+#define RANK_C_BORDER				(2000)
+#define RANK_S_BORDER				(14000)
+
+//// デバッグ用
+//#define RANK_A_BORDER				(300)
+//#define RANK_B_BORDER				(200)
+//#define RANK_C_BORDER				(100)
+//#define RANK_S_BORDER				(1000)
 
 #define MOVE_VOLUME					(20.0f)		// カーブの半径
 #define MOVE_SPEED					(0.1f)		// カーブの速度
