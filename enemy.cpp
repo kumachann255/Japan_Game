@@ -74,6 +74,8 @@ void SetEnemy(void);
 //*****************************************************************************
 static ENEMY			g_Enemy[MAX_ENEMY];				// エネミー
 
+static int				g_Stage;
+
 static BOOL				g_Load = FALSE;
 
 static int				count = 0;		// ポップカウント
@@ -119,6 +121,9 @@ HRESULT InitEnemy(void)
 
 	}
 
+	g_Stage = GetStage();
+
+	count = 0;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -148,7 +153,7 @@ void UninitEnemy(void)
 //=============================================================================
 void UpdateEnemy(void)
 {
-	if (GetStage() == tutorial)
+	if (g_Stage == tutorial)
 	{	// チュートリアル様に1体出す
 		count++;
 
@@ -177,7 +182,7 @@ void UpdateEnemy(void)
 		count++;
 		int useCount = 0;
 
-		switch (GetStage())
+		switch (g_Stage)
 		{
 		case stage0:
 			// 今何体出現しているかを確認
@@ -518,11 +523,11 @@ void SetEnemy(void)
 
 			// x座標はランダム
 			g_Enemy[i].pos.x = (float)(rand() % ENEMY_POP_X) - ((float)ENEMY_POP_X / 2.0f);
-			if (GetStage() == tutorial) g_Enemy[i].pos.x = 0.0f;
+			if (g_Stage == tutorial) g_Enemy[i].pos.x = 0.0f;
 
 			// 到達地点もランダム
 			g_Enemy[i].zGoal = (float)(rand() % ENEMY_GOAL_Z_OFFSET) + ENEMY_GOAL_Z;
-			if (GetStage() == tutorial) g_Enemy[i].zGoal = 150.0f;
+			if (g_Stage == tutorial) g_Enemy[i].zGoal = 150.0f;
 
 			g_Enemy[i].liveCount = 0;
 

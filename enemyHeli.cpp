@@ -69,6 +69,8 @@ static BOOL			g_Load = FALSE;
 
 static int			count = 0;						// ポップカウント
 
+static int			g_Stage;
+
 
 
 //=============================================================================
@@ -170,6 +172,7 @@ HRESULT InitEnemyHeli(void)
 
 	}
 
+	g_Stage = GetStage();
 
 	g_Load = TRUE;
 	return S_OK;
@@ -199,7 +202,7 @@ void UninitEnemyHeli(void)
 //=============================================================================
 void UpdateEnemyHeli(void)
 {
-	if (GetStage() != tutorial)
+	if (g_Stage != tutorial)
 	{	// pop処理
 		count++;
 		int useCount = 0;
