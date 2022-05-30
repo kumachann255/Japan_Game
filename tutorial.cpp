@@ -66,6 +66,8 @@ static float					g_time;
 
 static BOOL						g_EnemyDead;
 
+static int						g_Stage;
+
 static BOOL						g_Load = FALSE;
 
 
@@ -98,11 +100,12 @@ HRESULT InitTutorial(void)
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	GetDevice()->CreateBuffer(&bd, NULL, &g_VertexBuffer);
 
+	g_Stage = GetStage();
 
 	// 初期化
 	for (int i = 0; i < 2; i++)
 	{
-		g_Tutorial[i].use = TRUE;
+		g_Tutorial[i].use = FALSE;
 		g_Tutorial[i].pos = { SCREEN_WIDTH / 2 ,SCREEN_HEIGHT / 2 , 0.0f };
 		g_Tutorial[i].texNo = i;
 
@@ -123,11 +126,11 @@ HRESULT InitTutorial(void)
 	}
 
 	// チュートリアル以外は使わない
-	if (GetStage() != tutorial)
+	if (g_Stage == tutorial)
 	{
 		for (int i = 0; i < 2; i++)
 		{
-			g_Tutorial[i].use = FALSE;
+			g_Tutorial[i].use = TRUE;
 		}
 	}
 
@@ -168,9 +171,10 @@ void UninitTutorial(void)
 void UpdateTutorial(void)
 {
 	// チュートリアル以外は使わない
-	if (GetStage() == tutorial)
+	if (g_Stage != tutorial) return;
+
 	{
-		if (GetKeyboardTrigger(DIK_RETURN))
+		if ((GetKeyboardTrigger(DIK_RETURN)) || (GetKeyboardTrigger(DIK_SPACE)))
 		{
 			// チュートリアルテキストが最後まで言っていたらチュートリアル終了
 			if (g_Tutorial[1].texNo == tutorial08)

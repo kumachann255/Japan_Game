@@ -399,7 +399,6 @@ void UpdatePlayer(void)
 		SetBomthrowMotion();
 
 		SetBom();
-		
 	}
 
 
