@@ -177,7 +177,7 @@ void UpdateTutorial(void)
 	if (g_Stage != tutorial) return;
 
 	{
-		if ((GetKeyboardTrigger(DIK_RETURN)) || (GetKeyboardTrigger(DIK_SPACE)))
+		if ((GetKeyboardTrigger(DIK_RETURN)) || (GetKeyboardTrigger(DIK_SPACE)) || (IsButtonTriggered(0, BUTTON_B)))
 		{
 			// チュートリアルテキストが最後まで言っていたらチュートリアル終了
 			if (g_Tutorial[1].texNo == tutorial09)
@@ -272,4 +272,13 @@ void SetTutorialEnemy(BOOL data)
 {
 	g_EnemyDead = data;
 	if (g_Tutorial[1].texNo < tutorial07) g_Tutorial[1].texNo++;
+}
+
+
+//=============================================================================
+// チュートリアルテキストが表示されているかどうかを取得
+//=============================================================================
+BOOL GetTutorialUse(void)
+{
+	return g_Tutorial[1].use;
 }

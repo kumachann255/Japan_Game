@@ -105,19 +105,19 @@ void UpdateAttackR(void)
 	{
 
 		// ˆÚ“®‚³‚¹‚¿‚á‚¤
-		if (GetKeyboardPress(DIK_A))
+		if ((GetKeyboardPress(DIK_A)) || (IsButtonPressed(0, BUTTON_LEFT)))
 		{	// ¶‚ÖˆÚ“®
 			if(g_AttackR.pos.x > -RANGE_ELEA_X) g_AttackR.pos.x -= VALUE_MOVE;
 		}
-		if (GetKeyboardPress(DIK_D))
+		if ((GetKeyboardPress(DIK_D)) || (IsButtonPressed(0, BUTTON_RIGHT)))
 		{	// ‰E‚ÖˆÚ“®
 			if(g_AttackR.pos.x < RANGE_ELEA_X) g_AttackR.pos.x += VALUE_MOVE;
 		}
-		if (GetKeyboardPress(DIK_W))
+		if ((GetKeyboardPress(DIK_W)) || (IsButtonPressed(0, BUTTON_UP)))
 		{	// ã‚ÖˆÚ“®
 			if(g_AttackR.pos.z < RANGE_ELEA_Z_FLONT) g_AttackR.pos.z += VALUE_MOVE;
 		}
-		if (GetKeyboardPress(DIK_S))
+		if ((GetKeyboardPress(DIK_S)) || (IsButtonPressed(0, BUTTON_DOWN)))
 		{	// ‰º‚ÖˆÚ“®
 			if(g_AttackR.pos.z > RANGE_ELEA_Z_BACK) g_AttackR.pos.z -= VALUE_MOVE;
 		}

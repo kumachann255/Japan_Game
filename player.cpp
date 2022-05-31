@@ -16,7 +16,7 @@
 #include "meshfield.h"
 #include "bom.h"
 #include "speech.h"
-
+#include "tutorial.h"
 #include "sound.h"
 
 
@@ -55,6 +55,7 @@
 static PLAYER		g_Player;						// プレイヤー
 
 static PLAYER		g_Parts[PLAYER_PARTS_MAX];		// プレイヤーのパーツ用
+static int			g_Stage;
 
 static BOOL			g_Load = FALSE;
 
@@ -278,7 +279,7 @@ HRESULT InitPlayer(void)
 	g_Parts[0].load = TRUE;
 
 
-	
+	g_Stage = GetStage();
 
 	//=============================================================================
 // ここで各パーツの読み込み
@@ -368,12 +369,26 @@ void UpdatePlayer(void)
 	SetPositionShadow(g_Player.shadowIdx, pos);
 
 	// 弾発射処理
-	if ((GetKeyboardTrigger(DIK_SPACE)) && (GetCoolTime() == 0))
+	if (g_Stage != tutorial)
 	{
-		g_Player.action = TRUE;
-		SetBomthrowMotion();
+		if (((GetKeyboardTrigger(DIK_SPACE)) || (IsButtonTriggered(0, BUTTON_B))) && (GetCoolTime() == 0))
+		{
+			g_Player.action = TRUE;
+			SetBomthrowMotion();
 
-		SetBom();
+			SetBom();
+		}
+	}
+	else
+	{
+		if (((GetKeyboardTrigger(DIK_SPACE)) || (IsButtonTriggered(0, BUTTON_B))) 
+			&& (!GetTutorialUse()))
+		{
+			g_Player.action = TRUE;
+			SetBomthrowMotion();
+
+			SetBom();
+		}
 	}
 
 

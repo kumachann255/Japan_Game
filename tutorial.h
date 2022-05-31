@@ -32,3 +32,4 @@ void UpdateTutorial(void);
 void DrawTutorial(void);
 
 void SetTutorialEnemy(BOOL data);
+BOOL GetTutorialUse(void);
