@@ -84,9 +84,6 @@ HRESULT InitLogoD(void)
 	g_TexNo = 0;
 	count = 0;
 
-	// BGMçƒê∂
-	PlaySound(SOUND_LABEL_BGM_bgm_stage001);
-
 	g_Load = TRUE;
 	return S_OK;
 }

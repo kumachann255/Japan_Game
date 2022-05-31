@@ -125,7 +125,6 @@ void UninitScore(void)
 void UpdateScore(void)
 {
 	SetMainScore(g_Score);
-
 }
 
 //=============================================================================

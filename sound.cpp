@@ -217,7 +217,17 @@ BOOL InitSound(HWND hWnd)
 
 	}
 
-	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.0f);
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_title, 0.25f);
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage001, 0.2f);
+	SetSourceVolume(SOUND_LABEL_BGM_bgm_stage002, 0.2f);
+
+
+	SetSourceVolume(SOUND_LABEL_SE_booingSound01, 0.5f);
+	SetSourceVolume(SOUND_LABEL_SE_carHorn01, 0.25f);
+	SetSourceVolume(SOUND_LABEL_SE_propellerSound01, 0.3f);
+	SetSourceVolume(SOUND_LABEL_SE_siren01, 0.5f);
+	SetSourceVolume(SOUND_LABEL_SE_stickingSound01, 1.5f);
+	SetSourceVolume(SOUND_LABEL_SE_titleClick04, 0.25f);
 
 	return TRUE;
 }

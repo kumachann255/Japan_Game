@@ -72,6 +72,7 @@ static int						g_BorderScore;				// 目標スコア
 
 static float					g_time;
 
+static BOOL						g_SoundFlag;
 static BOOL						g_Load = FALSE;
 
 
@@ -177,6 +178,7 @@ HRESULT InitGameUI(void)
 	g_Score = 0;	// スコアの初期化
 	g_time = 0.0f;
 	g_Border = FALSE;
+	g_SoundFlag = FALSE;
 
 	g_Load = TRUE;
 	return S_OK;
@@ -219,6 +221,12 @@ void UpdateGameUI(void)
 		{
 			g_UI[i].use = TRUE;
 
+		}
+
+		if (!g_SoundFlag)
+		{
+			PlaySound(SOUND_LABEL_SE_cheers00);
+			g_SoundFlag = TRUE;
 		}
 	}
 

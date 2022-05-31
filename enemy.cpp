@@ -19,6 +19,7 @@
 #include "player.h"
 #include "fade.h"
 #include "tutorial.h"
+#include "timeUI.h"
 
 #include "sound.h"
 
@@ -323,9 +324,13 @@ void UpdateEnemy(void)
 					}
 				}
 
-				if (ans)
+				if ((ans) && (GetTime() > 1))
 				{
 					g_Enemy[i].pos.z -= VALUE_MOVE;
+				}
+				else if ((ans) && (GetTime() <= 1))
+				{
+					g_Enemy[i].pos.z += VALUE_MOVE;
 				}
 			}
 

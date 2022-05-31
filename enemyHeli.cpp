@@ -17,6 +17,7 @@
 #include "damageEF.h"
 #include "debugproc.h"
 #include "player.h"
+#include "timeUI.h"
 
 #include "sound.h"
 
@@ -325,9 +326,13 @@ void UpdateEnemyHeli(void)
 					}
 				}
 
-				if (ans)
+				if ((ans) && (GetTime() > 1))
 				{
 					g_EnemyHeli[i].pos.z -= VALUE_MOVE;
+				}
+				else if((ans) && (GetTime() <= 1))
+				{
+					g_EnemyHeli[i].pos.z += VALUE_MOVE;
 				}
 			}
 

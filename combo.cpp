@@ -10,6 +10,7 @@
 #include "sprite.h"
 #include "speech.h"
 #include "score.h"
+#include "sound.h"
 
 
 //*****************************************************************************
@@ -144,7 +145,7 @@ void UpdateCombo(void)
 	{
 		g_Combo++;
 		// コンボ数が増える音
-		// PlaySound(SOUND_LABEL_SE_shot000);
+		if(g_Combo >= 15) PlaySound(SOUND_LABEL_SE_cheers05);
 
 		// 吹き出しを表示
 		SetComboSpeech();

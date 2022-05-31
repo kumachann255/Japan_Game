@@ -16,8 +16,8 @@ enum
 {
 	// BGM
 	SOUND_LABEL_BGM_bgm_title,		// タイトルBGM
-	SOUND_LABEL_BGM_bgm_stage001,	// ステージBGM1
-	SOUND_LABEL_BGM_bgm_stage002,	// ステージBGM2
+	SOUND_LABEL_BGM_bgm_stage001,	// ステージBGM
+	SOUND_LABEL_BGM_bgm_stage002,	// リザルトBGM
 	SOUND_LABEL_BGM_bgm_endroll,	// エンドロールBGM
 
 

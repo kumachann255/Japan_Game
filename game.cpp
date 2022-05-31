@@ -399,14 +399,14 @@ void DrawGame0(void)
 	// 時間の描画処理
 	DrawTime();
 
-	// UIの描画処理
-	DrawGameUI();
-
 	// プレイヤーのHPの描画処理
 	DrawPlayerHP();
 
 	// ダメージエフェクトの描画処理
 	DrawDamageEF();
+
+	// UIの描画処理
+	DrawGameUI();
 
 	// 吹き出しの描画処理
 	DrawSpeech();

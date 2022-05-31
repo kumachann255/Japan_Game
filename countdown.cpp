@@ -148,8 +148,24 @@ HRESULT InitCountDown(void)
 
 	case stage0:
 		g_Use2[0] = TRUE;
+	}
+
+	switch (g_Stage)
+	{
+	case stage2:
 		// SEçƒê∂
-		PlaySound(SOUND_LABEL_SE_cheers05);
+		PlaySound(SOUND_LABEL_SE_cheers03);
+		break;
+
+	case stage1:
+		// SEçƒê∂
+		PlaySound(SOUND_LABEL_SE_cheers02);
+		break;
+
+	case stage0:
+		// SEçƒê∂
+		PlaySound(SOUND_LABEL_SE_cheers01);
+		break;
 	}
 
 	g_Load = TRUE;

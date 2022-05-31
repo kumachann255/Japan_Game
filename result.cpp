@@ -98,6 +98,8 @@ static XMFLOAT4					g_Colar;
 
 static int						g_timeRank;
 
+static BOOL						g_soundFlag;
+
 static BOOL						g_Load = FALSE;
 
 
@@ -143,6 +145,8 @@ HRESULT InitResult(void)
 	g_Colar.w = 0.0f;
 
 	g_timeRank = 0;
+
+	g_soundFlag = FALSE;
 
 	for (int i = 0; i < stage_max; i++)
 	{
@@ -227,7 +231,7 @@ HRESULT InitResult(void)
 	}
 
 	// BGM再生
-	//PlaySound(SOUND_LABEL_BGM_sample002);
+	PlaySound(SOUND_LABEL_BGM_bgm_stage002);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -284,28 +288,30 @@ void UpdateResult(void)
 
 	for (int i = 0; i < stage_max; i++)
 	{
-		if (g_time >= 45 * (i + 1))
+		if (g_time == 45 * (i + 1))
 		{
 			g_Use[i] = TRUE;
+			PlaySound(SOUND_LABEL_SE_comboSound01);
 		}
 	}
 
-	if (g_time >= 250 )
+	if (g_time == 250 )
 	{
 		g_Use[4] = TRUE;
-
+		PlaySound(SOUND_LABEL_SE_stickingSound01);
 	}
 
-	if (g_time >= 330)
+	if (g_time == 330)
 	{
 		g_Use[5] = TRUE;
-
+		PlaySound(SOUND_LABEL_SE_stickingSound01);
 	}
 
-	if (g_time >= 390)
+	if (g_time == 390)
 	{
 		g_Use[6] = TRUE;
 		g_Use[7] = TRUE;
+		PlaySound(SOUND_LABEL_SE_stickingSound01);
 	}
 
 	if (g_time >= 440)
@@ -361,12 +367,11 @@ void UpdateResult(void)
 		}
 	}
 
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	
-#endif
-
+	if ((g_Use[13]) && (!g_soundFlag))
+	{
+		PlaySound(SOUND_LABEL_SE_selectBomb01);
+		g_soundFlag = TRUE;
+	}
 }
 
 //=============================================================================
