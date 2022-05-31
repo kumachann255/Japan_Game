@@ -84,6 +84,8 @@ HRESULT InitLogo(void)
 	g_TexNo = 0;
 	count = 0;
 
+	PlaySound(SOUND_LABEL_SE_logo);
+
 	g_Load = TRUE;
 	return S_OK;
 }

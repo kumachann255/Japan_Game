@@ -69,6 +69,8 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{ (char*)"data/SE/titleClick02.wav", 0 },		// タイトルモード選択音2
 	{ (char*)"data/SE/titleClick03.wav", 0 },		// タイトルモード選択音3
 	{ (char*)"data/SE/titleClick04.wav", 0 },		// タイトルモード選択音4
+	{ (char*)"data/SE/logo.wav", 0 },		// タイトルモード選択音3
+	{ (char*)"data/SE/logoD.wav", 0 },		// タイトルモード選択音4
 
 
 };

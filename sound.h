@@ -48,6 +48,8 @@ enum
 	SOUND_LABEL_SE_titleClick02,		// タイトルモード選択音2
 	SOUND_LABEL_SE_titleClick03,		// タイトルモード選択音3
 	SOUND_LABEL_SE_titleClick04,		// タイトルモード選択音4
+	SOUND_LABEL_SE_logo,				// ロゴの環境音
+	SOUND_LABEL_SE_logoD,				// ロゴの環境音
 
 
 	SOUND_LABEL_MAX,	// MAX

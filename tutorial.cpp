@@ -18,7 +18,7 @@
 #define TEXTURE_WIDTH				(500.0f)	// キャラサイズ
 #define TEXTURE_HEIGHT				(300.0f)	// 
 
-#define TEXTURE_MAX					(10)			// テクスチャの数
+#define TEXTURE_MAX					(11)			// テクスチャの数
 
 #define TEXTURE_OFFSET_Y			(60.0f)		// 表示位置調整
 #define TEXTURE_OFFSET_X			(180.0f)	// 表示位置調整
@@ -46,6 +46,7 @@ static char *g_TexturName[TEXTURE_MAX] = {
 	"data/TEXTURE/tutorial06.png",
 	"data/TEXTURE/tutorial07.png",
 	"data/TEXTURE/tutorial08.png",
+	"data/TEXTURE/tutorial09.png",
 };
 
 enum {
@@ -58,6 +59,7 @@ enum {
 	tutorial06,
 	tutorial07,
 	tutorial08,
+	tutorial09,
 };
 
 static TUTORIAL					g_Tutorial[2];	// 0：少しくらい背景　1：テキスト
@@ -178,7 +180,7 @@ void UpdateTutorial(void)
 		if ((GetKeyboardTrigger(DIK_RETURN)) || (GetKeyboardTrigger(DIK_SPACE)))
 		{
 			// チュートリアルテキストが最後まで言っていたらチュートリアル終了
-			if (g_Tutorial[1].texNo == tutorial08)
+			if (g_Tutorial[1].texNo == tutorial09)
 			{
 				SetStage(stage0);
 				SetFade(FADE_OUT, MODE_GAME);
@@ -187,8 +189,8 @@ void UpdateTutorial(void)
 			// 敵を倒す前までのチュートリアル
 			if (!g_EnemyDead)
 			{
-				if (g_Tutorial[1].texNo < tutorial05) g_Tutorial[1].texNo++;
-				else if (g_Tutorial[1].texNo == tutorial05)
+				if (g_Tutorial[1].texNo < tutorial06) g_Tutorial[1].texNo++;
+				else if (g_Tutorial[1].texNo == tutorial06)
 				{	// 敵を倒すフェーズに行ったらチュートリアルを消す
 					for (int i = 0; i < 2; i++)
 					{
@@ -198,7 +200,7 @@ void UpdateTutorial(void)
 			}
 			else
 			{	// 敵を倒した後のチュートリアル
-				if (g_Tutorial[1].texNo < tutorial08) g_Tutorial[1].texNo++;
+				if (g_Tutorial[1].texNo < tutorial09) g_Tutorial[1].texNo++;
 			}
 		}
 
@@ -269,5 +271,5 @@ void DrawTutorial(void)
 void SetTutorialEnemy(BOOL data)
 {
 	g_EnemyDead = data;
-	if (g_Tutorial[1].texNo < tutorial06) g_Tutorial[1].texNo++;
+	if (g_Tutorial[1].texNo < tutorial07) g_Tutorial[1].texNo++;
 }

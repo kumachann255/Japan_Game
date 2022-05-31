@@ -344,6 +344,9 @@ void UpdateEnemyHeli(void)
 				// SEの停止
 				StopSound(SOUND_LABEL_SE_propellerSound01);
 
+				// リムライトオフ
+				g_EnemyHeli[i].fuchi = FALSE;
+
 				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
 				// 縮まる処理

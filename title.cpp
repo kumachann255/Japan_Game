@@ -123,6 +123,9 @@ HRESULT InitTitle(void)
 	// BGM再生
 	PlaySound(SOUND_LABEL_BGM_bgm_title);
 
+	// 初期化
+
+
 	g_Load = TRUE;
 	return S_OK;
 }
@@ -235,7 +238,7 @@ void UpdateTitle(void)
 
 		// ゲームパッドで入力処理
 		if (IsButtonTriggered(0, BUTTON_LEFT) || IsButtonTriggered(0, BUTTON_RIGHT))
-		{// S/W押したら、選択を切り替える
+		{
 
 			// SEの挿入（切り替え音）
 			PlaySound(SOUND_LABEL_SE_titleClick04);
