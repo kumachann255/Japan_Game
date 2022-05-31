@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ヘリエネミーモデル処理 [enemyHeli.cpp]
-// Author : hennkousitayo
+// Author : 大塚勝亮
 //
 //=============================================================================
 #include "main.h"
@@ -148,28 +148,6 @@ HRESULT InitEnemyHeli(void)
 		g_Parts[1].load = 1;
 		LoadModel(MODEL_HELI_PARTS, &g_Parts[1].model);
 
-		//g_Parts[2].pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		//g_Parts[3].pos = XMFLOAT3(7.5f, 0.0f, -32.5f);
-
-		//g_Parts[2].rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		//g_Parts[3].rot = XMFLOAT3(0.0f, 0.0f, 1.57f);
-
-		//g_Parts[2].scl = XMFLOAT3(1.0f, 1.0f, 1.0f);
-		//g_Parts[3].scl = XMFLOAT3(0.25f, 1.0f, 0.25f);
-
-
-		//g_Parts[2].use = TRUE;
-		//g_Parts[3].use = TRUE;
-
-		//g_Parts[2].parent = &g_EnemyHeli[1];		// 親をセット
-		//g_Parts[2].load = 1;
-		//LoadModel(MODEL_HELI_PARTS, &g_Parts[2].model);
-
-		//g_Parts[3].parent = &g_EnemyHeli[1];		// 親をセット
-		//g_Parts[3].load = 1;
-		//LoadModel(MODEL_HELI_PARTS, &g_Parts[3].model);
-
-
 	}
 
 	g_Stage = GetStage();
@@ -244,10 +222,6 @@ void UpdateEnemyHeli(void)
 					g_EnemyHeli[i].pos.x = ((1.0f - g_EnemyHeli[i].time) * (1.0f - g_EnemyHeli[i].time) * control0.x) +
 						(2 * g_EnemyHeli[i].time * (1.0f - g_EnemyHeli[i].time) * control1.x) +
 						(g_EnemyHeli[i].time * g_EnemyHeli[i].time * control2.x);
-
-					//g_EnemyHeli[i].pos.z = ((1.0f - g_EnemyHeli[i].time) * (1.0f - g_EnemyHeli[i].time) * control0.z) +
-					//	(2 * g_EnemyHeli[i].time * (1.0f - g_EnemyHeli[i].time) * control1.z) +
-					//	(g_EnemyHeli[i].time * g_EnemyHeli[i].time * control2.z);
 
 					g_EnemyHeli[i].pos.y = ((1.0f - g_EnemyHeli[i].time) * (1.0f - g_EnemyHeli[i].time) * control0.y) +
 						(2 * g_EnemyHeli[i].time * (1.0f - g_EnemyHeli[i].time) * control1.y) +
@@ -365,41 +339,6 @@ void UpdateEnemyHeli(void)
 				// SEの停止
 				StopSound(SOUND_LABEL_SE_propellerSound01);
 
-				//g_EnemyHeli[i].pos_old.x = g_EnemyHeli[i].pos.x;
-				//g_EnemyHeli[i].pos_old.y = g_EnemyHeli[i].pos.y;
-				//g_EnemyHeli[i].pos_old.z = g_EnemyHeli[i].pos.z;
-
-				//BOOL ans = TRUE;
-
-				//// ほかのパトカーとぶつかってないか？
-				//for (int j = 0; j < MAX_ENEMY; j++)
-				//{
-				//	if ((g_EnemyHeli[j].isHit == FALSE) || (i == j)) continue;	// 攻撃に当たってない奴には当たり判定のチェックをスキップ
-
-				//	if (CollisionBC(g_EnemyHeli[i].pos, g_EnemyHeli[j].pos, g_EnemyHeli[i].size - 20.0f, g_EnemyHeli[j].size - 20.0f))
-				//	{
-				//		ans = FALSE;
-				//		break;
-				//	}
-				//
-				//}
-
-				//// 決まった位置まで来てかいか？
-				//if (CollisionBC(g_EnemyHeli[i].pos, g_EnemyHeli[i].hitPos, g_EnemyHeli[i].size, g_EnemyHeli[i].size))
-				//{
-				//	ans = FALSE;
-				//}
-
-
-				//XMFLOAT3 temp = XMFLOAT3(g_EnemyHeli[i].pos.x - g_EnemyHeli[i].hitPos.x, g_EnemyHeli[i].pos.y - g_EnemyHeli[i].hitPos.y, g_EnemyHeli[i].pos.z - g_EnemyHeli[i].hitPos.z);
-				//float lenSq = (temp.x * temp.x) + (temp.y * temp.y) + (temp.z * temp.z);
-
-				//if (lenSq > 5000)
-				//{
-				//	g_EnemyHeli[i].pos.x -= g_EnemyHeli[i].hitSpd.x;
-				//	g_EnemyHeli[i].pos.y -= g_EnemyHeli[i].hitSpd.y;
-				//	g_EnemyHeli[i].pos.z -= g_EnemyHeli[i].hitSpd.z;
-				//}
 				BLAST *blast = GetBlast();		// 爆破オブジェクトの初期化
 
 				// 縮まる処理
@@ -458,16 +397,7 @@ void UpdateEnemyHeli(void)
 			pos.y -= (ENEMY_HELI_OFFSET_Y - 0.1f);
 			SetPositionShadow(g_EnemyHeli[i].shadowIdx, pos);
 		}
-
-
-
 	}
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_EnemyHeli[0].hitSpd.x, g_EnemyHeli[0].hitSpd.y, g_EnemyHeli[0].hitSpd.z);
-#endif
-
 }
 
 //=============================================================================
@@ -611,11 +541,4 @@ void SetEnemyHeli(void)
 			return;
 		}
 	}
-}
-
-
-
-void SetEnemyHeliMove(void)
-{
-
 }

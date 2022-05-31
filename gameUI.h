@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ÉQÅ[ÉÄUIèàóù [gameUI.h]
-// Author : 
+// Author : åF‡Vã`çO
 //
 //=============================================================================
 #pragma once
@@ -32,4 +32,5 @@ void UpdateGameUI(void);
 void DrawGameUI(void);
 
 int GetBorderScore(void);
+BOOL GetCelebration(void);
 

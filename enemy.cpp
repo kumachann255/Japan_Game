@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // エネミーモデル処理 [enemy.cpp]
-// Author : aaa
+// Author : 熊澤義弘＋エナ
 //
 //=============================================================================
 #include "main.h"
@@ -161,20 +161,6 @@ void UpdateEnemy(void)
 		if (count == STAGE0_POP_COUNT)
 		{
 			SetEnemy();
-		}
-
-		// エネミーが倒されたら
-		if ((g_Enemy[0].use == FALSE) && (count > STAGE0_POP_COUNT))
-		{
-			// チュートリアル完了のテロップ表示
-
-
-			// Enterを押したらステージ遷移
-			//if (GetKeyboardTrigger(DIK_RETURN))
-			//{
-			//	SetStage(stage0);
-			//	SetFade(FADE_OUT, MODE_GAME);
-			//}
 		}
 	}
 	else
@@ -381,15 +367,6 @@ void UpdateEnemy(void)
 				}
 				
 
-
-				//if (ans)
-				//{
-				//	g_Enemy[i].pos.x += (g_Enemy[i].hitPos.x - g_Enemy[i].pos.x) / ENEMY_HIT_MOVE;
-				//	g_Enemy[i].pos.y += (g_Enemy[i].hitPos.y - g_Enemy[i].pos.y) / ENEMY_HIT_MOVE;
-				//	g_Enemy[i].pos.z += (g_Enemy[i].hitPos.z - g_Enemy[i].pos.z) / ENEMY_HIT_MOVE;
-				//}
-
-
 				// 爆弾と一緒に落下する
 				BOOL camera = GetCameraSwitch();
 
@@ -423,16 +400,7 @@ void UpdateEnemy(void)
 			pos.y -= (ENEMY_OFFSET_Y - 0.1f);
 			SetPositionShadow(g_Enemy[i].shadowIdx, pos);
 		}
-
-
-
 	}
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//PrintDebugProc("enmey spd x:%f y:%f z:%f \n ", g_Enemy[0].hitSpd.x, g_Enemy[0].hitSpd.y, g_Enemy[0].hitSpd.z);
-#endif
-
 }
 
 //=============================================================================
@@ -539,11 +507,4 @@ void SetEnemy(void)
 			return;
 		}
 	}
-}
-
-
-
-void SetEnemyMove(void)
-{
-
 }

@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // リザルト画面処理 [result.cpp]
-// Author : GP12B183 山田隆徳
+// Author : 山田隆徳
 //
 //=============================================================================
 #include "main.h"
@@ -352,8 +352,6 @@ void UpdateResult(void)
 
 
 			}
-
-
 		}
 
 		if ((g_timeRank >60) && (g_Colar.w > 0.0f))
@@ -361,17 +359,6 @@ void UpdateResult(void)
 			g_Colar.w -= 0.04f;
 
 		}
-
-
-
-
-		//if (g_totale >= RANK_S_BORDER)
-
-		//{
-		//	g_Use[11] = TRUE;
-		//	g_Use[13] = TRUE;
-
-		//}
 	}
 
 
@@ -448,16 +435,7 @@ void DrawResult(void)
 				GetDeviceContext()->Draw(4, 0);
 
 			}
-
 		}
-		// テクスチャ設定
-
-
-		//// １枚のポリゴンの頂点とテクスチャ座標を設定
-		//SetSprite(g_VertexBuffer, g_Pos.x, g_Pos.y, TEXTURE_WIDTH_LOGO, TEXTURE_HEIGHT_LOGO, 0.0f, 0.0f, 1.0f, 1.0f);
-
-		//// ポリゴン描画
-		//GetDeviceContext()->Draw(4, 0);
 	}
 
 

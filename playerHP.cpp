@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // プレイヤーのHP処理 [playerHP.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -10,6 +10,9 @@
 #include "sprite.h"
 #include "model.h"
 #include "player.h"
+#include "score.h"
+#include "gameUI.h"
+
 
 //*****************************************************************************
 // マクロ定義
@@ -122,6 +125,7 @@ void UpdatePlayerHP(void)
 {
 	PLAYER *player = GetPlayer();
 
+	// プレイヤーのHPによって表示テクスチャを変更
 	if (player->hp < PLAYER_MAX_HP / TEXTURE_MAX)
 	{
 		g_TexNo = 3;
@@ -139,14 +143,11 @@ void UpdatePlayerHP(void)
 		g_TexNo = 0;
 	}
 
-
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//char *str = GetDebugStr();
-	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
-	
-#endif
+	// プレイヤーのHPは目標スコアを超えていた場合、0にならない
+	if ((player->hp < 3) && (GetCelebration()))
+	{
+		player->hp = 2;
+	}
 
 }
 

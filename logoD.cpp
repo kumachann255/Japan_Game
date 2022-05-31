@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ロゴ(DirectX)画面処理 [logoD.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -125,7 +125,6 @@ void UpdateLogoD(void)
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{// Enter押したら、ステージを切り替える
 		SetFade(FADE_OUT, MODE_TITLE);
-		//SetFade(FADE_OUT, MODE_RESULT);
 	}
 	// ゲームパッドで入力処理
 	else if (IsButtonTriggered(0, BUTTON_START))
@@ -139,13 +138,6 @@ void UpdateLogoD(void)
 
 	count++;
 	if(count >= NEXT_MODE) SetFade(FADE_OUT, MODE_TITLE);
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//char *str = GetDebugStr();
-	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
-	
-#endif
 
 }
 

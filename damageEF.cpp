@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ダメージエフェクト処理 [damageEF.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -136,49 +136,6 @@ void UpdateDamageEF(void)
 			g_time = 0;
 		}
 	}
-
-
-
-
-
-	//if (g_Fade != FADE_NONE)
-	//{// フェード処理中
-	//	if (g_Fade == FADE_OUT)
-	//	{// フェードアウト処理
-	//		g_Color.w += FADE_RATE;		// α値を加算して画面を消していく
-	//		if (g_Color.w >= 1.0f)
-	//		{
-	//			// 鳴っている曲を全部止める
-	//			StopSound();
-
-	//			// フェードイン処理に切り替え
-	//			g_Color.w = 1.0f;
-	//			SetFade(FADE_IN, g_ModeNext);
-
-	//			// モードを設定
-	//			SetMode(g_ModeNext);
-	//		}
-
-	//	}
-	//	else if (g_Fade == FADE_IN)
-	//	{// フェードイン処理
-	//		g_Color.w -= FADE_RATE;		// α値を減算して画面を浮き上がらせる
-	//		if (g_Color.w <= 0.0f)
-	//		{
-	//			// フェード処理終了
-	//			g_Color.w = 0.0f;
-	//			SetFade(FADE_NONE, g_ModeNext);
-	//		}
-
-	//	}
-	//}
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	// PrintDebugProc("\n");
-
-#endif
-
 }
 
 
@@ -188,9 +145,6 @@ void UpdateDamageEF(void)
 void DrawDamageEF(void)
 {
 	if (!g_Use) return;	// ダメージを受けていなければ表示しない
-
-	// 加算合成に設定
-	//SetBlendState(BLEND_MODE_ADD);
 
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);

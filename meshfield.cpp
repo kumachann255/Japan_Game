@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // メッシュ地面の処理 [meshfield.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -256,9 +256,6 @@ void UninitMeshField(void)
 //=============================================================================
 void UpdateMeshField(void)
 {
-
-	//return;	// 処理をスキップ！
-
 	// 波の処理
 	float dt = 0.03f;
 
@@ -272,28 +269,6 @@ void UpdateMeshField(void)
 		}
 
 	}
-
-
-
-
-
-	//for (int z = 0; z < g_nNumBlockZField; z++)
-	//{
-	//	for (int x = 0; x < g_nNumBlockXField; x++)
-	//	{
-	//		float dx = g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.x - g_Center.x;
-	//		float dz = g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.z - g_Center.z;
-
-	//		// 波紋の中心点からの距離を得る
-	//		float len = (float)sqrt(dx * dx + dz * dz);
-
-	//		// 波の高さを、sin関数で得る
-	//	//	g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.y = 0.0f;
-	//		g_Vertex[z * (g_nNumBlockXField + 1) + x].Position.y = sinf(-g_Time * g_wave_frequency + len * g_wave_correction) * g_wave_amplitude;
-	//	}
-
-	//}
-	//g_Time += dt;
 
 
 	// 頂点バッファに値をセットする

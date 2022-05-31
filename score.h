@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // スコア処理 [score.h]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #pragma once
@@ -14,10 +14,10 @@
 #define SCORE_DIGIT			(5)			// ステージ桁数
 #define COMBO_MAX_DIGIT		(3)			// 最大コンボの桁数
 
-//#define SCORE_STAGE0_BORDER	(2000)		// ステージ0のクリアスコア
-//#define SCORE_STAGE1_BORDER	(3000)		// ステージ1のクリアスコア
-//#define SCORE_STAGE2_BORDER	(4000)		// ステージ2のクリアスコア
-//#define SCORE_STAGE3_BORDER	(5000)		// ステージ3のクリアスコア
+#define SCORE_STAGE0_BORDER	(3000)		// ステージ0のクリアスコア
+#define SCORE_STAGE1_BORDER	(6000)		// ステージ1のクリアスコア
+#define SCORE_STAGE2_BORDER	(10000)		// ステージ2のクリアスコア
+#define SCORE_STAGE3_BORDER	(25000)		// ステージ3のクリアスコア
 
 #define SCORE_STAGE0_BORDER	(200)		// ステージ0のクリアスコア
 #define SCORE_STAGE1_BORDER	(200)		// ステージ1のクリアスコア
