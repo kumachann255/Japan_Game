@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // カウントダウン画面処理 [countdown.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -151,8 +151,6 @@ HRESULT InitCountDown(void)
 		// SE再生
 		PlaySound(SOUND_LABEL_SE_cheers05);
 	}
-	// BGM再生
-	//PlaySound(SOUND_LABEL_BGM_sample000);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -218,27 +216,7 @@ void UpdateCountDown(void)
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 3;
 		SetFade(FADE_OUT, MODE_GAME);
 	}
-	//else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3) + COUNTDOWN / 2)
-	//{
-	//	g_Count = 0;
-	//	SetFade(FADE_OUT, MODE_GAME);
-	//}
 
-
-
-	//if (GetKeyboardTrigger(DIK_RETURN))
-	//{// Enter押したら、ステージを切り替える
-	//	//SetFade(FADE_OUT, MODE_RESULT);
-	//}
-	//// ゲームパッドで入力処理
-	//else if (IsButtonTriggered(0, BUTTON_START))
-	//{
-	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
-	//}
-	//else if (IsButtonTriggered(0, BUTTON_B))
-	//{
-	//	SetFade(FADE_OUT, MODE_TITLE_DirectX);
-	//}
 
 	// お祝いテクスチャ
 	switch (g_Stage)
@@ -269,15 +247,6 @@ void UpdateCountDown(void)
 			g_Use2[i] = FALSE;
 		}
 	}
-
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//char *str = GetDebugStr();
-	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
-	
-#endif
-
 }
 
 //=============================================================================

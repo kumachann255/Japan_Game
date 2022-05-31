@@ -3,8 +3,6 @@
 // íeî≠éÀèàóù [bullet.cpp]
 // Author : ÉGÉi
 //
-//
-//
 //=============================================================================
 #include "main.h"
 #include "renderer.h"
@@ -276,9 +274,6 @@ int SetBullet(XMFLOAT3 pos, XMFLOAT3 rot)
 			g_Bullet[nCntBullet].shadowIdx = CreateShadow(g_Bullet[nCntBullet].pos, 0.5f, 0.5f);
 
 			nIdxBullet = nCntBullet;
-
-			// î≠éÀâπ
-			// PlaySound(SOUND_LABEL_SE_shot000);
 
 			break;
 		}

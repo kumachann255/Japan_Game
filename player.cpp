@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // モデル処理 [player.cpp]
-// Author :GP12B183 山田隆徳
+// Author :山田隆徳
 //
 //=============================================================================
 #include "main.h"
@@ -245,8 +245,6 @@ HRESULT InitPlayer(void)
 
 		// 親子関係
 		g_Parts[i].parent = &g_Player;		// ← ここに親のアドレスを入れる
-//	//	g_Parts[腕].parent= &g_Player;		// 腕だったら親は本体（プレイヤー）
-//	//	g_Parts[手].parent= &g_Paerts[腕];	// 指が腕の子供だった場合の例
 
 		// 階層アニメーション用のメンバー変数の初期化
 		g_Parts[i].tbl_adr = NULL;		// 再生するアニメデータの先頭アドレスをセット
@@ -323,28 +321,6 @@ void UpdatePlayer(void)
 {
 	CAMERA *cam = GetCamera();
 
-	//// 移動させちゃう
-	//if (GetKeyboardPress(DIK_LEFT))
-	//{	// 左へ移動
-	//	g_Player.spd = VALUE_MOVE;
-	//	g_Player.dir = XM_PI / 2;
-	//}
-	//if (GetKeyboardPress(DIK_RIGHT))
-	//{	// 右へ移動
-	//	g_Player.spd = VALUE_MOVE;
-	//	g_Player.dir = -XM_PI / 2;
-	//}
-	//if (GetKeyboardPress(DIK_UP))
-	//{	// 上へ移動
-	//	g_Player.spd = VALUE_MOVE;
-	//	g_Player.dir = XM_PI;
-	//}
-	//if (GetKeyboardPress(DIK_DOWN))
-	//{	// 下へ移動
-	//	g_Player.spd = VALUE_MOVE;
-	//	g_Player.dir = 0.0f;
-	//}
-
 	g_Player.pos.z -= 2.0f;
 
 	if (g_Player.pos.z <= 0.0f)
@@ -417,12 +393,6 @@ void UpdatePlayer(void)
 		float dt = 1.0f / g_Player.tbl_adr[index].frame;	// 1フレームで進める時間
 		g_Player.move_time += dt;					// アニメーションの合計時間に足す
 
-		//if ((g_Player.action == TRUE) && (g_Player.move_time >= size - 1) && (i == 4))
-		//{
-		//	SetStayMotion();
-		//	g_Player.action = FALSE;
-
-		//}
 		if (index > (size - 2))	// ゴールをオーバーしていたら、最初へ戻す
 		{
 			g_Player.move_time = 0.0f;
@@ -671,9 +641,6 @@ void SetStayMotion(void)
 //*****************************************************************************
 // 待機時のモーションテーブル
 //*****************************************************************************
-	//g_Player.tbl_adr = s_car;	// 再生するアニメデータの先頭アドレスをセット
-	//g_Player.tbl_size = sizeof(s_car) / sizeof(INTERPOLATION_DATA);		// 再生するアニメデータのレコード数をセット
-
 
 	g_Parts[0].tbl_adr = s_head;	// 再生するアニメデータの先頭アドレスをセット
 	g_Parts[0].tbl_size = sizeof(s_head) / sizeof(INTERPOLATION_DATA);		// 再生するアニメデータのレコード数をセット

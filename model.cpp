@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // モデルの処理 [model.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #define _CRT_SECURE_NO_WARNINGS
@@ -601,7 +601,9 @@ void LoadMaterial( char *FileName, MODEL_MATERIAL **MaterialArray, unsigned shor
 }
 
 
+//=============================================================================
 // モデルの全マテリアルのディフューズを取得する。Max16個分にしてある
+//=============================================================================
 void GetModelDiffuse(DX11_MODEL *Model, XMFLOAT4 *diffuse)
 {
 	int max = (Model->SubsetNum < MODEL_MAX_MATERIAL) ? Model->SubsetNum : MODEL_MAX_MATERIAL;
@@ -614,7 +616,9 @@ void GetModelDiffuse(DX11_MODEL *Model, XMFLOAT4 *diffuse)
 }
 
 
+//=============================================================================
 // モデルの指定マテリアルのディフューズをセットする。
+//=============================================================================
 void SetModelDiffuse(DX11_MODEL *Model, int mno, XMFLOAT4 diffuse)
 {
 	// ディフューズ設定

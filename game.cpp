@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ゲーム画面処理 [game.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -485,7 +485,6 @@ void DrawGame(void)
 		break;
 
 	}
-
 }
 
 
@@ -598,40 +597,6 @@ void CheckHit(void)
 	}
 
 
-
-	//// プレイヤーの弾と敵
-	//for (int i = 0; i < MAX_BULLET; i++)
-	//{
-	//	//弾の有効フラグをチェックする
-	//	if (bullet[i].use == FALSE)
-	//		continue;
-
-	//	// 敵と当たってるか調べる
-	//	for (int j = 0; j < MAX_ENEMY; j++)
-	//	{
-	//		//敵の有効フラグをチェックする
-	//		if (enemy[j].use == FALSE)
-	//			continue;
-
-	//		//BCの当たり判定
-	//		if (CollisionBC(bullet[i].pos, enemy[j].pos, bullet[i].fWidth, enemy[j].size))
-	//		{
-	//			// 当たったから未使用に戻す
-	//			bullet[i].use = FALSE;
-	//			ReleaseShadow(bullet[i].shadowIdx);
-
-	//			// 敵キャラクターは倒される
-	//			enemy[j].use = FALSE;
-	//			ReleaseShadow(enemy[j].shadowIdx);
-
-	//			// スコアを足す
-	//			AddScore(10);
-	//		}
-	//	}
-
-	//}
-
-
 	// プレイヤーのHPが0でゲームオーバー
 	// リザルト画面へ遷移
 	// 最終的にはゲームオーバー画面からリザルト画面へ遷移
@@ -639,21 +604,6 @@ void CheckHit(void)
 	{
 		SetFade(FADE_OUT, MODE_RESULT);
 	}
-
-	// エネミーが全部死亡したら状態遷移
-	//int enemy_count = 0;
-	//for (int i = 0; i < MAX_ENEMY; i++)
-	//{
-	//	if (enemy[i].use == FALSE) continue;
-	//	enemy_count++;
-	//}
-
-	//// エネミーが０匹？
-	//if (enemy_count == 0)
-	//{
-	//	SetFade(FADE_OUT, MODE_RESULT);
-	//}
-
 }
 
 

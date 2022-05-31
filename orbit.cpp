@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // 軌道処理 [orbit.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -194,54 +194,8 @@ void UpdateOrbit(void)
 					(2 * time * (1.0f - time) * control.y) +
 					(time * time * AttackR->pos.y);
 
-
-
-
-
-
-
-				//g_Orbit[nCntParticle].pos.x += g_Orbit[nCntParticle].move.x;
-				//g_Orbit[nCntParticle].pos.z += g_Orbit[nCntParticle].move.z;
-
-				//g_Orbit[nCntParticle].pos.y += g_Orbit[nCntParticle].move.y;
-				//if(g_Orbit[nCntParticle].pos.y <= g_Orbit[nCntParticle].fSizeY / 2)
-				//{// 着地した
-				//	g_Orbit[nCntParticle].pos.y = g_Orbit[nCntParticle].fSizeY / 2;
-				//	g_Orbit[nCntParticle].move.y = -g_Orbit[nCntParticle].move.y * 0.75f;
-				//}
-
-				//g_Orbit[nCntParticle].move.x += (0.0f - g_Orbit[nCntParticle].move.x) * 0.015f;
-				//g_Orbit[nCntParticle].move.y -= 0.25f;
-				//g_Orbit[nCntParticle].move.z += (0.0f - g_Orbit[nCntParticle].move.z) * 0.015f;
-
 			}
 		}
-
-		//// パーティクル発生
-		//{
-		//	XMFLOAT3 pos;
-		//	XMFLOAT3 move;
-		//	float fAngle, fLength;
-		//	int nLife;
-		//	float fSize;
-
-		//	pos = g_posBase;
-
-		//	fAngle = (float)(rand() % 628 - 314) / 100.0f;
-		//	fLength = rand() % (int)(g_fWidthBase * 200 ) / 100.0f - g_fWidthBase;
-		//	move.x = sinf(fAngle) * fLength;
-		//	move.y = rand() % 300 / 100.0f + g_fHeightBase;
-		//	move.z = cosf(fAngle) * fLength;
-
-		//	nLife = rand() % 100 + 150;  
-
-		//	fSize = (float)(rand() % 30 + 20);
-
-		//	pos.y = fSize / 2;
-
-		//	// ビルボードの設定
-		//	SetParticle(pos, move, XMFLOAT4(0.8f, 0.7f, 0.2f, 0.85f), fSize, fSize, nLife);
-		//}
 	}
 }
 
@@ -285,11 +239,6 @@ void DrawOrbit(void)
 
 			// ビューマトリックスを取得
 			mtxView = XMLoadFloat4x4(&cam->mtxView);
-
-			//mtxWorld = XMMatrixInverse(nullptr, mtxView);
-			//mtxWorld.r[3].m128_f32[0] = 0.0f;
-			//mtxWorld.r[3].m128_f32[1] = 0.0f;
-			//mtxWorld.r[3].m128_f32[2] = 0.0f;
 
 			// 処理が速いしお勧め
 			mtxWorld.r[0].m128_f32[0] = mtxView.r[0].m128_f32[0];

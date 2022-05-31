@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // フェード処理 [fade.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -152,13 +152,6 @@ void UpdateFade(void)
 
 		}
 	}
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	// PrintDebugProc("\n");
-
-#endif
-
 }
 
 //=============================================================================
@@ -167,9 +160,6 @@ void UpdateFade(void)
 void DrawFade(void)
 {
 	if (g_Fade == FADE_NONE) return;	// フェードしないのなら描画しない
-
-	// 加算合成に設定
-	//SetBlendState(BLEND_MODE_ADD);
 
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -192,7 +182,6 @@ void DrawFade(void)
 		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[g_TexNo]);
 
 		// １枚のポリゴンの頂点とテクスチャ座標を設定
-		//SetVertex(0.0f, 0.0f, SCREEN_WIDTH, TEXTURE_WIDTH, 0.0f, 0.0f, 1.0f, 1.0f);
 		SetSpriteColor(g_VertexBuffer, SCREEN_WIDTH/2, TEXTURE_WIDTH/2, SCREEN_WIDTH, TEXTURE_WIDTH, 0.0f, 0.0f, 1.0f, 1.0f,
 			g_Color);
 

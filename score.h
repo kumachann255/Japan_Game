@@ -1,34 +1,31 @@
 //=============================================================================
 //
-// ƒXƒRƒAˆ— [score.h]
-// Author : 
+// ã‚¹ã‚³ã‚¢å‡¦ç† [score.h]
+// Author : ç†Šæ¾¤ç¾©å¼˜
 //
 //=============================================================================
 #pragma once
 
 
 //*****************************************************************************
-// ƒ}ƒNƒ’è‹`
+// ãƒžã‚¯ãƒ­å®šç¾©
 //*****************************************************************************
-#define SCORE_MAX			(99999)		// ƒXƒRƒA‚ÌÅ‘å’l
-#define SCORE_DIGIT			(5)			// ƒXƒe[ƒWŒ…”
-#define COMBO_MAX_DIGIT		(3)			// Å‘åƒRƒ“ƒ{‚ÌŒ…”
+#define SCORE_MAX			(99999)		// ã‚¹ã‚³ã‚¢ã®æœ€å¤§å€¤
+#define SCORE_DIGIT			(5)			// ã‚¹ãƒ†ãƒ¼ã‚¸æ¡æ•°
+#define COMBO_MAX_DIGIT		(3)			// æœ€å¤§ã‚³ãƒ³ãƒœã®æ¡æ•°
 
-// ƒXƒe[ƒWƒNƒŠƒA‚Ìƒ{[ƒ_[
-#define SCORE_STAGE0_BORDER	(2000)		// ƒXƒe[ƒW0‚ÌƒNƒŠƒAƒXƒRƒA
-#define SCORE_STAGE1_BORDER	(3000)		// ƒXƒe[ƒW1‚ÌƒNƒŠƒAƒXƒRƒA
-#define SCORE_STAGE2_BORDER	(4000)		// ƒXƒe[ƒW2‚ÌƒNƒŠƒAƒXƒRƒA
-#define SCORE_STAGE3_BORDER	(5000)		// ƒXƒe[ƒW3‚ÌƒNƒŠƒAƒXƒRƒA
+#define SCORE_STAGE0_BORDER	(3000)		// ã‚¹ãƒ†ãƒ¼ã‚¸0ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+#define SCORE_STAGE1_BORDER	(6000)		// ã‚¹ãƒ†ãƒ¼ã‚¸1ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+#define SCORE_STAGE2_BORDER	(10000)		// ã‚¹ãƒ†ãƒ¼ã‚¸2ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+#define SCORE_STAGE3_BORDER	(25000)		// ã‚¹ãƒ†ãƒ¼ã‚¸3ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
 
-//// ƒfƒoƒbƒO—p
-//#define SCORE_STAGE0_BORDER	(200)		// ƒXƒe[ƒW0‚ÌƒNƒŠƒAƒXƒRƒA
-//#define SCORE_STAGE1_BORDER	(200)		// ƒXƒe[ƒW1‚ÌƒNƒŠƒAƒXƒRƒA
-//#define SCORE_STAGE2_BORDER	(200)		// ƒXƒe[ƒW2‚ÌƒNƒŠƒAƒXƒRƒA
-//#define SCORE_STAGE3_BORDER	(200)		// ƒXƒe[ƒW3‚ÌƒNƒŠƒAƒXƒRƒA
-//
+// #define SCORE_STAGE0_BORDER	(200)		// ã‚¹ãƒ†ãƒ¼ã‚¸0ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+// #define SCORE_STAGE1_BORDER	(200)		// ã‚¹ãƒ†ãƒ¼ã‚¸1ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+// #define SCORE_STAGE2_BORDER	(200)		// ã‚¹ãƒ†ãƒ¼ã‚¸2ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
+// #define SCORE_STAGE3_BORDER	(200)		// ã‚¹ãƒ†ãƒ¼ã‚¸3ã®ã‚¯ãƒªã‚¢ã‚¹ã‚³ã‚¢
 
 //*****************************************************************************
-// ƒvƒƒgƒ^ƒCƒvéŒ¾
+// ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
 //*****************************************************************************
 HRESULT InitScore(void);
 void UninitScore(void);

@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // カメラ処理 [camera.cpp]
-// Author : 
+// Author : 熊澤義弘
 //
 //=============================================================================
 #include "main.h"
@@ -125,13 +125,6 @@ void UpdateCamera(void)
 		}
 		else
 		{
-			//XMFLOAT3 pos;
-
-			//pos = pPlayer->pos;
-			//pos.y = 0.0f;			// カメラ酔いを防ぐためにクリアしている
-			//SetCameraAT(pos);
-			//SetCamera();
-
 			g_Shake = FALSE;
 		}
 	}
@@ -368,13 +361,9 @@ int GetViewPortType(void)
 }
 
 
-
-
-
-
-
-
+//=============================================================================
 // カメラの視点と注視点をセット
+//=============================================================================
 void SetCameraAT(XMFLOAT3 pos)
 {
 	// カメラの注視点をプレイヤーの座標にしてみる
@@ -395,22 +384,6 @@ void SetCameraAT(XMFLOAT3 pos)
 			g_Camera.at.y = g_Camera.at.y + ((targetAT.y - g_Camera.at.y) / CAMERA_VALUE);
 			g_Camera.at.z = g_Camera.at.z + ((targetAT.z - g_Camera.at.z) / CAMERA_VALUE);
 		}
-
-
-		//g_Camera.at = bom->pos;
-
-		// 過去の注視点と違っている場合に少しずつ保管させる
-		// 注視点が瞬間移動しないように
-		//float distance = fabsf(old_pos.y - g_Camera.at.y);
-
-		//if (distance > CAMERA_OFFSET)
-		{
-			//g_Camera.at.x = old_pos.x + ((g_Camera.at.x - old_pos.x) / CAMERA_VALUE);
-			//g_Camera.at.y = old_pos.y + ((g_Camera.at.x - old_pos.y) / CAMERA_VALUE);
-			//g_Camera.at.z = old_pos.z + ((g_Camera.at.x - old_pos.z) / CAMERA_VALUE);
-		}
-
-
 	}
 	else if(g_Move)
 	{
@@ -418,15 +391,6 @@ void SetCameraAT(XMFLOAT3 pos)
 	}
 	else
 	{
-		//g_Camera.at = pos;
-
-		// カメラの視点をカメラのY軸回転に対応させている
-		//g_Camera.pos.x = g_Camera.at.x - sinf(g_Camera.rot.y) * g_Camera.len;
-		//g_Camera.pos.z = g_Camera.at.z - cosf(g_Camera.rot.y) * g_Camera.len;
-
-		//// シーンに応じてATの調整
-		//g_Camera.at.y += CAMERA_OFFSET_Y;
-
 		XMFLOAT3 targetAT = pos;
 
 		// シーンに応じてATの調整

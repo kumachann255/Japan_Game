@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // タイトル画面処理 [title.cpp]
-// Author : 
+// Author : エナ
 //
 //=============================================================================
 #include "main.h"
@@ -157,28 +157,6 @@ void UninitTitle(void)
 //=============================================================================
 void UpdateTitle(void)
 {
-
-	//if (GetKeyboardTrigger(DIK_RETURN))
-	//{// Enter押したら、ステージを切り替える
-	//	SetStage(stage0);
-	//	SetFade(FADE_OUT, MODE_GAME);
-	//	//SetFade(FADE_OUT, MODE_RESULT);
-
-	//	// mainスコアを初期化
-	//	ResetMainScore();
-	//}
-	//// ゲームパッドで入力処理
-	//else if (IsButtonTriggered(0, BUTTON_START))
-	//{
-	//	SetStage(stage0);
-	//	SetFade(FADE_OUT, MODE_GAME);
-	//}
-	//else if (IsButtonTriggered(0, BUTTON_B))
-	//{
-	//	SetStage(stage0);
-	//	SetFade(FADE_OUT, MODE_GAME);
-	//}
-
 	if (flag_rot == TRUE)
 	{
 		logo_time -= 0.02f;
@@ -229,7 +207,6 @@ void UpdateTitle(void)
 				exit_h -= TEXTURE_HEIGHT_EXIT / 3;
 
 			}
-			//PlaySound(SOUND_LABEL_SE_system_01);
 		}
 
 
@@ -241,10 +218,8 @@ void UpdateTitle(void)
 
 			if (start_texno == 3)
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
-				//SetFade(FADE_OUT, MODE_TUTORIAL);
 		
 				// mainスコアを初期化
 				ResetMainScore();
@@ -252,7 +227,6 @@ void UpdateTitle(void)
 			}
 			else
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				Sleep(800);
 				exit(-1);
 			}
@@ -276,7 +250,6 @@ void UpdateTitle(void)
 				start_texno = 3;
 				exit_texno = 4;
 			}
-			//PlaySound(SOUND_LABEL_SE_system_01);
 		}
 
 
@@ -287,17 +260,14 @@ void UpdateTitle(void)
 
 			if (start_texno == 3)
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
-				//SetFade(FADE_OUT, MODE_TUTORIAL);
 			
 				// mainスコアを初期化
 				ResetMainScore();
 			}
 			else
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				Sleep(800);
 				exit(-1);
 			}
@@ -309,35 +279,19 @@ void UpdateTitle(void)
 
 			if (start_texno == 3)
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				SetStage(tutorial);
 				SetFade(FADE_OUT, MODE_GAME);
-				//SetFade(FADE_OUT, MODE_TUTORIAL);
 			
 				// mainスコアを初期化
 				ResetMainScore();
 			}
 			else
 			{
-				//PlaySound(SOUND_LABEL_SE_system_02);
 				Sleep(800);
 				exit(-1);
 			}
 		}
 	}
-
-	//g_Time--;
-
-
-
-
-
-#ifdef _DEBUG	// デバッグ情報を表示する
-	//char *str = GetDebugStr();
-	//sprintf(&str[strlen(str)], " PX:%.2f PY:%.2f", g_Pos.x, g_Pos.y);
-	
-#endif
-
 }
 
 //=============================================================================
@@ -389,7 +343,6 @@ void DrawTitle(void)
 	}
 
 	// タイトルのメニューを描画
-	//if (g_Time < 0)
 	{
 		// テクスチャ設定
 		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[start_texno]);
@@ -411,30 +364,6 @@ void DrawTitle(void)
 		// ポリゴン描画
 		GetDeviceContext()->Draw(4, 0);
 	}
-
-//	// 加減算のテスト
-//	SetBlendState(BLEND_MODE_ADD);		// 加算合成
-////	SetBlendState(BLEND_MODE_SUBTRACT);	// 減算合成
-//	for(int i=0; i<30; i++)
-//	{
-//		// テクスチャ設定
-//		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[2]);
-//
-//		// １枚のポリゴンの頂点とテクスチャ座標を設定
-//		float dx = 100.0f;
-//		float dy = 100.0f;
-//		float sx = (float)(rand() % 100);
-//		float sy = (float)(rand() % 100);
-//
-//
-//		SetSpriteColor(g_VertexBuffer, dx+sx, dy+sy, 50, 50, 0.0f, 0.0f, 1.0f, 1.0f,
-//			XMFLOAT4(0.3f, 0.3f, 1.0f, 0.5f));
-//
-//		// ポリゴン描画
-//		GetDeviceContext()->Draw(4, 0);
-//	}
-//	SetBlendState(BLEND_MODE_ALPHABLEND);	// 半透明処理を元に戻す
-
 }
 
 
