@@ -95,9 +95,9 @@ HRESULT InitEnemyHeli(void)
 		// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_EnemyHeli[i].model, &g_EnemyHeli[i].diffuse[0]);
 
-		XMFLOAT3 pos = g_EnemyHeli[i].pos;
-		pos.y -= (ENEMY_HELI_OFFSET_Y - 0.1f);
-		g_EnemyHeli[i].shadowIdx = CreateShadow(pos, ENEMY_HELI_SHADOW_SIZE, ENEMY_HELI_SHADOW_SIZE);
+		//XMFLOAT3 pos = g_EnemyHeli[i].pos;
+		//pos.y -= (ENEMY_HELI_OFFSET_Y - 0.1f);
+		//g_EnemyHeli[i].shadowIdx = CreateShadow(pos, ENEMY_HELI_SHADOW_SIZE, ENEMY_HELI_SHADOW_SIZE);
 
 		g_EnemyHeli[i].use = FALSE;			// TRUE:生きてる
 		g_EnemyHeli[i].switchFlag = TRUE;	// ベジェ曲線フラグ TRUE = time+ / FALSE = time-
@@ -545,6 +545,11 @@ void SetEnemyHeli(void)
 
 			// リムライトオフ
 			g_EnemyHeli[i].fuchi = FALSE;
+
+			XMFLOAT3 pos = g_EnemyHeli[i].pos;
+			pos.y -= (ENEMY_HELI_OFFSET_Y - 0.1f);
+			g_EnemyHeli[i].shadowIdx = CreateShadow(pos, ENEMY_HELI_SHADOW_SIZE, ENEMY_HELI_SHADOW_SIZE);
+
 
 			return;
 		}

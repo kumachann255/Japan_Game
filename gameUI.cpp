@@ -71,6 +71,7 @@ static BOOL						g_Border;					// 目標スコアを超えているかどうか
 static int						g_BorderScore;				// 目標スコア
 
 static float					g_time;
+static int						g_Stage;
 
 static BOOL						g_SoundFlag;
 static BOOL						g_Load = FALSE;
@@ -147,9 +148,10 @@ HRESULT InitGameUI(void)
 		}
 	}
 
+	g_Stage = GetStage();
 
 	// 目標スコアの初期化
-	switch (GetStage())
+	switch (g_Stage)
 	{
 	case stage0:
 	case tutorial:

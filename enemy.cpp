@@ -105,9 +105,9 @@ HRESULT InitEnemy(void)
 			// モデルのディフューズを保存しておく。色変え対応の為。
 		GetModelDiffuse(&g_Enemy[i].model, &g_Enemy[i].diffuse[0]);
 
-		XMFLOAT3 pos = g_Enemy[i].pos;
-		pos.y -= (ENEMY_OFFSET_Y - 0.1f);
-		g_Enemy[i].shadowIdx = CreateShadow(pos, ENEMY_SHADOW_SIZE, ENEMY_SHADOW_SIZE);
+		//XMFLOAT3 pos = g_Enemy[i].pos;
+		//pos.y -= (ENEMY_OFFSET_Y - 0.1f);
+		//g_Enemy[i].shadowIdx = CreateShadow(pos, ENEMY_SHADOW_SIZE, ENEMY_SHADOW_SIZE);
 
 		g_Enemy[i].use = FALSE;			// TRUE:生きてる
 
@@ -245,7 +245,7 @@ void UpdateEnemy(void)
 		if (g_Enemy[i].use == TRUE)			// このエネミーが使われている？
 		{									// Yes
 			// 生存時間をカウント
-			if(GetStage() != tutorial) g_Enemy[i].liveCount++;
+			if(g_Stage != tutorial) g_Enemy[i].liveCount++;
 
 			// 攻撃を食らっていなけらば攻撃処理
 			if (g_Enemy[i].isHit == FALSE)
@@ -506,8 +506,14 @@ void SetEnemy(void)
 
 			// エネミーのタイプをランダムに
 			g_Enemy[i].type = rand() % ENEMY_TYPE_MAX;
+
 			// リムライトオフ
 			g_Enemy[i].fuchi = FALSE;
+
+			XMFLOAT3 pos = g_Enemy[i].pos;
+			pos.y -= (ENEMY_OFFSET_Y - 0.1f);
+			g_Enemy[i].shadowIdx = CreateShadow(pos, ENEMY_SHADOW_SIZE * 2.0f, ENEMY_SHADOW_SIZE * 2.0f);
+
 
 			return;
 		}

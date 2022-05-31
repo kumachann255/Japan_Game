@@ -80,7 +80,7 @@ HRESULT InitDamageEF(void)
 
 
 	// ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
-	g_Use   = TRUE;
+	g_Use   = FALSE;
 	g_w     = TEXTURE_WIDTH;
 	g_h     = TEXTURE_HEIGHT;
 	g_Pos   = { 0.0f, 0.0f, 0.0f };

@@ -25,10 +25,10 @@
 
 #define RESULT_MAX					(17)				// ON/OFFスイッチが必要なテクスチャ数
 
-#define RANK_A_BORDER				(300)
-#define RANK_B_BORDER				(200)
-#define RANK_C_BORDER				(100)
-#define RANK_S_BORDER				(1000)
+#define RANK_C_BORDER				(15000)
+#define RANK_B_BORDER				(30000)
+#define RANK_A_BORDER				(50000)
+#define RANK_S_BORDER				(75000)
 
 #define MOVE_VOLUME					(20.0f)		// カーブの半径
 #define MOVE_SPEED					(0.1f)		// カーブの速度
@@ -153,6 +153,12 @@ HRESULT InitResult(void)
 		g_totale += GetMainScore(i);
 	}
 
+	// 最大を超えていた場合99999で固定
+	if (g_totale > SCORE_MAX)
+	{
+		g_totale = SCORE_MAX;
+	}
+
 	//g_Use = TRUE;		// デバッグ用
 
 	for (int i = 0; i < RESULT_MAX; i++)
@@ -231,7 +237,7 @@ HRESULT InitResult(void)
 	}
 
 	// BGM再生
-	PlaySound(SOUND_LABEL_BGM_bgm_stage002);
+	PlaySound(SOUND_LABEL_BGM_bgm_stage001);
 
 	g_Load = TRUE;
 	return S_OK;

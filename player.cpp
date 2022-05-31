@@ -292,7 +292,6 @@ HRESULT InitPlayer(void)
 	LoadModel(MODEL_PLAYER_PARTS_STICK,  &g_Parts[6].model);	 // ‚U”Ô–Ú‚Ìƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
 	LoadModel(MODEL_PLAYER_PARTS_NABE,   &g_Parts[7].model);	 // ‚V”Ô–Ú‚Ìƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
 
-
 	g_Load = TRUE;
 	return S_OK;
 }

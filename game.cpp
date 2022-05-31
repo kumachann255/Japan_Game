@@ -60,6 +60,8 @@ static int	g_ViewPortType_Game = TYPE_FULL_SCREEN;
 
 static BOOL	g_bPause = TRUE;	// ポーズON/OFF
 
+static int					g_Stage;
+
 
 //=============================================================================
 // 初期化処理
@@ -154,11 +156,27 @@ HRESULT InitGame(void)
 	// チュートリアルの初期化
 	InitTutorial();
 
-	// BGM再生
-	PlaySound(SOUND_LABEL_BGM_bgm_stage001);
+	g_Stage = GetStage();
 
 	// 連続再生のSEを再生
 	PlaySound(SOUND_LABEL_SE_stirringSound01);
+
+
+	switch (g_Stage)
+	{
+	case tutorial:
+		// BGM再生
+		PlaySound(SOUND_LABEL_BGM_bgm_stage002);
+		break;
+
+	case stage0:
+	case stage1:
+	case stage2:
+	case stage3:
+		// BGM再生
+		PlaySound(SOUND_LABEL_BGM_bgm_stage002);
+		break;
+	}
 
 
 	return S_OK;

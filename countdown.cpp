@@ -210,16 +210,19 @@ void UpdateCountDown(void)
 	{
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage;
 	}
-	else if (g_Count <= CLEAR_TIME + COUNTDOWN)
+	else if (g_Count == CLEAR_TIME + COUNTDOWN)
 	{
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 1;
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 	}
-	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 2))
+	else if (g_Count == CLEAR_TIME + (COUNTDOWN * 2))
 	{
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 2;
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 	}
-	else if (g_Count <= CLEAR_TIME + (COUNTDOWN * 3))
+	else if (g_Count == CLEAR_TIME + (COUNTDOWN * 3))
 	{
+		PlaySound(SOUND_LABEL_SE_titleClick04);
 		g_TexNo = TEXTURE_STAGE_MAX * g_Stage + 3;
 		SetFade(FADE_OUT, MODE_GAME);
 	}
