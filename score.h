@@ -1,32 +1,31 @@
 //=============================================================================
 //
-// �X�R�A���� [score.h]
-// Author : �F�V�`�O
+// スコア処理 [score.h]
+// Author : 熊澤義弘
 //
 //=============================================================================
 #pragma once
 
 
 //*****************************************************************************
-// �}�N����`
+// マクロ定義
 //*****************************************************************************
-#define SCORE_MAX			(99999)		// �X�R�A�̍ő�l
-#define SCORE_DIGIT			(5)			// �X�e�[�W����
-#define COMBO_MAX_DIGIT		(3)			// �ő�R���{�̌���
+#define SCORE_MAX			(99999)		// スコアの最大値
+#define SCORE_DIGIT			(5)			// ステージ桁数
+#define COMBO_MAX_DIGIT		(3)			// 最大コンボの桁数
 
-#define SCORE_STAGE0_BORDER	(3000)		// �X�e�[�W0�̃N���A�X�R�A
-#define SCORE_STAGE1_BORDER	(6000)		// �X�e�[�W1�̃N���A�X�R�A
-#define SCORE_STAGE2_BORDER	(10000)		// �X�e�[�W2�̃N���A�X�R�A
-#define SCORE_STAGE3_BORDER	(25000)		// �X�e�[�W3�̃N���A�X�R�A
+#define SCORE_STAGE0_BORDER	(3000)		// ステージ0のクリアスコア
+#define SCORE_STAGE1_BORDER	(6000)		// ステージ1のクリアスコア
+#define SCORE_STAGE2_BORDER	(10000)		// ステージ2のクリアスコア
+#define SCORE_STAGE3_BORDER	(25000)		// ステージ3のクリアスコア
 
-#define SCORE_STAGE0_BORDER	(200)		// �X�e�[�W0�̃N���A�X�R�A
-#define SCORE_STAGE1_BORDER	(200)		// �X�e�[�W1�̃N���A�X�R�A
-#define SCORE_STAGE2_BORDER	(200)		// �X�e�[�W2�̃N���A�X�R�A
-#define SCORE_STAGE3_BORDER	(200)		// �X�e�[�W3�̃N���A�X�R�A
-
+// #define SCORE_STAGE0_BORDER	(200)		// ステージ0のクリアスコア
+// #define SCORE_STAGE1_BORDER	(200)		// ステージ1のクリアスコア
+// #define SCORE_STAGE2_BORDER	(200)		// ステージ2のクリアスコア
+// #define SCORE_STAGE3_BORDER	(200)		// ステージ3のクリアスコア
 
 //*****************************************************************************
-// �v���g�^�C�v�錾
+// プロトタイプ宣言
 //*****************************************************************************
 HRESULT InitScore(void);
 void UninitScore(void);

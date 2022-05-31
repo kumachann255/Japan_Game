@@ -409,7 +409,16 @@ void DrawGame0(void)
 	DrawDamageEF();
 
 	// 吹き出しの描画処理
-	DrawSpeech();
+	//DrawSpeech();
+
+	// チュートリアルの描画処理
+	DrawTutorial();
+
+	// チュートリアルの描画処理
+	DrawTutorial();
+
+	// チュートリアルの描画処理
+	DrawTutorial();
 
 	// チュートリアルの描画処理
 	DrawTutorial();

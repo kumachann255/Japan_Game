@@ -19,7 +19,7 @@ struct UI
 	float		w;
 	float		h;
 	int			texNo;
-
+	BOOL		soundFlag;
 
 };
 

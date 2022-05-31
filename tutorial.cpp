@@ -134,7 +134,6 @@ HRESULT InitTutorial(void)
 		}
 	}
 
-
 	g_time = 0.0f;
 	g_EnemyDead = FALSE;
 	g_Load = TRUE;

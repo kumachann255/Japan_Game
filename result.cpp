@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "score.h"
+#include "sound.h" 
 
 //*****************************************************************************
 // マクロ定義
@@ -25,10 +26,17 @@
 
 #define RESULT_MAX					(17)				// ON/OFFスイッチが必要なテクスチャ数
 
-#define RANK_A_BORDER				(300)
-#define RANK_B_BORDER				(200)
-#define RANK_C_BORDER				(100)
-#define RANK_S_BORDER				(1000)
+// 合計リザルトランクのボーダー
+#define RANK_A_BORDER				(9000)
+#define RANK_B_BORDER				(5000)
+#define RANK_C_BORDER				(2000)
+#define RANK_S_BORDER				(14000)
+
+//// デバッグ用
+//#define RANK_A_BORDER				(300)
+//#define RANK_B_BORDER				(200)
+//#define RANK_C_BORDER				(100)
+//#define RANK_S_BORDER				(1000)
 
 #define MOVE_VOLUME					(20.0f)		// カーブの半径
 #define MOVE_SPEED					(0.1f)		// カーブの速度
@@ -83,12 +91,12 @@ static char *g_TexturName[TEXTURE_MAX] = {
 
 };
 
-//static BOOL						g_Use;						// TRUE:使っている  FALSE:未使用	デバッグ用
+//static BOOL						g_Use;					// TRUE:使っている  FALSE:未使用	デバッグ用
 
-static BOOL						g_Use[RESULT_MAX];						// TRUE:使っている  FALSE:未使用
+static BOOL						g_Use[RESULT_MAX];			// TRUE:使っている  FALSE:未使用
 static float					g_w, g_h;					// 幅と高さ
 static XMFLOAT3					g_Pos;						// ポリゴンの座標
-static int						g_TexNo[RESULT_MAX];					// テクスチャ番号
+static int						g_TexNo[RESULT_MAX];		// テクスチャ番号
 
 static int						g_time;
 
@@ -98,6 +106,8 @@ static XMFLOAT4					g_Colar;
 
 static int						g_timeRank;
 
+static BOOL						g_soundFlag;				// サウンド制御用フラグ
+
 static BOOL						g_Load = FALSE;
 
 
@@ -106,6 +116,7 @@ static BOOL						g_Load = FALSE;
 //=============================================================================
 HRESULT InitResult(void)
 {
+
 	ID3D11Device *pDevice = GetDevice();
 
 	//テクスチャ生成
@@ -154,6 +165,9 @@ HRESULT InitResult(void)
 	for (int i = 0; i < RESULT_MAX; i++)
 	{
 		g_Use[i] = FALSE;
+
+		// 挿入サウンドも始めはオフ
+		g_soundFlag = FALSE;
 
 		switch (i)
 		{
@@ -226,8 +240,9 @@ HRESULT InitResult(void)
 		}
 	}
 
+
 	// BGM再生
-	//PlaySound(SOUND_LABEL_BGM_sample002);
+	PlaySound(SOUND_LABEL_BGM_bgm_stage002);
 
 	g_Load = TRUE;
 	return S_OK;
@@ -282,6 +297,7 @@ void UpdateResult(void)
 
 	g_time++;
 
+	// リザルトのアニメーションを進める
 	for (int i = 0; i < stage_max; i++)
 	{
 		if (g_time >= 45 * (i + 1))
@@ -594,8 +610,6 @@ void DrawResult(void)
 	}
 
 
-
-	// ランクを描画
 	if (g_Use[8] == TRUE)
 	{
 		// テクスチャ設定
@@ -656,6 +670,23 @@ void DrawResult(void)
 	// ランクSエフェクトを描画
 	if (g_Use[13] == TRUE)
 	{
+		// 条件を満たした時だけ一度だけサウンドを鳴らす
+		switch (g_soundFlag)
+		{
+		case TRUE:
+			break;
+
+		case FALSE:
+			if (g_soundFlag == FALSE && g_Use[13] == TRUE)
+			{
+				// スコアが規定以上に達したら一度だけSE処理
+				PlaySound(SOUND_LABEL_SE_stickingSound01);
+				g_soundFlag = TRUE;
+			}
+			break;
+		}
+
+
 		// テクスチャ設定
 		GetDeviceContext()->PSSetShaderResources(0, 1, &g_Texture[2]);
 
